@@ -39,6 +39,8 @@
 # define SIMPLE_QUOTE 10
 # define DOUBLE_QUOTE 11
 
+extern int last_code;
+
 typedef struct s_inf
 {
         struct sigaction sa;

@@ -72,6 +72,7 @@ int	main(int argc, char *argv[], char **env)
 	info.env = env;
 	get_enviroment(&info);
 	init_sigaction(&info);
+	last_code = 0;
 	while (1)
 	{
 		display_prompt(&info);
