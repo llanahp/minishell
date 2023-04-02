@@ -61,7 +61,6 @@ int	store_word(t_inf *info, char *line, int i)
 	if (j > (int)ft_strlen(line))
 		return (-1);
 	word = ft_substr(line, i, j - i);
-	//printf("%s\n\n", word);
 	ft_lstadd_back(&info->tokens, ft_lstnew(word));
 	return (j);
 }
@@ -124,16 +123,12 @@ int	tokenize(t_inf *info, char *line)
 			i++;
 		else if (is_delimiter(line[i]))
 		{
-			//printf("Delimiter\n");
 			store_delimiter(info, line, &i);
 		}
 		else
 		{
-			//printf("Word\n");
 			i = store_word(info, line, i);
-			//printf("%s\n",line+i);
 		}
 	}
-	//mostrar_tokens(info);
 	return (0);
 }

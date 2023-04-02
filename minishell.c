@@ -48,7 +48,8 @@ void	display_prompt(t_inf *info)
 		return ;
 	if (check_vars(info) == -1)
 		return ;
-	
+	if (delete_quotes(info) == -1)
+		return ;
 
 	if (ft_strcmp(line, "exit") == 0)
 		exit(0);//TODO mirar por si pasa el codigo con el que tiene que terminar

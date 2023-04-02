@@ -88,4 +88,5 @@ int	tokenize(t_inf *info, char *line);
 
 /** check_vars.c */
 int	check_vars(t_inf *info);
+int	delete_quotes(t_inf *info);
 #endif

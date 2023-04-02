@@ -18,6 +18,7 @@ void mostrar_tokens2(t_inf *info)
 	while (info->tokens)
 	{
 		printf("%s\n", (char *)info->tokens->content);
+		printf("\ttype:%d\n",info->tokens->type);
 		info->tokens = info->tokens->next;
 	}
 }
@@ -58,6 +59,7 @@ char	*replace(char *string, char *search, char *replace)
 		result[i] = string[i];
 		i++;
 	}
+	result[i]='\0';
 	len = i;
 	while (replace[++j] != '\0')
 		result[i++] = replace[j];
@@ -87,11 +89,66 @@ int	check_vars(t_inf *info)
 		{
 			name = get_name_var(tmp->content);
 			var = get_var(info, name);
+		
 			if (var == NULL)
 				tmp->content = replace(tmp->content, name, "");
 			else
 				tmp->content = replace(tmp->content, name, var);
 			free(name);
+			tmp = info->tokens;
+		}
+		else
+			tmp = tmp->next;
+	}
+	//mostrar_tokens2(info);
+	return (0);
+}
+
+
+char	*replace_quotes(char *string, char quote)
+{
+	char	*result;
+	int 	i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	result = (char *)malloc(sizeof(char) * (ft_strlen(string) - 1 + 1));
+	if (result == NULL)
+		return (NULL);
+	while (string[i] != '\0')
+	{
+		if (string[i] != quote)
+		{
+			result[j] = string[i];
+			j++;
+		}
+		i++;
+	}
+	result[j]='\0';
+	free(string);
+	return (result);
+}
+/*
+caso de prueba:
+hola que tal | pers < ddfasddf> || "yes" 'per"otro"o' esto
+*/
+
+int	delete_quotes(t_inf *info)
+{
+	t_list	*tmp;
+
+	tmp = info->tokens;
+	while (tmp)
+	{
+		if (ft_strcontains(tmp->content, '"'))
+		{
+			tmp->content = replace_quotes(tmp->content, '\"');
+			tmp = info->tokens;
+		}
+		else if (ft_strcontains(tmp->content, '\''))
+		{
+			tmp->content = replace_quotes(tmp->content, '\'');
 			tmp = info->tokens;
 		}
 		else
