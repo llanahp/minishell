@@ -51,34 +51,22 @@ int	store_word(t_inf *info, char *line, int i)
 	while (line[j] && ((type > 1 && is_quote(line[j]) != type)
 			|| (type == 0 && !is_space(line[j]) && !is_delimiter(line[j])) ))
 		j++;
-	//printf("n1:%d\n",j);
 	if (line[j] && type > 0 && !is_space(line[j]))
 		type = 0 ;
 	while(line[j] && !is_space(line[j]) && !is_delimiter(line[j]))
 		j++;
-	//printf("n2:%d\n",j);
 	if (type > 0)
 		j++;
-	//printf("n3:%d\n",j);
 	if (j > (int)ft_strlen(line))
 		return (-1);
 	word = ft_substr(line, i, j - i);
 	ft_lstadd_back(&info->tokens, ft_lstnew(word));
-	//printf("Almaceno:%s\n",word);
 	if (is_delimiter(line[j - 1]))
 		return (j); // return index of delimiter
 	return (j);
 }
 
-void mostrar_tokens(t_inf *info)
-{
-	printf("--------------\n");
-	while (info->tokens)
-	{
-		printf("%s\n", (char *)info->tokens->content);
-		info->tokens = info->tokens->next;
-	}
-}
+
 
 int	type_delimiter(char *line, int *i) 
 {
@@ -138,13 +126,9 @@ int	tokenize(t_inf *info, char *line)
 		}
 		else
 		{
-			/*printf("(1)i:%d\n",i);
-			printf("(1)line[i]:%s\n",line+i);*/
 			i = store_word(info, line, i);
-			/*printf("(2)i:%d\n",i);
-			printf("(2)line[i]:%s\n",line+i);
-			getchar();*/
 		}
 	}
 	return (0);
 }
+

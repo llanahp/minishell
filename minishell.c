@@ -40,9 +40,12 @@ void	display_prompt(t_inf *info)
 	char	*line;
 
 	line = NULL;
+	info->commands = NULL;
 	line = readline("minishell>");
 	if (ft_strcmp(line, "") == 0)
 		return ;
+	if (ft_strcmp(line, "exit") == 0)
+		exit(0);//TODO mirar por si pasa el codigo con el que tiene que terminar
 	add_history(line);
 	if (tokenize(info, line) == -1)
 		return ;
@@ -50,12 +53,25 @@ void	display_prompt(t_inf *info)
 		return ;
 	if (delete_quotes(info) == -1)
 		return ;
-
-	if (ft_strcmp(line, "exit") == 0)
-		exit(0);//TODO mirar por si pasa el codigo con el que tiene que terminar
+	if (create_commands(info) == -1)
+		return ;
+	
+	
 	int code = execute_builtins(info, line);
 	free(line);
-	if (1 == 2)
+	int i;
+	while (info->commands)
+	{
+		i = 0;//info->commands[i] != NULL && 
+		while (info->commands[i].args[i])
+		{
+			free(info->commands[i].args[i]);
+			i++;
+		}
+		//if (info->commands[i] != NULL)
+			//free(info->commands[i]);	
+	}
+	if (code == 9999)
 		code = 0;
 }
 
@@ -66,13 +82,14 @@ int	main(int argc, char *argv[], char **env)
 
 	if (1 == 2)
 	{
-		argc = 0;
-		argv = NULL;
+		argc = argc;
+		argv = argv;
 	}
 	info.env = env;
 	get_enviroment(&info);
 	init_sigaction(&info);
-	last_code = 0;
+
+	//last_code = 0;
 	while (1)
 	{
 		display_prompt(&info);

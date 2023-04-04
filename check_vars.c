@@ -12,16 +12,6 @@
 
 # include "minishell.h"
 
-void mostrar_tokens2(t_inf *info)
-{
-	printf("--------------\n");
-	while (info->tokens)
-	{
-		printf("%s\n", (char *)info->tokens->content);
-		printf("\ttype:%d\n",info->tokens->type);
-		info->tokens = info->tokens->next;
-	}
-}
 
 char	*get_name_var(char *line)
 {
@@ -154,6 +144,6 @@ int	delete_quotes(t_inf *info)
 		else
 			tmp = tmp->next;
 	}
-	mostrar_tokens2(info);
+//	mostrar_tokens2(info);
 	return (0);
 }

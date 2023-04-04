@@ -29,6 +29,7 @@
 # include <sys/wait.h>
 
 # define CMD_NOT_FOUND 127
+# define WORD 0
 # define PIPE 3
 # define SEMICOLON 4
 # define LESS 5
@@ -41,13 +42,26 @@
 
 extern int last_code;
 
+typedef struct s_command
+{
+	char				*cmd;
+	char				**args;
+	char				*path;
+	int					input;
+	int					output;
+	struct t_command	*previous;
+	struct t_command	*next;
+}		t_command;
+
+
 typedef struct s_inf
 {
-        struct sigaction sa;
-        char    **env;
-        char	**paths;
-        char    *pwd;
-        t_list  *tokens;
+	struct sigaction sa;
+	char		**env;
+	char		**paths;
+	char		*pwd;
+	t_list		*tokens;
+	t_command	*commands;
 }               t_inf;
 
 /** cd.c */
@@ -91,4 +105,12 @@ int	tokenize(t_inf *info, char *line);
 /** check_vars.c */
 int	check_vars(t_inf *info);
 int	delete_quotes(t_inf *info);
+
+
+/** create_cmds.c */
+int	create_commands(t_inf *info);
+
+/** command_utils.c */
+t_command	*ft_lstnew_command(char *cmd);
+void	ft_lstadd_back_command(t_command **lst, t_command *new);
 #endif

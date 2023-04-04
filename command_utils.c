@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew.c                                        :+:      :+:    :+:   */
+/*   command_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ralopez- <ralopez-@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,17 +10,40 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-	t_list	*ft_lstnew(void *content)
+t_command	*ft_lstnew_command(char *cmd)
+{
+	t_command	*obj;
+
+	obj = (t_command *) malloc(sizeof(*obj));
+	if (!obj)
+		return (0);
+	obj->cmd = cmd;
+	obj->args = NULL;
+	obj->path = NULL;
+	obj->next = NULL;
+	obj->previous = NULL;
+	obj->input = -2;
+	obj->output = -2;
+	return (obj);
+}
+
+
+void	ft_lstadd_back_command(t_command **lst, t_command *new)
+{
+	t_command	*aux;
+
+	if (lst != NULL)
 	{
-		t_list	*obj;
-
-		obj = (t_list *) malloc(sizeof(*obj));
-		if (!obj)
-			return (0);
-		obj->content = content;
-		obj->next = NULL;
-		obj->type =	0;
-		return (obj);
+		aux = (*lst);
+		if (aux != NULL)
+		{
+			while (aux != NULL && aux->next != NULL)
+				aux = aux->next;
+			aux->next = new;
+		}
+		else
+			*lst = new;
 	}
+}
