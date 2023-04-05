@@ -42,6 +42,9 @@
 
 extern int last_code;
 
+typedef struct s_command t_command;
+
+
 typedef struct s_command
 {
 	char				*cmd;
@@ -49,8 +52,8 @@ typedef struct s_command
 	char				*path;
 	int					input;
 	int					output;
-	struct t_command	*previous;
-	struct t_command	*next;
+	t_command	*previous;
+	t_command	*next;
 }		t_command;
 
 
@@ -113,4 +116,5 @@ int	create_commands(t_inf *info);
 /** command_utils.c */
 t_command	*ft_lstnew_command(char *cmd);
 void	ft_lstadd_back_command(t_command **lst, t_command *new);
+void	ft_lstclear_cmds(t_command *lst);
 #endif

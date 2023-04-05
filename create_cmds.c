@@ -15,11 +15,14 @@
 
 void mostrar_commands(t_inf *info)
 {
+	t_command	*tmp;
+
+	tmp = info->commands;
 	printf("--------------\n");
-	while (info->commands)
+	while (tmp)
 	{
-		printf("%s\n", (char *)info->commands->cmd);
-		info->tokens = info->tokens->next;
+		printf("%s\n", (char *)tmp->cmd);
+		tmp = tmp->next;
 	}
 }
 
@@ -28,10 +31,10 @@ t_command	*get_last_cmd(t_inf *info)
 	t_command	*tmp;
 	if (info->commands == NULL)
 	{
-		tmp = malloc(sizeof(t_command) * 1);
+		tmp = (t_command *)malloc(sizeof(t_command) * 1);
 		if (!tmp)
 			return (NULL);
-		ft_lstadd_back_command(info->commands, tmp);
+		ft_lstadd_back_command(&info->commands, tmp);
 		return (tmp);
 	}
 	tmp = info->commands;
@@ -60,7 +63,7 @@ t_list *save_args(t_list *tmp, t_command *command)
 	int i;
 
 	i = 0;
-	command->args = (char **)malloc(sizeof(char *) * num_args(tmp));
+	command->args = (char **)malloc(sizeof(char *) * (num_args(tmp) + 1));
 	while (tmp && tmp->type == WORD)
 	{
 		command->args[i] = ft_strdup(tmp->content);
@@ -79,7 +82,8 @@ t_list *save_word(t_inf *info, t_list *tmp)
 	command->cmd = ft_strdup(tmp->content);
 	printf("cmd:%s\n", command->cmd);
 	tmp = tmp->next;
-	tmp  = save_args( tmp, command);
+	tmp  = save_args(tmp, command);
+	
 	return (tmp);
 }
 
@@ -93,12 +97,10 @@ int	create_commands(t_inf *info)
 	while (tmp)
 	{
 		printf("->%s (%d)\n",tmp->content, tmp->type);
-		if (tmp->type == WORD)
+		if (tmp != NULL && tmp->type == WORD)
 		{
-			printf("Antes de guardar\n");
 			tmp  = save_word(info, tmp);
-			printf("Almacenado\n");
-			getchar();
+			
 		}
 		/*else if (tmp->type == PIPE || tmp->type == SEMICOLON)
 		{
@@ -115,7 +117,7 @@ int	create_commands(t_inf *info)
 			tmp = tmp->next;
 			continue;
 		}*/
-		else if (tmp->type == END)
+		else if (tmp != NULL && tmp->type == END)
 		{
 			break;
 		}
@@ -125,7 +127,9 @@ int	create_commands(t_inf *info)
 			ft_lstadd_back(&info->commands, ft_lstnew(tmp->content));
 			tmp = tmp->next;
 		}*/
-		mostrar_commands(info);
+		
 	}
+
+	mostrar_commands(info);
 	return (0);
 }

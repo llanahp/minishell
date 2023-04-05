@@ -33,7 +33,37 @@ int	execute_builtins(t_inf *info, char *line)
 		code = unset(info, line);
 	return (code);
 }
+/*
+void	free_cmds(t_inf *info)
+{
+	int i;
+	t_command	*tmp;
 
+	tmp = info->commands;
+	while (tmp)
+	{
+		if (tmp->cmd != NULL)
+		{
+			printf("Commando\n");
+			free(tmp->cmd);
+			tmp->cmd = NULL;
+		}
+		i = 0;
+		while (tmp->args && tmp->args[i])
+		{
+			printf("Quitando arg:%s\n",tmp->args[i]);
+			free(tmp->args[i]);
+			tmp->args[i]= NULL;
+			i++;
+		}
+		if (tmp->path != NULL)
+		{
+			free(tmp->path);
+			tmp->path = NULL;
+		}
+		tmp = tmp->next;
+	}
+}*/
 
 void	display_prompt(t_inf *info)
 {
@@ -57,22 +87,9 @@ void	display_prompt(t_inf *info)
 		return ;
 	
 	
-	int code = execute_builtins(info, line);
+	//int code = execute_builtins(info, line);
 	free(line);
-	int i;
-	while (info->commands)
-	{
-		i = 0;//info->commands[i] != NULL && 
-		while (info->commands[i].args[i])
-		{
-			free(info->commands[i].args[i]);
-			i++;
-		}
-		//if (info->commands[i] != NULL)
-			//free(info->commands[i]);	
-	}
-	if (code == 9999)
-		code = 0;
+	ft_lstclear_cmds(info->commands);
 }
 
 
@@ -82,8 +99,8 @@ int	main(int argc, char *argv[], char **env)
 
 	if (1 == 2)
 	{
-		argc = argc;
-		argv = argv;
+		argc = 0;
+		argv = NULL;
 	}
 	info.env = env;
 	get_enviroment(&info);
