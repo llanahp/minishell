@@ -116,5 +116,6 @@ int	create_commands(t_inf *info);
 /** command_utils.c */
 t_command	*ft_lstnew_command(char *cmd);
 void	ft_lstadd_back_command(t_command **lst, t_command *new);
-void	ft_lstclear_cmds(t_command *lst);
+void	ft_lstclear_cmds(t_inf *info);
+void   ft_lstclear_tokens(t_inf *info);
 #endif

@@ -19,10 +19,17 @@ void mostrar_commands(t_inf *info)
 
 	tmp = info->commands;
 	printf("--------------\n");
-	while (tmp)
+	while (tmp != NULL)
 	{
-		printf("%s\n", (char *)tmp->cmd);
+		printf("cmd:%s\n", (char *)tmp->cmd);
+		int i=0;
+		while (tmp->args[i] != NULL)
+		{
+			printf("args(%d): %s\n",i, tmp->args[i]);
+			i++;
+		}
 		tmp = tmp->next;
+		
 	}
 }
 
@@ -67,7 +74,7 @@ t_list *save_args(t_list *tmp, t_command *command)
 	while (tmp && tmp->type == WORD)
 	{
 		command->args[i] = ft_strdup(tmp->content);
-		printf("args(%d)%s\n",i, command->args[i]);
+		//printf("args(%d)%s\n",i, command->args[i]);
 		tmp = tmp->next;
 		i++;
 	}
@@ -80,7 +87,7 @@ t_list *save_word(t_inf *info, t_list *tmp)
 	t_command *command;
 	command = get_last_cmd(info);
 	command->cmd = ft_strdup(tmp->content);
-	printf("cmd:%s\n", command->cmd);
+	//printf("cmd:%s\n", command->cmd);
 	tmp = tmp->next;
 	tmp  = save_args(tmp, command);
 	
@@ -96,11 +103,10 @@ int	create_commands(t_inf *info)
 	tmp = info->tokens;
 	while (tmp)
 	{
-		printf("->%s (%d)\n",tmp->content, tmp->type);
+		//printf("->%s (%d)\n",tmp->content, tmp->type);
 		if (tmp != NULL && tmp->type == WORD)
 		{
 			tmp  = save_word(info, tmp);
-			
 		}
 		/*else if (tmp->type == PIPE || tmp->type == SEMICOLON)
 		{

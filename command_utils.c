@@ -29,11 +29,16 @@ t_command	*ft_lstnew_command(char *cmd)
 	return (obj);
 }
 
-//TODO falta meter el previous
+
 void	ft_lstadd_back_command(t_command **lst, t_command *new)
 {
 	t_command	*aux;
 
+	new->path = NULL;
+	new->next = NULL;
+	new->cmd = NULL;
+	new->args = NULL;
+	new->previous = NULL;
 	if (lst != NULL)
 	{
 		aux = (*lst);
@@ -42,53 +47,57 @@ void	ft_lstadd_back_command(t_command **lst, t_command *new)
 			while (aux != NULL && aux->next != NULL)
 				aux = aux->next;
 			aux->next = new;
+			new->previous = aux;
 		}
 		else
 			*lst = new;
 	}
 	else
-	{
 		lst = &new;
-	}
 }
 
-void ft_free_array(char **array)
+void ft_free_array(char ***array)
 {
 	int i;
 
 	i = 0;
-	while (array[i] != NULL)
+	while ((*array) != NULL && (*array)[i] != NULL)
 	{
-		free(array[i]);
-		array[i]= NULL;
+		//printf("Fuera %s\n", (*array)[i]);
+		free((*array)[i]);
+		(*array)[i] = NULL;
 		i++;
 	}
-	free(array);
-	array = NULL;
+	if ((*array) != NULL)
+		free((*array));
+	(*array) = NULL;
 }
 
+//TODO falta liberar el previous y next 
 void	clear_command(t_command *cmd)
 {
-	if (cmd->cmd != NULL)
-		free(cmd->cmd);
-	if (cmd->args != NULL)
-		ft_free_array(cmd->args);
-	
-	if (cmd->path != NULL)
-		free(cmd->path);
+	if (cmd != NULL)
+	{
+		if (cmd->cmd != NULL)
+			free(cmd->cmd);
+		
+		if (cmd->args != NULL)
+			ft_free_array(&cmd->args);
+		
+		if (cmd->path != NULL)
+			free(cmd->path);
+	}
 }
 
-void	ft_lstclear_cmds(t_command *lst)
+void	ft_lstclear_cmds(t_inf *info)
 {
 	t_command	*aux;
 	t_command	*aux2;
-
-	printf("DEBUG\n");
-	getchar();
 	
-	if (lst != NULL)
+	if (info->commands != NULL)
 	{
-		aux = lst;
+		
+		aux = info->commands;
 		if (aux != NULL)
 		{
 			aux2 = aux;
@@ -108,6 +117,39 @@ void	ft_lstclear_cmds(t_command *lst)
 			free(aux);
 			aux = NULL;
 		}
-		lst = NULL;
+		info->commands = NULL;
+	}
+}
+
+void	ft_clear_tokens(t_inf *info)
+{
+	t_list	*aux;
+	t_list	*aux2;
+	
+	if (info->tokens != NULL)
+	{	
+		aux = info->tokens;
+		if (aux != NULL)
+		{
+			aux2 = aux;
+			while (aux2 != NULL && aux2->next != NULL)
+			{
+				aux = aux2;
+				if (aux2->content != NULL)
+					free(aux2->content);
+				aux2 = aux2->next;
+				aux->next = NULL;
+				free(aux);
+				aux = NULL;
+			}
+			aux = aux2;
+			if (aux2->content != NULL)
+				free(aux2->content);
+			aux2 = aux2->next;
+			aux->next = NULL;
+			free(aux);
+			aux = NULL;
+		}
+		info->tokens = NULL;
 	}
 }
