@@ -24,6 +24,8 @@ t_command	*ft_lstnew_command(char *cmd)
 	obj->path = NULL;
 	obj->next = NULL;
 	obj->previous = NULL;
+	obj->input_name = NULL;
+	obj->output_name = NULL;
 	obj->input = -2;
 	obj->output = -2;
 	return (obj);
@@ -34,11 +36,7 @@ void	ft_lstadd_back_command(t_command **lst, t_command *new)
 {
 	t_command	*aux;
 
-	new->path = NULL;
 	new->next = NULL;
-	new->cmd = NULL;
-	new->args = NULL;
-	new->previous = NULL;
 	if (lst != NULL)
 	{
 		aux = (*lst);
@@ -55,7 +53,7 @@ void	ft_lstadd_back_command(t_command **lst, t_command *new)
 	else
 		lst = &new;
 }
-
+/*
 void ft_free_array(char ***array)
 {
 	int i;
@@ -63,7 +61,6 @@ void ft_free_array(char ***array)
 	i = 0;
 	while ((*array) != NULL && (*array)[i] != NULL)
 	{
-		//printf("Fuera %s\n", (*array)[i]);
 		free((*array)[i]);
 		(*array)[i] = NULL;
 		i++;
@@ -71,7 +68,7 @@ void ft_free_array(char ***array)
 	if ((*array) != NULL)
 		free((*array));
 	(*array) = NULL;
-}
+}*/
 
 //TODO falta liberar el previous y next 
 void	clear_command(t_command *cmd)
@@ -82,10 +79,19 @@ void	clear_command(t_command *cmd)
 			free(cmd->cmd);
 		
 		if (cmd->args != NULL)
-			ft_free_array(&cmd->args);
-		
+			ft_free_split2(&cmd->args);
 		if (cmd->path != NULL)
 			free(cmd->path);
+		if (cmd->input_name != NULL)
+		{
+			free(cmd->input_name);
+			close(cmd->input);
+		}
+		if (cmd->output_name != NULL)
+		{
+			free(cmd->output_name);
+			close(cmd->output);
+		}
 	}
 }
 

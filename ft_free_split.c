@@ -16,13 +16,31 @@ void	ft_free_split(char **split)
 {
 	int		i;
 
-	i = -1;
+	i = 0;
 	if (split != NULL)
 	{
-		while (split[++i])
+		while (split[i])
 		{
 			free(split[i]);
+			i++;
 		}
 		free(split);
+	}
+}
+
+void	ft_free_split2(char ***split)
+{
+	int		i;
+
+	i = 0;
+	if ((*split) != NULL)
+	{
+		while ((*split)[i])
+		{
+			free((*split)[i]);
+			i++;
+		}
+		free((*split));
+		(*split) = NULL;
 	}
 }

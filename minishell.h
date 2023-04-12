@@ -52,6 +52,8 @@ typedef struct s_command
 	char				*path;
 	int					input;
 	int					output;
+	char				*input_name;
+	char				*output_name;
 	t_command	*previous;
 	t_command	*next;
 }		t_command;
@@ -89,7 +91,7 @@ int unset(t_inf *info, char *line);
 
 
 void	ft_free_split(char **split);
-
+void	ft_free_split2(char ***split);
 /** get_info.c */
 int	get_enviroment(t_inf *info);
 int	get_pwd(t_inf *info);

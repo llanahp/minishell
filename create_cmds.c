@@ -38,9 +38,10 @@ t_command	*get_last_cmd(t_inf *info)
 	t_command	*tmp;
 	if (info->commands == NULL)
 	{
-		tmp = (t_command *)malloc(sizeof(t_command) * 1);
+		/*tmp = (t_command *)malloc(sizeof(t_command) * 1);
 		if (!tmp)
-			return (NULL);
+			return (NULL);*/
+		tmp = ft_lstnew_command(NULL);
 		ft_lstadd_back_command(&info->commands, tmp);
 		return (tmp);
 	}
@@ -65,35 +66,116 @@ int	num_args(t_list *tmp)
 	return (i);
 }
 
-t_list *save_args(t_list *tmp, t_command *command)
+char	**join_arguments(char	**args, char	**tmp)
 {
-	int i;
+	int	i;
+	int	j;
+	char	**tmp2;
 
 	i = 0;
-	command->args = (char **)malloc(sizeof(char *) * (num_args(tmp) + 1));
+	j = 0;
+	if (args == NULL && tmp == NULL)
+		return (NULL);
+	while (args && args[i] != NULL)
+		i++;
+	while (tmp && tmp[j] != NULL)
+		j++;
+	tmp2 = (char **)malloc(sizeof(char *) * (i + j + 1));
+	if (tmp2 == NULL)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (args && args[i] != NULL)
+	{
+		tmp2[i] = ft_strdup(args[i]);
+		i++;
+	}
+	while (tmp && tmp[j] != NULL)
+	{
+		tmp2[i] = ft_strdup(tmp[j]);
+		i++;
+		j++;
+	}
+	tmp2[i] = NULL;
+	ft_free_split(args);
+	ft_free_split(tmp);
+
+	return (tmp2);
+}
+
+t_list *save_args(t_list *tmp, t_command *command)
+{
+	int		i;
+	char	**tmp2;
+
+	i = 0;
+	tmp2 = (char **)malloc(sizeof(char *) * (num_args(tmp) + 1));
+	if (tmp2 == NULL)
+		return (NULL);
 	while (tmp && tmp->type == WORD)
 	{
-		command->args[i] = ft_strdup(tmp->content);
-		//printf("args(%d)%s\n",i, command->args[i]);
+		tmp2[i] = ft_strdup(tmp->content);
 		tmp = tmp->next;
 		i++;
 	}
-	command->args[i] = NULL;
-	return (tmp);
-}
-
-t_list *save_word(t_inf *info, t_list *tmp)
-{
-	t_command *command;
-	command = get_last_cmd(info);
-	command->cmd = ft_strdup(tmp->content);
-	//printf("cmd:%s\n", command->cmd);
-	tmp = tmp->next;
-	tmp  = save_args(tmp, command);
+	tmp2[i] = NULL;
+	command->args = join_arguments(command->args, tmp2);
 	
 	return (tmp);
 }
 
+t_list	*save_word(t_inf *info, t_list *tmp)
+{
+	t_command *command;
+	command = get_last_cmd(info);
+	if (command->cmd != NULL)
+	{
+		printf("cmd : %s\n", command->cmd);
+	}
+	if (command->cmd == NULL)
+	{
+		command->cmd = ft_strdup(tmp->content);
+		tmp = tmp->next;
+		tmp  = save_args(tmp, command);
+	}
+	else
+		tmp  = save_args(tmp, command);
+	return (tmp);
+}
+
+
+t_list	*save_input(t_inf *info, t_list *tmp)
+{
+	t_command *command;
+	command = get_last_cmd(info);
+	tmp = tmp->next;
+	//verificar si ya tenia uno, en ese caso debo cerrar el anterior
+	if (command->input_name != NULL)
+	{
+		close(command->input);
+		free(command->input_name);
+		command->input_name = NULL;
+	}
+	if (tmp->type == WORD)
+	{
+		command->input_name = ft_strdup(tmp->content);
+		if (command->input_name == NULL)
+			printf("Entrada no valida");
+		else
+		{
+			command->input = open(command->input_name, O_RDONLY);
+			if (command->input == -1)
+			{
+				perror("Error al abrir el archivo de entrada");
+				//printf("Error al abrir el archivo de entrada");
+			}
+		}
+		tmp = tmp->next;
+	}
+	else
+		command->input_name = NULL;
+	return (tmp);
+}
 
 int	create_commands(t_inf *info)
 {
@@ -108,6 +190,10 @@ int	create_commands(t_inf *info)
 		{
 			tmp  = save_word(info, tmp);
 		}
+		else if (tmp->type == LESS)
+		{
+			tmp  = save_input(info, tmp);
+		}
 		/*else if (tmp->type == PIPE || tmp->type == SEMICOLON)
 		{
 			tmp = tmp->next;
@@ -118,7 +204,7 @@ int	create_commands(t_inf *info)
 			tmp = tmp->next;
 			continue;
 		}
-		else if (tmp->type == LESS || tmp->type == GREATER)
+		else if (tmp->type == GREATER)
 		{
 			tmp = tmp->next;
 			continue;
