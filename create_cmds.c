@@ -149,14 +149,13 @@ t_list	*save_input(t_inf *info, t_list *tmp)
 	t_command *command;
 	command = get_last_cmd(info);
 	tmp = tmp->next;
-	//verificar si ya tenia uno, en ese caso debo cerrar el anterior
 	if (command->input_name != NULL)
 	{
 		close(command->input);
 		free(command->input_name);
 		command->input_name = NULL;
 	}
-	if (tmp->type == WORD)
+	if (tmp != NULL && tmp->type == WORD)
 	{
 		command->input_name = ft_strdup(tmp->content);
 		if (command->input_name == NULL)
@@ -167,13 +166,43 @@ t_list	*save_input(t_inf *info, t_list *tmp)
 			if (command->input == -1)
 			{
 				perror("Error al abrir el archivo de entrada");
-				//printf("Error al abrir el archivo de entrada");
 			}
 		}
 		tmp = tmp->next;
 	}
 	else
 		command->input_name = NULL;
+	return (tmp);
+}
+
+t_list	*save_output(t_inf *info, t_list *tmp)
+{
+	t_command *command;
+	command = get_last_cmd(info);
+	tmp = tmp->next;
+	if (command->output_name != NULL)
+	{
+		close(command->output);
+		free(command->output_name);
+		command->output_name = NULL;
+	}
+	if (tmp != NULL && tmp->type == WORD)
+	{
+		command->output_name = ft_strdup(tmp->content);
+		if (command->output_name == NULL)
+			printf("salida no valida");
+		else
+		{
+			command->output = open(command->output_name,  O_WRONLY | O_CREAT | O_TRUNC, 0664);
+			if (command->output == -1)
+			{
+				perror("Error al abrir el archivo de salida");
+			}
+		}
+		tmp = tmp->next;
+	}
+	else
+		command->output_name = NULL;
 	return (tmp);
 }
 
@@ -185,15 +214,12 @@ int	create_commands(t_inf *info)
 	tmp = info->tokens;
 	while (tmp)
 	{
-		//printf("->%s (%d)\n",tmp->content, tmp->type);
 		if (tmp != NULL && tmp->type == WORD)
-		{
 			tmp  = save_word(info, tmp);
-		}
 		else if (tmp->type == LESS)
-		{
 			tmp  = save_input(info, tmp);
-		}
+		else if (tmp->type == GREATER)
+			tmp  = save_output(info, tmp);
 		/*else if (tmp->type == PIPE || tmp->type == SEMICOLON)
 		{
 			tmp = tmp->next;
@@ -204,11 +230,7 @@ int	create_commands(t_inf *info)
 			tmp = tmp->next;
 			continue;
 		}
-		else if (tmp->type == GREATER)
-		{
-			tmp = tmp->next;
-			continue;
-		}*/
+		*/
 		else if (tmp != NULL && tmp->type == END)
 		{
 			break;
