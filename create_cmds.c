@@ -175,7 +175,7 @@ t_list	*save_input(t_inf *info, t_list *tmp)
 	return (tmp);
 }
 
-t_list	*save_output(t_inf *info, t_list *tmp)
+t_list	*save_output(t_inf *info, t_list *tmp, int type)
 {
 	t_command *command;
 	command = get_last_cmd(info);
@@ -193,7 +193,7 @@ t_list	*save_output(t_inf *info, t_list *tmp)
 			printf("salida no valida");
 		else
 		{
-			command->output = open(command->output_name,  O_WRONLY | O_CREAT | O_TRUNC, 0664);
+			command->output = open(command->output_name,  O_WRONLY | O_CREAT | type, 0664);
 			if (command->output == -1)
 			{
 				perror("Error al abrir el archivo de salida");
@@ -219,13 +219,20 @@ int	create_commands(t_inf *info)
 		else if (tmp->type == LESS)
 			tmp  = save_input(info, tmp);
 		else if (tmp->type == GREATER)
-			tmp  = save_output(info, tmp);
-		/*else if (tmp->type == PIPE || tmp->type == SEMICOLON)
+			tmp  = save_output(info, tmp, O_TRUNC);
+		else if (tmp->type == APPEND)
+			tmp  = save_output(info, tmp, O_APPEND);
+		/*else if (tmp->type == SEMICOLON)
 		{
 			tmp = tmp->next;
 			continue;
 		}
-		else if (tmp->type == HEREDOC || tmp->type == APPEND)
+		else if (tmp->type == HEREDOC)
+		{
+			tmp = tmp->next;
+			continue;
+		}
+		else if (tmp->type == APPEND)
 		{
 			tmp = tmp->next;
 			continue;
