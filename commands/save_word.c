@@ -17,6 +17,7 @@ t_list	*save_word(t_inf *info, t_list *tmp)
 	t_command	*command;
 
 	command = get_last_cmd(info);
+
 	if (command->cmd != NULL)
 	{
 		printf("cmd : %s\n", command->cmd);
@@ -29,5 +30,7 @@ t_list	*save_word(t_inf *info, t_list *tmp)
 	}
 	else
 		tmp = save_args(tmp, command);
+	
 	return (tmp);
 }
+

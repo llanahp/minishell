@@ -45,7 +45,7 @@ int	num_args(t_list *tmp)
 	return (i);
 }
 
-int	malloc_join_args(char **args, char **tmp)
+char	**malloc_join_args(char **args, char **tmp)
 {
 	int		i;
 	int		j;
