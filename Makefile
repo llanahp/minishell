@@ -44,6 +44,7 @@ SRC = libft/ft_isalpha.c libft/ft_isalnum.c libft/ft_isascii.c libft/ft_isprint.
 	libft/ft_strcmp.c libft/ft_strcontains.c\
 	builtins/echo.c builtins/cd.c builtins/pwd.c builtins/env.c builtins/export.c builtins/unset.c \
 	ft_free_split.c get_info.c sigaction.c tokenize.c check_vars.c create_cmds.c command_utils.c\
+	commands/save_args.c commands/save_heredoc.c  commands/save_input.c commands/save_output.c commands/save_pipe.c commands/save_word.c\
 	minishell.c
 
 OBJ = $(SRC:.c=.o)

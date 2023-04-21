@@ -28,6 +28,7 @@ t_command	*ft_lstnew_command(char *cmd)
 	obj->output_name = NULL;
 	obj->input = -2;
 	obj->output = -2;
+	obj->pipe_out = 0;
 	return (obj);
 }
 
@@ -158,4 +159,24 @@ void	ft_clear_tokens(t_inf *info)
 		}
 		info->tokens = NULL;
 	}
+}
+
+t_command	*get_last_cmd(t_inf *info)
+{
+	t_command	*tmp;
+	if (info->commands == NULL)
+	{
+		/*tmp = (t_command *)malloc(sizeof(t_command) * 1);
+		if (!tmp)
+			return (NULL);*/
+		tmp = ft_lstnew_command(NULL);
+		ft_lstadd_back_command(&info->commands, tmp);
+		return (tmp);
+	}
+	tmp = info->commands;
+	while (tmp->next)
+	{
+		tmp = tmp->next;
+	}
+	return (tmp);
 }
