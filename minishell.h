@@ -20,6 +20,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <readline/readline.h>
+# include "get_next_line/get_next_line.h"
 # include <readline/history.h>
 # include <signal.h>
 # include <limits.h>
@@ -108,6 +109,7 @@ void	manejar_sigchild(int signal);
 void	init_sigaction(t_inf *info);
 
 /** tokenize.c */
+int	is_quote(char c);
 int	tokenize(t_inf *info, char *line);
 
 /** check_vars.c */
@@ -133,6 +135,7 @@ char	**join_arguments(char	**args, char	**tmp);
 
 t_list	*save_word(t_inf *info, t_list *tmp);
 
+void	close_prev_redir(t_command *command);
 t_list	*save_input(t_inf *info, t_list *tmp);
 
 t_list	*save_output(t_inf *info, t_list *tmp, int type);
@@ -140,4 +143,10 @@ t_list	*save_output(t_inf *info, t_list *tmp, int type);
 t_list	*save_heredoc(t_inf *info, t_list *tmp);
 
 t_list	*save_pipe(t_inf *info, t_list *tmp, int pipe);
+
+/** ft_error.c */
+int	msg(char *str1, char *str2, char *str3, int code);
+
+
+char	*get_next_line(int fd);
 #endif

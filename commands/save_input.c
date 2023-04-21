@@ -12,18 +12,23 @@
 
 #include "../minishell.h"
 
-t_list	*save_input(t_inf *info, t_list *tmp)
+void	close_prev_redir(t_command *command)
 {
-	t_command	*command;
-
-	command = get_last_cmd(info);
-	tmp = tmp->next;
 	if (command->input_name != NULL)
 	{
 		close(command->input);
 		free(command->input_name);
 		command->input_name = NULL;
 	}
+}
+
+t_list	*save_input(t_inf *info, t_list *tmp)
+{
+	t_command	*command;
+
+	command = get_last_cmd(info);
+	tmp = tmp->next;
+	close_prev_redir(command);
 	if (tmp != NULL && tmp->type == WORD)
 	{
 		command->input_name = ft_strdup(tmp->content);
