@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-static int	excep_case(n, fd)
+static int	excep_case(int n, int fd)
 {
 	if (n == -2147483648)
 	{

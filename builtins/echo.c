@@ -17,7 +17,7 @@ int	echo(t_inf *info, char *line)
 	char	*string;
 
 	if (1==2)
-		info = NULL;
+		info->pwd = NULL;
 	string = ft_substr(line, 5, ft_strlen(line));
 	//echo $varia asdf
 	printf("%s\n",string);

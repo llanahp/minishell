@@ -12,15 +12,6 @@
 
 # include "minishell.h"
 
-void mostrar_tokens2(t_inf *info)
-{
-	printf("--------------\n");
-	while (info->tokens)
-	{
-		printf("%s\n", (char *)info->tokens->content);
-		info->tokens = info->tokens->next;
-	}
-}
 
 char	*get_name_var(char *line)
 {
@@ -47,23 +38,31 @@ char	*replace(char *string, char *search, char *replace)
 	int		j;
 
 	len = 0;
-	i = -1;
+	i = 0;
 	j = -1;
-	len = ft_strlen(string) - ft_strlen(search) + ft_strlen(replace);
+	len = ft_strlen(string) - ft_strlen(search) + ft_strlen(replace) + 1;
 	result = (char *)malloc(sizeof(char) * (len + 1));
 	if (result == NULL)
 		return (NULL);
-	while (string[++i] != '$')
+	while (string[i] != '\0' && string[i] != '$')
+	{
 		result[i] = string[i];
+		i++;
+	}
+	result[i]='\0';
 	len = i;
 	while (replace[++j] != '\0')
 		result[i++] = replace[j];
+	while (string[len] != '\0' && string[len] != ' ')
+		len++;
 	while (string[len] != '\0')
 	{
 		result[i] = string[len];
 		i++;
 		len++;
 	}
+	result[i] = '\0';
+	free(string);
 	return (result);
 }
 
@@ -71,33 +70,80 @@ int	check_vars(t_inf *info)
 {
 	t_list	*tmp;
 	char	*var;
+	char	 *name;
 
 	tmp = info->tokens;
 	while (tmp)
 	{
 		if (ft_strcontains(tmp->content, '$'))
 		{
-			
-			var = get_var(info, get_name_var(tmp->content));
-			printf("%s\n",var);
+			name = get_name_var(tmp->content);
+			var = get_var(info, name);
+		
 			if (var == NULL)
-			{
-				//lo reemplazo por un string vacio
-				tmp->content = replace(tmp->content, get_name_var(tmp->content), "");
-				printf("no existe var\n");
-				getchar();
-			}
+				tmp->content = replace(tmp->content, name, "");
 			else
-			{
-				//lo reemplazo por el valor de la variable
-				printf("existe var\n");
-				getchar();
-			}
+				tmp->content = replace(tmp->content, name, var);
+			free(name);
 			tmp = info->tokens;
 		}
-		tmp = tmp->next;
+		else
+			tmp = tmp->next;
 	}
+	//mostrar_tokens2(info);
+	return (0);
+}
 
-	mostrar_tokens2(info);
+
+char	*replace_quotes(char *string, char quote)
+{
+	char	*result;
+	int 	i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	result = (char *)malloc(sizeof(char) * (ft_strlen(string) - 1 + 1));
+	if (result == NULL)
+		return (NULL);
+	while (string[i] != '\0')
+	{
+		if (string[i] != quote)
+		{
+			result[j] = string[i];
+			j++;
+		}
+		i++;
+	}
+	result[j]='\0';
+	free(string);
+	return (result);
+}
+/*
+caso de prueba:
+hola que tal | pers < ddfasddf> || "yes" 'per"otro"o' esto
+*/
+
+int	delete_quotes(t_inf *info)
+{
+	t_list	*tmp;
+
+	tmp = info->tokens;
+	while (tmp)
+	{
+		if (ft_strcontains(tmp->content, '"'))
+		{
+			tmp->content = replace_quotes(tmp->content, '\"');
+			tmp = info->tokens;
+		}
+		else if (ft_strcontains(tmp->content, '\''))
+		{
+			tmp->content = replace_quotes(tmp->content, '\'');
+			tmp = info->tokens;
+		}
+		else
+			tmp = tmp->next;
+	}
+//	mostrar_tokens2(info);
 	return (0);
 }

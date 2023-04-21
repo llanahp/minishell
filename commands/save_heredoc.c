@@ -1,26 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew.c                                        :+:      :+:    :+:   */
+/*   save_args.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ralopez- <ralopez-@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: ralopez- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/13 14:51:43 by ralopez-          #+#    #+#             */
-/*   Updated: 2022/09/13 15:53:03 by ralopez-         ###   ########.fr       */
+/*   Created: 2023/03/31 14:08:25 by ralopez-          #+#    #+#             */
+/*   Updated: 2023/03/31 14:08:27 by ralopez-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../minishell.h"
 
-	t_list	*ft_lstnew(void *content)
-	{
-		t_list	*obj;
+t_list	*save_heredoc(t_inf *info, t_list *tmp)
+{
+	//TODO
 
-		obj = (t_list *) malloc(sizeof(*obj));
-		if (!obj)
-			return (0);
-		obj->content = content;
-		obj->next = NULL;
-		obj->type =	0;
-		return (obj);
-	}
+	return (tmp->next);
+}

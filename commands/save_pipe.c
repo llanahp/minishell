@@ -1,46 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_split.c                                    :+:      :+:    :+:   */
+/*   save_args.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ralopez- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/13 10:52:07 by ralopez-          #+#    #+#             */
-/*   Updated: 2022/11/13 10:52:09 by ralopez-         ###   ########.fr       */
+/*   Created: 2023/03/31 14:08:25 by ralopez-          #+#    #+#             */
+/*   Updated: 2023/03/31 14:08:27 by ralopez-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
-void	ft_free_split(char **split)
+t_list	*save_pipe(t_inf *info, t_list *tmp, int pipe)
 {
-	int		i;
+	t_command	*command;
 
-	i = 0;
-	if (split != NULL)
-	{
-		while (split[i])
-		{
-			free(split[i]);
-			i++;
-		}
-		free(split);
-	}
-}
-
-void	ft_free_split2(char ***split)
-{
-	int		i;
-
-	i = 0;
-	if ((*split) != NULL)
-	{
-		while ((*split)[i])
-		{
-			free((*split)[i]);
-			i++;
-		}
-		free((*split));
-		(*split) = NULL;
-	}
+	command = get_last_cmd(info);
+	if (pipe)
+		command->pipe_out = 1;
+	ft_lstadd_back_command(&info->commands, ft_lstnew_command(NULL));
+	return (tmp->next);
 }

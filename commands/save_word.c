@@ -1,46 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_split.c                                    :+:      :+:    :+:   */
+/*   save_word.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ralopez- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/13 10:52:07 by ralopez-          #+#    #+#             */
-/*   Updated: 2022/11/13 10:52:09 by ralopez-         ###   ########.fr       */
+/*   Created: 2023/03/31 14:08:25 by ralopez-          #+#    #+#             */
+/*   Updated: 2023/03/31 14:08:27 by ralopez-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
-void	ft_free_split(char **split)
+t_list	*save_word(t_inf *info, t_list *tmp)
 {
-	int		i;
+	t_command	*command;
 
-	i = 0;
-	if (split != NULL)
+	command = get_last_cmd(info);
+
+	if (command->cmd != NULL)
 	{
-		while (split[i])
-		{
-			free(split[i]);
-			i++;
-		}
-		free(split);
+		printf("cmd : %s\n", command->cmd);
 	}
+	if (command->cmd == NULL)
+	{
+		command->cmd = ft_strdup(tmp->content);
+		tmp = tmp->next;
+		tmp = save_args(tmp, command);
+	}
+	else
+		tmp = save_args(tmp, command);
+	
+	return (tmp);
 }
 
-void	ft_free_split2(char ***split)
-{
-	int		i;
-
-	i = 0;
-	if ((*split) != NULL)
-	{
-		while ((*split)[i])
-		{
-			free((*split)[i]);
-			i++;
-		}
-		free((*split));
-		(*split) = NULL;
-	}
-}

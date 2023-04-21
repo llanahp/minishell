@@ -44,37 +44,29 @@ int	store_word(t_inf *info, char *line, int i)
 	int		type;
 	char	*word;
 	
-	j = i;
+	j=i;
 	type = is_quote(line[j]);
 	if (type)
 		j++;
 	while (line[j] && ((type > 1 && is_quote(line[j]) != type)
-			|| (type == 0 && !is_space(line[j]))))
+			|| (type == 0 && !is_space(line[j]) && !is_delimiter(line[j])) ))
 		j++;
 	if (line[j] && type > 0 && !is_space(line[j]))
 		type = 0 ;
-	while(line[j] && !is_space(line[j]))
+	while(line[j] && !is_space(line[j]) && !is_delimiter(line[j]))
 		j++;
 	if (type > 0)
 		j++;
-
 	if (j > (int)ft_strlen(line))
 		return (-1);
 	word = ft_substr(line, i, j - i);
-	//printf("%s\n\n", word);
 	ft_lstadd_back(&info->tokens, ft_lstnew(word));
+	if (is_delimiter(line[j - 1]))
+		return (j); // return index of delimiter
 	return (j);
 }
 
-void mostrar_tokens(t_inf *info)
-{
-	printf("--------------\n");
-	while (info->tokens)
-	{
-		printf("%s\n", (char *)info->tokens->content);
-		info->tokens = info->tokens->next;
-	}
-}
+
 
 int	type_delimiter(char *line, int *i) 
 {
@@ -113,6 +105,12 @@ void	store_delimiter(t_inf *info, char *line, int *i)
 	ft_lstadd_back(&info->tokens, tmp);
 }
 
+/*
+caso de prueba:
+hola esto | |aa aa| aa|aa < <bb bb< bb<bb  > >cc cc> cc>cc || dd|| ||dd dd||dd ; e; ;e e;e 
+"yes" 'per"otro"o' esto
+*/
+
 int	tokenize(t_inf *info, char *line)
 {
 	int	i;
@@ -124,16 +122,13 @@ int	tokenize(t_inf *info, char *line)
 			i++;
 		else if (is_delimiter(line[i]))
 		{
-			//printf("Delimiter\n");
 			store_delimiter(info, line, &i);
 		}
 		else
 		{
-			//printf("Word\n");
 			i = store_word(info, line, i);
-			//printf("%s\n",line+i);
 		}
 	}
-	//mostrar_tokens(info);
 	return (0);
 }
+
