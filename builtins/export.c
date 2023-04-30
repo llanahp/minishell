@@ -26,7 +26,7 @@ int	ft_find(char *line, char character)
 	return (position);
 }
 
-int	export_binding(t_inf *info, char *line)
+int	export_binding(t_inf *info, char *line, t_command *cmd)
 {
 	char	*name;
 	char	*value;

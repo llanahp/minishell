@@ -12,7 +12,7 @@
 
 # include "../minishell.h"
 
-int	pwd(t_inf *info)
+int	pwd(t_inf *info, t_command *cmd)
 {
 	int	code;
 
@@ -20,3 +20,4 @@ int	pwd(t_inf *info)
 	printf("%s\n",info->pwd);
 	return (code);
 }
+

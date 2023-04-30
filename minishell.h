@@ -30,6 +30,10 @@
 # include <sys/wait.h>
 
 # define CMD_NOT_FOUND 127
+
+# define CMD_SUCCESS 0
+# define CMD_FAILURE 1
+
 # define WORD 0
 # define PIPE 3
 # define SEMICOLON 4
@@ -40,7 +44,6 @@
 # define END 9
 # define SIMPLE_QUOTE 10
 # define DOUBLE_QUOTE 11
-
 extern int last_code;
 
 typedef struct s_command t_command;
@@ -53,6 +56,8 @@ typedef struct s_command
 	char				*path;
 	int					input;
 	int					output;
+	int					*fds;
+	int					pid;
 	char				*input_name;
 	char				*output_name;
 	t_command			*previous;
@@ -72,24 +77,23 @@ typedef struct s_inf
 }               t_inf;
 
 /** cd.c */
-int	cd(t_inf *info, char *line);
-
+int	cd(t_inf *info, char *line, t_command *cmd);
 
 /** echo.c */
-int	echo(t_inf *info, char *line);
+int	echo(t_inf *info, char *line, t_command *cmd);
 
 /** pwd.c */
-int	pwd(t_inf *info);
-
+int	pwd(t_inf *info, t_command *cmd);
 
 /** env.c */
-int	env(t_inf *info);
+int	env(t_inf *info, t_command *cmd);
 
 /** export.c */
-int    	export_binding(t_inf *info, char *line);
+int    	export_binding(t_inf *info, char *line,t_command *cmd);
 
 /** unset.c */
-int 	unset(t_inf *info, char *line);
+int 	unset(t_inf *info, char *line,t_command *cmd);
+
 
 
 void	ft_free_split(char **split);
@@ -149,4 +153,8 @@ int	msg(char *str1, char *str2, char *str3, int code);
 
 
 char	*get_next_line(int fd);
+
+
+/** execution.c */
+int execute_commands(t_inf *info);
 #endif

@@ -12,7 +12,7 @@
 
 # include "../minishell.h"
 
-int	echo(t_inf *info, char *line)
+int	echo(t_inf *info, char *line, t_command *cmd)
 {
 	char	*string;
 

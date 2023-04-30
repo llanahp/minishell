@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 # include "minishell.h"
-
+/*
 int	execute_builtins(t_inf *info, char *line)
 {
 	int	code;
@@ -32,7 +32,7 @@ int	execute_builtins(t_inf *info, char *line)
 	else if (ft_memcmp(line, "unset", 5) == 0)
 		code = unset(info, line);
 	return (code);
-}
+}*/
 
 
 
@@ -57,7 +57,8 @@ void	display_prompt(t_inf *info)
 		return ;
 	if (create_commands(info) == -1)
 		return ;
-	
+	if (execute_commands(info) == -1)
+		return ;
 	
 	//int code = execute_builtins(info, line);
 	free(line);

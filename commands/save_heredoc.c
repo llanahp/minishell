@@ -98,13 +98,14 @@ t_list	*set_name_heredoc(t_list *tmp, t_command *command)
 	name = ft_strjoin("/tmp/heredoc_", ft_itoa(i));
 	tmp = tmp->next;
 	delimiter = define_delimiter(&tmp);
-	printf("antes de leer\nname:%s\ndelimiter:%s\n", name, delimiter);
-	getchar();
 	if (read_heredoc( name, delimiter) == -1)
 		return (NULL);
 	command->input_name = ft_strdup(name);
 	free(name);
 	free(delimiter);
+	command->input = open(command->input_name, O_RDONLY);
+	if (command->input == -1)
+		perror("Error al abrir el archivo de entrada");
 	return (tmp);
 }
 

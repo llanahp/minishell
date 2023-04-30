@@ -12,7 +12,7 @@
 
 # include "../minishell.h"
 
-int	env(t_inf *info)
+int	env(t_inf *info, t_command *cmd)
 {
 	int	i;
 

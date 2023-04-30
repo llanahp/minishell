@@ -12,3 +12,4 @@ int	msg(char *str1, char *str2, char *str3, int code)
 	ft_putendl_fd(str3, 2);
 	return (code);
 }
+

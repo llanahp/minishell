@@ -12,7 +12,7 @@
 
 # include "../minishell.h"
 
-int	unset(t_inf *info, char *line)
+int	unset(t_inf *info, char *line, t_command *cmd)
 {
 	char	**args;
 	int     i;

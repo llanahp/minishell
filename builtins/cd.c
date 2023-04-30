@@ -19,7 +19,7 @@ int	msg_error(char *str)
 	return (1);
 }
 
-int	cd(t_inf *info, char *line)
+int	cd(t_inf *info, char *line, t_command *cmd)
 {
 	char	*location;
 	char	*tmp;
