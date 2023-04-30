@@ -157,4 +157,10 @@ char	*get_next_line(int fd);
 
 /** execution.c */
 int execute_commands(t_inf *info);
+
+
+/** pipes.c */
+int	prepare_execution(t_inf *info);
+int	prepare_pipes(t_inf *info);
+int	wait_childs(t_inf *info);
 #endif

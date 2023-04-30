@@ -28,8 +28,7 @@ void mostrar_commands(t_inf *info)
 			printf("args(%d): %s\n",i, tmp->args[i]);
 			i++;
 		}
-		tmp = tmp->next;
-		
+		tmp = tmp->next;	
 	}
 }
 
@@ -56,17 +55,8 @@ int	create_commands(t_inf *info)
 		else if (tmp->type == HEREDOC) //<<
 			tmp = save_heredoc(info, tmp);
 		else if (tmp != NULL && tmp->type == END)
-		{
 			break;
-		}
-		
-		/*else
-		{
-			ft_lstadd_back(&info->commands, ft_lstnew(tmp->content));
-			tmp = tmp->next;
-		}*/
-		
 	}
-	mostrar_commands(info);
+	//mostrar_commands(info);
 	return (0);
 }
