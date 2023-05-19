@@ -28,6 +28,7 @@
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <string.h>
 
 # define CMD_NOT_FOUND 127
 

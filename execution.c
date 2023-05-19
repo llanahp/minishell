@@ -91,15 +91,17 @@ void	execute_cmd(t_command *cmd, t_inf *info)
 
 	if (cmd != NULL && is_builtin(cmd->cmd))
 	{
+		ft_putstr_fd("es builtiiiiiin\n",1);
 		execute_builtin(cmd, info);
 	}
 	else
 	{
 		cmd->cmd = get_path(cmd->cmd, info);
+		
 		if (execve(cmd->cmd, cmd->args, info->env) == -1)
 		{
-			if (cmd != NULL)
-				free(cmd);
+			//if (cmd != NULL)
+				//free(cmd);
 			msg("Execve", ": ", strerror(errno), EXIT_FAILURE);
 		}
 	}
@@ -112,7 +114,17 @@ int	create_childs(t_inf *info)
 	tmp = info->commands;
 	while (tmp)
 	{
-		
+		/*int i=0;
+		char **aux = tmp->args;
+		aux[0] = "ls";
+		aux[1] = NULL;
+		while (aux != NULL && aux[i])
+		{
+			printf("\t%s\n", aux[i]);
+			i++;
+		}
+		printf("----");
+		getchar();*/
 		info->pid = fork();
 		if (info->pid == -1)
 			msg("fork", "", strerror(errno), EXIT_FAILURE);
@@ -120,7 +132,8 @@ int	create_childs(t_inf *info)
 			execute_cmd(tmp, info);
 		tmp = tmp->next;
 	}
-	return (wait_childs(info));
+	//return (wait_childs(info));
+	return (0);
 }
 /*
 int	redir()
