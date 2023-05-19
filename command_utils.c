@@ -28,7 +28,6 @@ t_command	*ft_lstnew_command(char *cmd)
 	obj->input_name = NULL;
 	obj->output_name = NULL;
 	obj->input = -2;
-	obj->pid = -2;
 	obj->output = -2;
 	obj->pipe_out = 0;
 	return (obj);

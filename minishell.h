@@ -57,7 +57,6 @@ typedef struct s_command
 	int					input;
 	int					output;
 	int					*fds;
-	int					pid;
 	char				*input_name;
 	char				*output_name;
 	t_command			*previous;
@@ -74,13 +73,14 @@ typedef struct s_inf
 	char		*pwd;
 	t_list		*tokens;
 	t_command	*commands;
+	int			pid;
 }               t_inf;
 
 /** cd.c */
 int	cd(t_inf *info, char *line, t_command *cmd);
 
 /** echo.c */
-int	echo(t_inf *info, char *line, t_command *cmd);
+int	echo(t_command *cmd);
 
 /** pwd.c */
 int	pwd(t_inf *info, t_command *cmd);
@@ -89,10 +89,10 @@ int	pwd(t_inf *info, t_command *cmd);
 int	env(t_inf *info, t_command *cmd);
 
 /** export.c */
-int    	export_binding(t_inf *info, char *line,t_command *cmd);
+int    	export_binding(t_inf *info, char *line, t_command *cmd);
 
 /** unset.c */
-int 	unset(t_inf *info, char *line,t_command *cmd);
+int 	unset(t_inf *info, t_command *cmd);
 
 
 
@@ -130,6 +130,7 @@ void		ft_lstadd_back_command(t_command **lst, t_command *new);
 void		ft_lstclear_cmds(t_inf *info);
 void		ft_lstclear_tokens(t_inf *info);
 t_command	*get_last_cmd(t_inf *info);
+void	ft_clear_tokens(t_inf *info);
 
 
 /** save_args.c */

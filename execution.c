@@ -36,7 +36,7 @@ int	is_builtin(char *cmd)
 void	execute_builtin(t_command *cmd, t_inf *info)
 {
 	if (ft_strcmp(cmd->cmd, "echo"))
-		echo(info, "quitaresteargumento", cmd);
+		echo(cmd);
 	else if (ft_strcmp(cmd->cmd, "cd"))
 		cd(info, "quitaresteargumento", cmd);
 	else if (ft_strcmp(cmd->cmd, "pwd"))
@@ -44,7 +44,7 @@ void	execute_builtin(t_command *cmd, t_inf *info)
 	else if (ft_strcmp(cmd->cmd, "export"))
 		export_binding(info, "quitaresteargumento", cmd);
 	else if (ft_strcmp(cmd->cmd, "unset"))
-		unset(info, "quitaresteargumento", cmd);
+		unset(info, cmd);
 	else if (ft_strcmp(cmd->cmd, "env"))
 		env(info, cmd);
 }
@@ -71,7 +71,6 @@ char	*get_path(char *cmd, t_inf *info)
 
 	if (access(cmd, F_OK | X_OK) == 0)
 	{
-		free(cmd);
 		return (cmd);
 	}
 	i = -1;
@@ -101,7 +100,7 @@ void	execute_cmd(t_command *cmd, t_inf *info)
 		{
 			if (cmd != NULL)
 				free(cmd);
-			msg("Execve", ": ", strerror(errno), info);
+			msg("Execve", ": ", strerror(errno), EXIT_FAILURE);
 		}
 	}
 }
@@ -113,10 +112,11 @@ int	create_childs(t_inf *info)
 	tmp = info->commands;
 	while (tmp)
 	{
-		tmp->pid = fork();
-		if (tmp->pid == -1)
+		
+		info->pid = fork();
+		if (info->pid == -1)
 			msg("fork", "", strerror(errno), EXIT_FAILURE);
-		else if (tmp->pid == 0)
+		else if (info->pid == 0)
 			execute_cmd(tmp, info);
 		tmp = tmp->next;
 	}
@@ -145,12 +145,12 @@ int	redir()
 int	execute_commands(t_inf *info)
 {
 	int	code;
-	t_command	*tmp;
+	//t_command	*tmp;
 
 	code = prepare_execution(info);
 	if (code != CMD_NOT_FOUND)
 		return (code);
-	tmp = info->commands;
+	//tmp = info->commands;
 /*	if (io_sets(tmp))
 		return (false);
 	{
@@ -159,6 +159,7 @@ int	execute_commands(t_inf *info)
 	}
 	if (code == CMD_NOT_FOUND)
 		return (CMD_NOT_FOUND);*/
+	
 	code = create_childs(info);
 	return (code);
 }

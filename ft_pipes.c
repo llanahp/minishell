@@ -48,8 +48,34 @@ int	prepare_pipes(t_inf *info)
 	return (0);
 }
 
+void	close_pipes(t_inf *info)
+{
+	t_command	*tmp;
+
+	tmp = info->commands;
+	while (tmp != NULL)
+	{
+		close(tmp->fds[0]);
+		close(tmp->fds[1]);
+		tmp = tmp->next;
+	}
+}
+
 int	wait_childs(t_inf *info)
 {
+	pid_t	wpid;
+	int		status;
+	int		save_status;
 
-	return (0);
+	close_pipes(info);
+	save_status = 0;
+	wpid = 0;
+	while (wpid != -1 || errno != ECHILD)
+	{
+		wpid = waitpid(-1, &status, 0);
+		if (wpid == info->pid)
+			save_status = status;
+		continue ;
+	}
+	return (save_status);
 }

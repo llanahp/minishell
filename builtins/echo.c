@@ -12,14 +12,14 @@
 
 # include "../minishell.h"
 
-int	echo(t_inf *info, char *line, t_command *cmd)
+int	echo(t_command *cmd)
 {
-	char	*string;
+	int	i;
 
-	if (1==2)
-		info->pwd = NULL;
-	string = ft_substr(line, 5, ft_strlen(line));
-	//echo $varia asdf
-	printf("%s\n",string);
+	i = 0;
+	while (cmd != NULL && cmd->args[i])
+	{
+		printf("%s", cmd->args[i]);
+	}
 	return (0);
 }

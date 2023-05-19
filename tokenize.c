@@ -62,7 +62,7 @@ int	store_word(t_inf *info, char *line, int i)
 	word = ft_substr(line, i, j - i);
 	ft_lstadd_back(&info->tokens, ft_lstnew(word));
 	if (is_delimiter(line[j - 1]))
-		return (j); // return index of delimiter
+		return (j);
 	return (j);
 }
 

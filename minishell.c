@@ -49,6 +49,7 @@ void	display_prompt(t_inf *info)
 	if (ft_strcmp(line, "exit") == 0)
 		exit(0);//TODO mirar por si pasa el codigo con el que tiene que terminar
 	add_history(line);
+
 	if (tokenize(info, line) == -1)
 		return ;
 	if (check_vars(info) == -1)
@@ -78,6 +79,10 @@ int	main(int argc, char *argv[], char **env)
 		argv = NULL;
 	}
 	info.env = env;
+	info.tokens = NULL;
+	/*info.commands = NULL;
+	info.pwd = NULL;
+	info.paths = NULL;*/
 	get_enviroment(&info);
 	init_sigaction(&info);
 

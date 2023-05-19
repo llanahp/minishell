@@ -12,21 +12,19 @@
 
 # include "../minishell.h"
 
-int	unset(t_inf *info, char *line, t_command *cmd)
+int	unset(t_inf *info, t_command *cmd)
 {
 	char	**args;
 	int     i;
 	int		code;
 
 	i = 1;
-	args = ft_split(line, ' ');
 	code  = 0;
-	while (args[i])
+	while (cmd != NULL && cmd->args[i])
 	{
-		if (delete_var(info, args[i]) == 1 && code == 0)
+		if (delete_var(info, cmd->args[i]) == 1 && code == 0)
 			code = 1;
 		i++;
 	}
-	ft_free_split(args);
 	return (code);
 }
