@@ -3,23 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ralopez- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:33:39 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/03/10 11:33:41 by ralopez-         ###   ########.fr       */
+/*   Updated: 2023/05/20 16:07:57 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../minishell.h"
+#include "../minishell.h"
 
 int	echo(t_command *cmd)
 {
 	int	i;
 
 	i = 0;
-	while (cmd != NULL && cmd->args[i])
+	while (cmd != NULL && cmd->args[i] && i < 4)
 	{
-		printf("%s", cmd->args[i]);
+		printf("%s\n", cmd->args[i]);
+		i++;
 	}
 	return (0);
 }

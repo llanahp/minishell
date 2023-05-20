@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ralopez- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:41:20 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/03/10 10:41:21 by ralopez-         ###   ########.fr       */
+/*   Updated: 2023/05/20 18:56:19 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "minishell.h"
 
 //TODO revisar porque no se si es correcto
 /*
@@ -35,18 +35,19 @@ int	is_builtin(char *cmd)
 
 void	execute_builtin(t_command *cmd, t_inf *info)
 {
-	if (ft_strcmp(cmd->cmd, "echo"))
+	if (!ft_strcmp(cmd->cmd, "echo"))
 		echo(cmd);
-	else if (ft_strcmp(cmd->cmd, "cd"))
-		cd(info, "quitaresteargumento", cmd);
-	else if (ft_strcmp(cmd->cmd, "pwd"))
+	else if (!ft_strcmp(cmd->cmd, "cd"))
+		cd(info, cmd);
+	else if (!ft_strcmp(cmd->cmd, "pwd"))
 		pwd(info, cmd);
-	else if (ft_strcmp(cmd->cmd, "export"))
-		export_binding(info, "quitaresteargumento", cmd);
-	else if (ft_strcmp(cmd->cmd, "unset"))
+	else if (!ft_strcmp(cmd->cmd, "export"))
+		export_binding(info, cmd);
+	else if (!ft_strcmp(cmd->cmd, "unset"))
 		unset(info, cmd);
-	else if (ft_strcmp(cmd->cmd, "env"))
-		env(info, cmd);
+	else if (!ft_strcmp(cmd->cmd, "env"))
+		env(info);
+	// exit() ?????
 }
 
 /** create_cmd:
@@ -88,20 +89,15 @@ char	*get_path(char *cmd, t_inf *info)
 
 void	execute_cmd(t_command *cmd, t_inf *info)
 {
-
 	if (cmd != NULL && is_builtin(cmd->cmd))
-	{
-		ft_putstr_fd("es builtiiiiiin\n",1);
 		execute_builtin(cmd, info);
-	}
 	else
 	{
 		cmd->cmd = get_path(cmd->cmd, info);
-		
 		if (execve(cmd->cmd, cmd->args, info->env) == -1)
 		{
-			//if (cmd != NULL)
-				//free(cmd);
+			if (cmd != NULL)
+				// free(cmd);
 			msg("Execve", ": ", strerror(errno), EXIT_FAILURE);
 		}
 	}
@@ -114,17 +110,6 @@ int	create_childs(t_inf *info)
 	tmp = info->commands;
 	while (tmp)
 	{
-		/*int i=0;
-		char **aux = tmp->args;
-		aux[0] = "ls";
-		aux[1] = NULL;
-		while (aux != NULL && aux[i])
-		{
-			printf("\t%s\n", aux[i]);
-			i++;
-		}
-		printf("----");
-		getchar();*/
 		info->pid = fork();
 		if (info->pid == -1)
 			msg("fork", "", strerror(errno), EXIT_FAILURE);
@@ -132,8 +117,7 @@ int	create_childs(t_inf *info)
 			execute_cmd(tmp, info);
 		tmp = tmp->next;
 	}
-	//return (wait_childs(info));
-	return (0);
+	return (wait_childs(info));
 }
 /*
 int	redir()
