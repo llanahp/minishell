@@ -57,9 +57,11 @@ typedef struct s_command
 	char				*path;
 	int					input;
 	int					output;
-	int					*fds;
+	int					*redir;
 	char				*input_name;
 	char				*output_name;
+	int					type_redir;
+	int					num_cmd_pipe;
 	t_command			*previous;
 	t_command			*next;
 	int					pid;
