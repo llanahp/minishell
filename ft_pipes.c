@@ -70,12 +70,14 @@ int	wait_childs(t_inf *info)
 	close_pipes(info);
 	save_status = 0;
 	wpid = 0;
-	while (wpid != -1 || errno != ECHILD)
+	t_command	*tmp= info->commands;
+	while ((wpid != -1 || errno != ECHILD) && tmp != NULL)
 	{
-		wpid = waitpid(-1, &status, 0);
+		wpid = waitpid(tmp->pid, &status, 0);
 		if (wpid == info->pid)
 			save_status = status;
 		continue ;
+		tmp = tmp->next;
 	}
 	return (save_status);
 }

@@ -33,6 +33,7 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
+
 void	execute_builtin(t_command *cmd, t_inf *info)
 {
 	if (ft_strcmp(cmd->cmd, "echo"))
@@ -88,12 +89,9 @@ char	*get_path(char *cmd, t_inf *info)
 
 void	execute_cmd(t_command *cmd, t_inf *info)
 {
-
+	redir(info);
 	if (cmd != NULL && is_builtin(cmd->cmd))
-	{
-		ft_putstr_fd("es builtiiiiiin\n",1);
 		execute_builtin(cmd, info);
-	}
 	else
 	{
 		cmd->cmd = get_path(cmd->cmd, info);
@@ -114,26 +112,15 @@ int	create_childs(t_inf *info)
 	tmp = info->commands;
 	while (tmp)
 	{
-		/*int i=0;
-		char **aux = tmp->args;
-		aux[0] = "ls";
-		aux[1] = NULL;
-		while (aux != NULL && aux[i])
-		{
-			printf("\t%s\n", aux[i]);
-			i++;
-		}
-		printf("----");
-		getchar();*/
-		info->pid = fork();
-		if (info->pid == -1)
+		tmp->pid = fork();
+		if (tmp->pid == -1)
 			msg("fork", "", strerror(errno), EXIT_FAILURE);
-		else if (info->pid == 0)
+		else if (tmp->pid == 0)
 			execute_cmd(tmp, info);
 		tmp = tmp->next;
 	}
-	//return (wait_childs(info));
-	return (0);
+	return (wait_childs(info));
+	//return (0);
 }
 /*
 int	redir()
@@ -155,23 +142,16 @@ int	redir()
 	return (code);
 }*/
 
+
+
+
 int	execute_commands(t_inf *info)
 {
 	int	code;
-	//t_command	*tmp;
 
 	code = prepare_execution(info);
 	if (code != CMD_NOT_FOUND)
 		return (code);
-	//tmp = info->commands;
-/*	if (io_sets(tmp))
-		return (false);
-	{
-		redir(tmp);
-		
-	}
-	if (code == CMD_NOT_FOUND)
-		return (CMD_NOT_FOUND);*/
 	
 	code = create_childs(info);
 	return (code);
