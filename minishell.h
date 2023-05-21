@@ -62,6 +62,7 @@ typedef struct s_command
 	char				*output_name;
 	t_command			*previous;
 	t_command			*next;
+	int					pid;
 	int					pipe_out;
 }		t_command;
 
@@ -165,4 +166,7 @@ int execute_commands(t_inf *info);
 int	prepare_execution(t_inf *info);
 int	prepare_pipes(t_inf *info);
 int	wait_childs(t_inf *info);
+
+/** redir.c */
+void	redir(t_command *cmd);
 #endif

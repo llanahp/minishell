@@ -33,6 +33,7 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
+
 void	execute_builtin(t_command *cmd, t_inf *info)
 {
 	if (!ft_strcmp(cmd->cmd, "echo"))
@@ -89,6 +90,8 @@ char	*get_path(char *cmd, t_inf *info)
 
 void	execute_cmd(t_command *cmd, t_inf *info)
 {
+	
+	redir(cmd);
 	if (cmd != NULL && is_builtin(cmd->cmd))
 		execute_builtin(cmd, info);
 	else
@@ -110,52 +113,27 @@ int	create_childs(t_inf *info)
 	tmp = info->commands;
 	while (tmp)
 	{
-		info->pid = fork();
-		if (info->pid == -1)
+		tmp->pid = fork();
+		if (tmp->pid == -1)
 			msg("fork", "", strerror(errno), EXIT_FAILURE);
-		else if (info->pid == 0)
+		else if (tmp->pid == 0)
 			execute_cmd(tmp, info);
 		tmp = tmp->next;
 	}
 	return (wait_childs(info));
+	//return (0);
 }
-/*
-int	redir()
-{
-	int	code;
 
-	code = 0;
-	if ()
-	if (dup2(in, STDIN_FILENO) == -1)
-	{
-		//free_error("error", "", "", info);
-		code = 1;
-	}
-	if (dup2(out, STDOUT_FILENO) == -1)
-	{
-		//free_error("error", "", "", info);
-		code = 1;
-	}
-	return (code);
-}*/
+
+
 
 int	execute_commands(t_inf *info)
 {
 	int	code;
-	//t_command	*tmp;
 
 	code = prepare_execution(info);
 	if (code != CMD_NOT_FOUND)
 		return (code);
-	//tmp = info->commands;
-/*	if (io_sets(tmp))
-		return (false);
-	{
-		redir(tmp);
-		
-	}
-	if (code == CMD_NOT_FOUND)
-		return (CMD_NOT_FOUND);*/
 	
 	code = create_childs(info);
 	return (code);
