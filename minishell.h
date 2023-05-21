@@ -79,7 +79,7 @@ typedef struct s_inf
 }               t_inf;
 
 /** cd.c */
-int	cd(t_inf *info, char *line, t_command *cmd);
+int	cd(t_inf *info, t_command *cmd);
 
 /** echo.c */
 int	echo(t_command *cmd);
@@ -88,10 +88,10 @@ int	echo(t_command *cmd);
 int	pwd(t_inf *info, t_command *cmd);
 
 /** env.c */
-int	env(t_inf *info, t_command *cmd);
+int	env(t_inf *info);
 
 /** export.c */
-int    	export_binding(t_inf *info, char *line, t_command *cmd);
+int	export_binding(t_inf *info, t_command *cmd);
 
 /** unset.c */
 int 	unset(t_inf *info, t_command *cmd);
