@@ -13,25 +13,6 @@
 
 # include "minishell.h"
 
-void mostrar_commands(t_inf *info)
-{
-	t_command	*tmp;
-
-	tmp = info->commands;
-	printf("--------------\n");
-	while (tmp != NULL)
-	{
-		printf("cmd:%s\n", (char *)tmp->cmd);
-		int i=0;
-		while (tmp->args[i] != NULL)
-		{
-			printf("args(%d): %s\n",i, tmp->args[i]);
-			i++;
-		}
-		tmp = tmp->next;	
-	}
-}
-
 void prepare_args(t_inf *info)
 {
 	t_command	*tmp;
@@ -74,7 +55,6 @@ int	create_commands(t_inf *info)
 		else if (tmp != NULL && tmp->type == END)
 			break;
 	}
-	//mostrar_commands(info);
 	prepare_args(info);
 	return (0);
 }

@@ -31,8 +31,36 @@ void	fds_pipes(int in, int out)
 	}
 }
 
+int	*locate_redir(t_command *cmd)
+{
+	t_command *tmp = cmd;
+	while (tmp != NULL && tmp->redir == NULL)
+	{
+		tmp = tmp->previous;
+	}
+	if (tmp == NULL)
+		return (NULL);
+	return (tmp->redir);
+}
+
+/** close_pipes:
+ * This function close the previous file descriptors to the actual command.
+ */
+void	close_pipes(int *redir,t_command *cmd)
+{
+	int	i;
+
+	i = -1;
+	while (++i < (2 * (cmd->num_cmd_pipe - 1)))
+	{
+		close(redir[i]);
+	}
+}
+
 void	redir(t_command *cmd)
 {
+	int	*redir;
+
 	if (cmd->input != -2 &&  cmd->output != -2)
 	{
 		fds_pipes(cmd->input, cmd->output);
@@ -50,25 +78,26 @@ void	redir(t_command *cmd)
 		dup2(cmd->output, STDOUT_FILENO);
 		close(cmd->output);
 	}
-	if (cmd->pipe_out == 1)
+	printf("cmd:%s\n", cmd->cmd);
+	printf("type_redir:%d\n", cmd->type_redir);
+	printf("num_cmd_pipe:%d\n\n", cmd->num_cmd_pipe);
+	if (cmd->type_redir != 0)
 	{
-		printf("(4)\n");
-		close(cmd->fds[0]);
-		dup2(cmd->fds[1], STDOUT_FILENO);
-
-		close(cmd->fds[0]);
-		close(cmd->fds[1]);
-
-		/*if (cmd->input != -2)
-			close(cmd->input);
-		if (cmd->output!= -2)
-			close(cmd->output);*/
+		redir = locate_redir(cmd);
+		if (cmd->type_redir == 1)
+		{
+			if (dup2(redir[1], STDOUT_FILENO) == -1)
+				exit(EXIT_FAILURE);
+		}
+		else if (cmd->type_redir == 3)
+		{
+			if (dup2(redir[2 * cmd->num_cmd_pipe - 2], STDIN_FILENO) == -1)
+				exit(EXIT_FAILURE);
+		}
+		else
+			fds_pipes(redir[2 * cmd->num_cmd_pipe - 2], redir[2 * cmd->num_cmd_pipe + 1]);
+		close_pipes(redir, cmd);
 	}
 	
 	
-	if (cmd->previous != NULL && cmd->previous->pipe_out == 1)
-	{
-		close(cmd->fds[1]);
-		dup2(cmd->fds[0], STDIN_FILENO);
-	}
 }

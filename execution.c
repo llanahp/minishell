@@ -12,23 +12,13 @@
 
 #include "minishell.h"
 
-//TODO revisar porque no se si es correcto
-/*
-int	io_sets(t_command *tmp)
-{
-	if ((tmp->input_name && tmp->input == -2) || (tmp->output_name && tmp->output == -2))
-		return (1);
-	else
-		return (0);
-}
-*/
 
 int	is_builtin(char *cmd)
 {
 	if (cmd == NULL)
 		return (0);
-	if (ft_strcmp(cmd, "echo") ==0|| ft_strcmp(cmd, "cd")  ==0|| ft_strcmp(cmd, "pwd")  ==0 || 
-		ft_strcmp(cmd, "export")  ==0|| ft_strcmp(cmd, "unset")  ==0|| ft_strcmp(cmd, "env") ==0)
+	if (ft_strcmp(cmd, "echo") == 0|| ft_strcmp(cmd, "cd")  == 0|| ft_strcmp(cmd, "pwd")  == 0 || 
+		ft_strcmp(cmd, "export")  == 0|| ft_strcmp(cmd, "unset")  == 0|| ft_strcmp(cmd, "env") == 0)
 		return (1);
 	return (0);
 }
@@ -96,7 +86,6 @@ void	execute_cmd(t_command *cmd, t_inf *info)
 		execute_builtin(cmd, info);
 	else
 	{
-		
 		cmd->cmd = get_path(cmd->cmd, info);
 		if (execve(cmd->cmd, cmd->args, info->env) == -1)
 		{
@@ -122,7 +111,6 @@ int	create_childs(t_inf *info)
 		tmp = tmp->next;
 	}
 	return (wait_childs(info));
-	//return (0);
 }
 
 
