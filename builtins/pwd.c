@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ralopez- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 14:01:41 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/03/10 14:01:43 by ralopez-         ###   ########.fr       */
+/*   Updated: 2023/05/20 16:19:59 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../minishell.h"
+#include "../minishell.h"
 
 int	pwd(t_inf *info, t_command *cmd)
 {
 	int	code;
 
-	if (cmd->args != NULL)
+	if (cmd->args[0] != NULL)
 	{
 		if (cmd->args[0] != NULL && cmd->args[1][0] == '-')
 			printf("pwd: bad option: -%c\n", cmd->args[1][1]);
@@ -31,4 +31,3 @@ int	pwd(t_inf *info, t_command *cmd)
 	}
 	return (code);
 }
-

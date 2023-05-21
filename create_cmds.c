@@ -32,22 +32,6 @@ void mostrar_commands(t_inf *info)
 	}
 }
 
-void prepare_args(t_inf *info)
-{
-	t_command	*tmp;
-	int			i;
-
-	tmp = info->commands;
-	i = 0;
-	while (tmp)
-	{
-		tmp->args = join_arguments(ft_split(tmp->cmd, ' '),tmp->args);
-		tmp = tmp->next;
-		i++;
-	}
-	
-}
-
 int	create_commands(t_inf *info)
 {
 	if (info->tokens == NULL)
@@ -73,8 +57,6 @@ int	create_commands(t_inf *info)
 		else if (tmp != NULL && tmp->type == END)
 			break;
 	}
-	//mostrar_commands(info);
-	prepare_args(info);
 	//mostrar_commands(info);
 	return (0);
 }
