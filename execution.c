@@ -96,10 +96,11 @@ void	execute_cmd(t_command *cmd, t_inf *info)
 		execute_builtin(cmd, info);
 	else
 	{
+		
 		cmd->cmd = get_path(cmd->cmd, info);
 		if (execve(cmd->cmd, cmd->args, info->env) == -1)
 		{
-			if (cmd != NULL)
+			//if (cmd != NULL)
 				// free(cmd);
 			msg("Execve", ": ", strerror(errno), EXIT_FAILURE);
 		}

@@ -169,4 +169,6 @@ int	wait_childs(t_inf *info);
 
 /** redir.c */
 void	redir(t_command *cmd);
+
+int	is_builtin(char *cmd);
 #endif
