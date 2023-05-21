@@ -57,7 +57,12 @@ void	close_pipes(t_inf *info)
 	{
 		close(tmp->fds[0]);
 		close(tmp->fds[1]);
+		if (tmp->input != -2)
+			close(tmp->input);
+		if (tmp->output != -2)
+			close(tmp->output);
 		tmp = tmp->next;
+
 	}
 }
 

@@ -89,7 +89,8 @@ char	*get_path(char *cmd, t_inf *info)
 
 void	execute_cmd(t_command *cmd, t_inf *info)
 {
-	redir(info);
+	
+	redir(cmd);
 	if (cmd != NULL && is_builtin(cmd->cmd))
 		execute_builtin(cmd, info);
 	else
@@ -122,25 +123,6 @@ int	create_childs(t_inf *info)
 	return (wait_childs(info));
 	//return (0);
 }
-/*
-int	redir()
-{
-	int	code;
-
-	code = 0;
-	if ()
-	if (dup2(in, STDIN_FILENO) == -1)
-	{
-		//free_error("error", "", "", info);
-		code = 1;
-	}
-	if (dup2(out, STDOUT_FILENO) == -1)
-	{
-		//free_error("error", "", "", info);
-		code = 1;
-	}
-	return (code);
-}*/
 
 
 

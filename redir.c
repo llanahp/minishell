@@ -33,35 +33,42 @@ void	fds_pipes(int in, int out)
 
 void	redir(t_command *cmd)
 {
+	if (cmd->input != -2 &&  cmd->output != -2)
+	{
+		fds_pipes(cmd->input, cmd->output);
+		close(cmd->input);
+		close(cmd->output);
+
+	}
+	else if (cmd->input != -2)
+	{
+		dup2(cmd->input, STDIN_FILENO);
+		close(cmd->input);
+	}
+	else if (cmd->output != -2)
+	{
+		dup2(cmd->output, STDOUT_FILENO);
+		close(cmd->output);
+	}
 	if (cmd->pipe_out == 1)
 	{
-		if (cmd->input != 2 &&  cmd->output != -2)
-			fds_pipes(cmd->input, cmd->output);
-		else if (cmd->input != 2)
-			fds_pipes(cmd->input, cmd->fds[1]);
-		else if (cmd->output != -2)
-			fds_pipes(cmd->fds[0],cmd->output);
-		else
-        {
-               close(cmd->fds[0]);
-               dup2(cmd->fds[1], STDOUT_FILENO);
-        }   
-    }
-    if (cmd->pipe_out == 1)
+		printf("(4)\n");
+		close(cmd->fds[0]);
+		dup2(cmd->fds[1], STDOUT_FILENO);
+
+		close(cmd->fds[0]);
+		close(cmd->fds[1]);
+
+		/*if (cmd->input != -2)
+			close(cmd->input);
+		if (cmd->output!= -2)
+			close(cmd->output);*/
+	}
+	
+	
+	if (cmd->previous != NULL && cmd->previous->pipe_out == 1)
 	{
-        if (cmd->input != -1)
-            close(cmd->input);
-        if (cmd->output!= -1)
-            close(cmd->output);
-        if (cmd->pipe_out == 1)
-        {
-            close(cmd->fds[0]);
-            close(cmd->fds[1]);
-        }       
-    }
-    if (cmd->previous != NULL && cmd->previous->pipe_out == 1)
-    {
-         close(cmd->fds[1]);
-          dup2(cmd->fds[0], STDIN_FILENO);
-    }
+		close(cmd->fds[1]);
+		dup2(cmd->fds[0], STDIN_FILENO);
+	}
 }
