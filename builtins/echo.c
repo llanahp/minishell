@@ -19,8 +19,9 @@ int	echo(t_command *cmd)
 	i = 0;
 	while (cmd != NULL && cmd->args[i] && i < 4)
 	{
-		printf("%s\n", cmd->args[i]);
+		printf("%s", cmd->args[i]);
 		i++;
 	}
+	printf("\n");
 	return (0);
 }

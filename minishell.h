@@ -66,6 +66,7 @@ typedef struct s_command
 	t_command			*next;
 	int					pid;
 	int					pipe_out;
+		int					*fds;
 }		t_command;
 
 
@@ -170,7 +171,7 @@ int	prepare_pipes(t_inf *info);
 int	wait_childs(t_inf *info);
 
 /** redir.c */
-void	redir(t_command *cmd);
+void	redir(t_command *cmd, t_inf *info);
 
 int	is_builtin(char *cmd);
 #endif
