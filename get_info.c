@@ -49,7 +49,8 @@ int	get_pwd(t_inf *info)
 	i = 0;
 	if (info->pwd != NULL)
 	{
-			free(info->pwd);
+			// Daba error, tratando de free algo no alocado
+			// free(info->pwd);
 			info->pwd = NULL;
 	}
 	while ((*info).env[i] != NULL && (*info).env[i][0] != '\0'
