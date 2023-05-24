@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:33:39 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/05/20 16:07:57 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/05/24 18:58:38 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	echo(t_command *cmd)
 	// why i < 4 ??		
 	while (cmd != NULL && cmd->args[++i] && i < 4)
 	{
-		printf("4%s4", cmd->args[i]);
+		printf("%s", cmd->args[i]);
 		if (cmd->args[i + 1])
 			printf(" ");
 	}
