@@ -11,31 +11,6 @@
 /* ************************************************************************** */
 
 # include "minishell.h"
-/*
-int	execute_builtins(t_inf *info, char *line)
-{
-	int	code;
-
-	code = CMD_NOT_FOUND;
-	if (ft_strcmp(line, "exit") == 0)
-		exit(0);
-	else if (ft_memcmp(line, "cd", 2) == 0)
-		code = cd(info, line);
-	else if (ft_memcmp(line, "echo", 4) == 0)
-		code = echo(info, line);
-	else if (ft_strcmp(line, "pwd") == 0)
-		code = pwd(info);
-	else if (ft_strcmp(line, "env") == 0)
-		code = env(info);
-	else if (ft_memcmp(line, "export", 6) == 0)
-		code = export_binding(info, line);
-	else if (ft_memcmp(line, "unset", 5) == 0)
-		code = unset(info, line);
-	return (code);
-}*/
-
-
-
 
 void	display_prompt(t_inf *info)
 {
@@ -43,7 +18,9 @@ void	display_prompt(t_inf *info)
 
 	line = NULL;
 	info->commands = NULL;
+	set_signals_interactive();
 	line = readline("minishell>");
+	set_signals_noninteractive();
 	if (ft_strcmp(line, "") == 0)
 		return ;
 	if (ft_strcmp(line, "exit") == 0)
@@ -59,8 +36,6 @@ void	display_prompt(t_inf *info)
 		return ;
 	if (execute_commands(info) == -1)
 		return ;
-	
-	//int code = execute_builtins(info, line);
 	free(line);
 	ft_lstclear_cmds(info);
 	ft_clear_tokens(info);
@@ -72,18 +47,12 @@ int	main(int argc, char *argv[], char **env)
 {
 	t_inf	info;
 
-	if (1 == 2)
-	{
-		argc = 0;
-		argv = NULL;
-	}
 	info.env = env;
 	info.tokens = NULL;
-	/*info.commands = NULL;
+	info.commands = NULL;
 	info.pwd = NULL;
-	info.paths = NULL;*/
+	info.paths = NULL;
 	get_enviroment(&info);
-	init_sigaction(&info);
 
 	//last_code = 0;
 	while (1)

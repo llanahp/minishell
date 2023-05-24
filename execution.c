@@ -82,7 +82,7 @@ void	execute_cmd(t_command *cmd, t_inf *info)
 {
 	char	*cmd_original;
 	
-	cmd_original = cmd->cmd;
+	cmd_original = ft_strdup(cmd->cmd);
 	redir(cmd, info);
 	if (cmd != NULL && is_builtin(cmd->cmd))
 		execute_builtin(cmd, info);
@@ -90,12 +90,14 @@ void	execute_cmd(t_command *cmd, t_inf *info)
 	{
 		cmd->cmd = get_path(cmd->cmd, info);
 		if (cmd->cmd == NULL)
+		{
 			msg("command not found", ": ", cmd_original , EXIT_FAILURE);
+			exit(127);
+		}
 		else if (execve(cmd->cmd, cmd->args, info->env) == -1)
 		{
-			//if (cmd != NULL)
-				// free(cmd);
 			msg("Execve", ": ", strerror(errno), EXIT_FAILURE);
+			exit(127);
 		}
 	}
 }

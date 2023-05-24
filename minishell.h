@@ -114,8 +114,8 @@ void    add_var(t_inf *info, char *var, char *value);
 int		delete_var(t_inf *info, char *var);
 
 /** sigaction.c */
-void	manejar_sigchild(int signal);
-void	init_sigaction(t_inf *info);
+void	set_signals_interactive(void);
+void	set_signals_noninteractive(void);
 
 /** tokenize.c */
 int	is_quote(char c);
