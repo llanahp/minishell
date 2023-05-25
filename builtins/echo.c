@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:33:39 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/05/24 18:58:38 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/05/24 22:45:19 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	echo(t_command *cmd)
 	if (!ft_strcmp(cmd->args[0], "-n")) 
 		i++;
 	// why i < 4 ??		
+	// check if the cmd->args is a possible command, as echo cd ~ should print 
 	while (cmd != NULL && cmd->args[++i] && i < 4)
 	{
 		printf("%s", cmd->args[i]);

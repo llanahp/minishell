@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 14:08:25 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/05/24 22:29:00 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/05/25 02:19:44 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,8 +117,9 @@ int	ft_check_smpl_and_double_quotes(char *line, t_list *tmp)
 	return (is_quote);
 }
 // este caso no funciona bien, y muchos mas asi parecidos
-// bash-3.2$ echo "'$USER'"  >> deberia >> 'mpizzolo'. devuelve mpizzolo
-// bash-3.2$ echo '"$USER"'  >> deberia >> "$USER" devuelve $USER
+// bash$ echo "'$USER'"  >> devuelve >> 'mpizzolo' >> minishell >> devuelve mpizzolo
+// bash$ echo '"$USER"'  >> devuelve >> "$USER" >> minishell >> $USER
+// bash$ echo "$"HOME"" >> devuelve >> $HOME >> minishell >> cualq cosa
 
 int	check_vars(t_inf *info)
 {
@@ -139,6 +140,13 @@ int	check_vars(t_inf *info)
 				tmp->content = replace(tmp->content, name, var);
 			free(name);
 			tmp = info->tokens;
+		}
+		else if (ft_strcontains(tmp->content, '~'))
+		{
+			var = get_var(info, "USER_ZDOTDIR");
+			tmp->content = replace(tmp->content, "~", var);
+			tmp->content = replace_quotes(tmp->content, '~');
+			tmp = tmp->next;
 		}
 		else
 			tmp = tmp->next;

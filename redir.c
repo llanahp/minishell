@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ralopez- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:41:20 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/03/10 10:41:21 by ralopez-         ###   ########.fr       */
+/*   Updated: 2023/05/25 00:49:35 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,9 @@ void	redir(t_command *cmd)
 		dup2(cmd->output, STDOUT_FILENO);
 		close(cmd->output);
 	}
-	printf("cmd:%s\n", cmd->cmd);
-	printf("type_redir:%d\n", cmd->type_redir);
-	printf("num_cmd_pipe:%d\n\n", cmd->num_cmd_pipe);
+	// printf("cmd:%s\n", cmd->cmd);
+	// printf("type_redir:%d\n", cmd->type_redir);
+	// printf("num_cmd_pipe:%d\n\n", cmd->num_cmd_pipe);
 	if (cmd->type_redir != 0)
 	{
 		redir = locate_redir(cmd);
