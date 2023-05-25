@@ -47,6 +47,8 @@ int	main(int argc, char *argv[], char **env)
 {
 	t_inf	info;
 
+	argc = argc;
+	argv = argv;
 	info.env = env;
 	info.tokens = NULL;
 	info.commands = NULL;

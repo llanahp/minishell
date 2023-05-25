@@ -79,6 +79,9 @@ char	*handle_absolute_path(t_inf *info, char *absolute_path)
 	// char	*to;
 	// char	*tmp;
 
+	//TEMPORAL
+	info = info;
+	absolute_path = absolute_path;
 	printf("Absolute path\n");
 	// to = absolute_path;
 	// to_location = handle_back_cd(info->pwd);
