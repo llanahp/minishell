@@ -15,13 +15,9 @@
 int	file_exists(char	*name)
 {
 	if(access(name, F_OK) == 0)
-	{
         return (1);
-    }
 	else
-	{
         return (0);
-    }
 }
 
 char	*define_delimiter(t_list **tmp)
@@ -68,8 +64,9 @@ int	read_heredoc( char *name, char *delimiter)
 	while (1 == 1)
 	{
 		buf = NULL;
-		write(1, "heredoc> ", 10);
-		buf = get_next_line(0);
+		set_signals_interactive();
+		buf = readline("heredoc>");
+		set_signals_noninteractive();
 		if (buf == NULL)
 			return (msg("Error reading", ": ", strerror(errno), -1));
 		buf[ft_strlen(buf) - 1] = '\0';

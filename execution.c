@@ -80,18 +80,24 @@ char	*get_path(char *cmd, t_inf *info)
 
 void	execute_cmd(t_command *cmd, t_inf *info)
 {
+	char	*cmd_original;
 	
-	redir(cmd);
+	cmd_original = ft_strdup(cmd->cmd);
+	redir(cmd, info);
 	if (cmd != NULL && is_builtin(cmd->cmd))
 		execute_builtin(cmd, info);
 	else
 	{
 		cmd->cmd = get_path(cmd->cmd, info);
-		if (execve(cmd->cmd, cmd->args, info->env) == -1)
+		if (cmd->cmd == NULL)
 		{
-			//if (cmd != NULL)
-				// free(cmd);
+			msg("command not found", ": ", cmd_original , EXIT_FAILURE);
+			exit(127);
+		}
+		else if (execve(cmd->cmd, cmd->args, info->env) == -1)
+		{
 			msg("Execve", ": ", strerror(errno), EXIT_FAILURE);
+			exit(127);
 		}
 	}
 }
@@ -103,18 +109,15 @@ int	create_childs(t_inf *info)
 	tmp = info->commands;
 	while (tmp)
 	{
-		tmp->pid = fork();
-		if (tmp->pid == -1)
-			msg("fork", "", strerror(errno), EXIT_FAILURE);
-		else if (tmp->pid == 0)
+		info->pid = fork();
+		if (info->pid == -1)
+			msg("fork", ": ", strerror(errno), EXIT_FAILURE);
+		else if (info->pid == 0)
 			execute_cmd(tmp, info);
 		tmp = tmp->next;
 	}
 	return (wait_childs(info));
 }
-
-
-
 
 int	execute_commands(t_inf *info)
 {
@@ -123,7 +126,6 @@ int	execute_commands(t_inf *info)
 	code = prepare_execution(info);
 	if (code != CMD_NOT_FOUND)
 		return (code);
-	
 	code = create_childs(info);
 	return (code);
 }

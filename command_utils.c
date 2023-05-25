@@ -22,6 +22,7 @@ t_command	*ft_lstnew_command(char *cmd)
 	obj->cmd = cmd;
 	obj->args = NULL;
 	obj->path = NULL;
+	obj->fds = NULL;
 	obj->next = NULL;
 	obj->redir = NULL;
 	obj->previous = NULL;
