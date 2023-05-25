@@ -2,3 +2,4 @@
 *.o
 minishell
 *.o
+libft.a

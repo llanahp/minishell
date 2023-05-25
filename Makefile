@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ralopez- <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/27 12:35:10 by ralopez-          #+#    #+#              #
-#    Updated: 2023/01/27 12:35:13 by ralopez-         ###   ########.fr        #
+#    Updated: 2023/05/25 09:46:42 by mpizzolo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,8 @@ NAME = minishell
 CC = gcc
 CFLAGS = -Wall -Wextra -I libft/ #-Werror
 
+LDFLAGS		= -L/Users/$(USER)/.brew/opt/readline/lib
+CPPFLAGS	= -I/Users/$(USER)/.brew/opt/readline/include
 
 
 ifdef TERM
@@ -47,7 +49,7 @@ OBJ = $(SRC:.c=.o)
 
 $(NAME): $(OBJ) libft
 	@echo $(BLUE) Done!!! $(COLRESET)
-	@$(CC) -o $@ $(OBJ) -Llibft -lft  -lreadline
+	@$(CC) -o $@ $(OBJ) -Llibft -lft $(LDFLAGS) $(CPPFLAGS) -lreadline
 
 libft:
 	@make -C libft 
