@@ -13,24 +13,21 @@
 
 # include "minishell.h"
 
-void mostrar_commands(t_inf *info)
+void prepare_args(t_inf *info)
 {
 	t_command	*tmp;
+	int			i;
 
 	tmp = info->commands;
-	printf("--------------\n");
-	while (tmp != NULL)
+	i = 0;
+	while (tmp)
 	{
-		printf("cmd:%s\n", (char *)tmp->cmd);
-		int i=0;
-		while (tmp->args[i] != NULL)
-		{
-			printf("args(%d): %s\n",i, tmp->args[i]);
-			i++;
-		}
+		if (tmp->cmd != NULL && !is_builtin(tmp->cmd))
+			tmp->args = join_arguments(ft_split(tmp->cmd, ' '),tmp->args);
 		tmp = tmp->next;
-		
+		i++;
 	}
+
 }
 
 int	create_commands(t_inf *info)
@@ -56,17 +53,8 @@ int	create_commands(t_inf *info)
 		else if (tmp->type == HEREDOC) //<<
 			tmp = save_heredoc(info, tmp);
 		else if (tmp != NULL && tmp->type == END)
-		{
 			break;
-		}
-		
-		/*else
-		{
-			ft_lstadd_back(&info->commands, ft_lstnew(tmp->content));
-			tmp = tmp->next;
-		}*/
-		
 	}
-	mostrar_commands(info);
+	prepare_args(info);
 	return (0);
 }

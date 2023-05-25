@@ -3,30 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ralopez- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:41:20 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/03/10 10:41:21 by ralopez-         ###   ########.fr       */
+/*   Updated: 2023/05/20 18:55:44 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../minishell.h"
+#include "../minishell.h"
 
-int	unset(t_inf *info, char *line)
+int	unset(t_inf *info, t_command *cmd)
 {
-	char	**args;
-	int     i;
+	int		i;
 	int		code;
 
-	i = 1;
-	args = ft_split(line, ' ');
-	code  = 0;
-	while (args[i])
+	i = 0;
+	code = 0;
+	while (cmd != NULL && cmd->args[i])
 	{
-		if (delete_var(info, args[i]) == 1 && code == 0)
+		if (delete_var(info, cmd->args[i]) == 1 && code == 0)
 			code = 1;
 		i++;
 	}
-	ft_free_split(args);
 	return (code);
 }

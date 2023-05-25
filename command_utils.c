@@ -22,13 +22,17 @@ t_command	*ft_lstnew_command(char *cmd)
 	obj->cmd = cmd;
 	obj->args = NULL;
 	obj->path = NULL;
+	obj->fds = NULL;
 	obj->next = NULL;
+	obj->redir = NULL;
 	obj->previous = NULL;
 	obj->input_name = NULL;
 	obj->output_name = NULL;
 	obj->input = -2;
 	obj->output = -2;
 	obj->pipe_out = 0;
+	obj->type_redir = 0;
+	obj->num_cmd_pipe = 0;
 	return (obj);
 }
 
