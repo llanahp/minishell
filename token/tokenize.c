@@ -10,31 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
-
-int	is_space(char c)
-{
-	if (c == ' ' || c == '\t')
-		return (1);
-	return (0);
-}
-
-int	is_delimiter(char c)
-{
-	if (c == '|' || c == '<' || c == '>')
-		return (1);
-	return (0);
-}
-
-int	is_quote(char c)
-{
-	if (c == '"')
-		return (DOUBLE_QUOTE);
-	if (c == '\'')
-		return (SIMPLE_QUOTE);
-	return (0);
-}
-
+# include "../minishell.h"
 
 
 int	store_word(t_inf *info, char *line, int i)
@@ -64,8 +40,6 @@ int	store_word(t_inf *info, char *line, int i)
 		return (j);
 	return (j);
 }
-
-
 
 int	type_delimiter(char *line, int *i) 
 {
@@ -101,12 +75,6 @@ void	store_delimiter(t_inf *info, char *line, int *i)
 	*i += 1;
 	ft_lstadd_back(&info->tokens, tmp);
 }
-
-/*
-caso de prueba:
-hola esto | |aa aa| aa|aa < <bb bb< bb<bb  > >cc cc> cc>cc || dd|| ||dd dd||dd ; e; ;e e;e 
-"yes" 'per"otro"o' esto
-*/
 
 int	tokenize(t_inf *info, char *line)
 {

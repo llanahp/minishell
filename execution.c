@@ -12,18 +12,6 @@
 
 #include "minishell.h"
 
-
-int	is_builtin(char *cmd)
-{
-	if (cmd == NULL)
-		return (0);
-	if (ft_strcmp(cmd, "echo") == 0|| ft_strcmp(cmd, "cd")  == 0|| ft_strcmp(cmd, "pwd")  == 0 || 
-		ft_strcmp(cmd, "export")  == 0|| ft_strcmp(cmd, "unset")  == 0|| ft_strcmp(cmd, "env") == 0)
-		return (1);
-	return (0);
-}
-
-
 void	execute_builtin(t_command *cmd, t_inf *info, int exi)
 {
 	int	code;
@@ -115,7 +103,6 @@ int	create_childs(t_inf *info)
 	t_command	*tmp;
 
 	tmp = info->commands;
-
 	while (tmp)
 	{
 		info->pid = fork();
@@ -132,8 +119,7 @@ int	execute_single_cmd(t_inf *info)
 {
 	t_command	*tmp;
 	int			code;
-	
-	
+
 	tmp = info->commands;
 	execute_builtin(tmp, info, 0);
 	info->last_code = 0;

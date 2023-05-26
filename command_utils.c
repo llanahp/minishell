@@ -58,22 +58,6 @@ void	ft_lstadd_back_command(t_command **lst, t_command *new)
 	else
 		lst = &new;
 }
-/*
-void ft_free_array(char ***array)
-{
-	int i;
-
-	i = 0;
-	while ((*array) != NULL && (*array)[i] != NULL)
-	{
-		free((*array)[i]);
-		(*array)[i] = NULL;
-		i++;
-	}
-	if ((*array) != NULL)
-		free((*array));
-	(*array) = NULL;
-}*/
 
 //TODO falta liberar el previous y next 
 void	clear_command(t_command *cmd)
@@ -107,7 +91,6 @@ void	ft_lstclear_cmds(t_inf *info)
 	
 	if (info->commands != NULL)
 	{
-		
 		aux = info->commands;
 		if (aux != NULL)
 		{
@@ -170,9 +153,6 @@ t_command	*get_last_cmd(t_inf *info)
 	t_command	*tmp;
 	if (info->commands == NULL)
 	{
-		/*tmp = (t_command *)malloc(sizeof(t_command) * 1);
-		if (!tmp)
-			return (NULL);*/
 		tmp = ft_lstnew_command(NULL);
 		ft_lstadd_back_command(&info->commands, tmp);
 		return (tmp);

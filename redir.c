@@ -31,48 +31,6 @@ void	fds_pipes(int in, int out)
 	}
 }
 
-/*
-int	*locate_redir(t_command *cmd)
-{
-	t_command *tmp = cmd;
-	while (tmp != NULL && tmp->redir == NULL)
-	{
-		tmp = tmp->previous;
-	}
-	if (tmp == NULL)
-		return (NULL);
-	return (tmp->redir);
-}*/
-
-/** close_pipes:
- * This function close the previous file descriptors to the actual command.
- */
-/*
-void	close_pipes(int *redir, t_command *cmd)
-{
-	int	i;
-	t_command *tmp = cmd;
-
-	i = -1;
-	if (cmd->input != -2)
-	{
-		close(cmd->input);
-		cmd->input = -2;
-	}
-	if (cmd->output != -2)
-	{
-		close(cmd->output);
-		cmd->input = -2;
-	}
-
-	while (tmp != NULL && (tmp->next != NULL && tmp->next->num_cmd_pipe > cmd->num_cmd_pipe))
-	{
-		tmp = tmp->next;
-	}
-	while (++i < (2 * (tmp->num_cmd_pipe)))
-		close(redir[i]);
-}*/
-
 void	redir_files(t_command *cmd)
 {
 	if (cmd->input != -2 &&  cmd->output != -2)

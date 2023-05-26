@@ -20,7 +20,6 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <readline/readline.h>
-# include "get_next_line/get_next_line.h"
 # include <readline/history.h>
 # include <signal.h>
 # include <limits.h>
@@ -110,7 +109,7 @@ void	ft_free_split(char **split);
 void	ft_free_split2(char ***split);
 
 
-/** get_info.c */
+/** env_utils.c */
 int		get_enviroment(t_inf *info, char **env);
 int		get_pwd(t_inf *info);
 void	change_var_env(t_inf *info, char *var, char *value);
@@ -123,13 +122,23 @@ void	set_signals_interactive(void);
 void	set_signals_noninteractive(void);
 
 /** tokenize.c */
-int	is_quote(char c);
 int	tokenize(t_inf *info, char *line);
+
+/** token_utils.c */
+int	is_space(char c);
+int	is_delimiter(char c);
+int	is_quote(char c);
 
 /** check_vars.c */
 int	check_vars(t_inf *info);
 int	delete_quotes(t_inf *info);
 
+/** var_utils.c */
+int		len_var(char *tmp);
+char	*get_name(char *tmp);
+void	update_status(char **str, int i, int *status);
+char	*get_name_var(char *line);
+char	*replace(char *string, char *search, char *replace);
 
 /** create_cmds.c */
 int	create_commands(t_inf *info);
@@ -158,12 +167,8 @@ t_list	*save_pipe(t_inf *info, t_list *tmp, int pipe);
 int		msg(char *str1, char *str2, char *str3, int code);
 void	end_shell(t_inf *info, int code);
 
-char	*get_next_line(int fd);
-
-
 /** execution.c */
 int execute_commands(t_inf *info);
-
 
 /** pipes.c */
 int	prepare_execution(t_inf *info);
@@ -173,9 +178,18 @@ int	wait_childs(t_inf *info);
 /** redir.c */
 void	redir(t_command *cmd, t_inf *info);
 
-int	is_builtin(char *cmd);
+
 
 /** utils */
 int	ft_strichr(char *str, char c);
+bool	is_separator(char c);
+bool	is_var_compliant(char c);
+int		is_builtin(char *cmd);
+
+/** quotes.c */
+char	*replace_quotes(char *string, char quote);
+int		ft_are_double_quotes(char *line);
+char	*replace_d_quotes(char *line, char quote);
+char	*ft_replace_double_quotes(char *line);
 
 #endif
