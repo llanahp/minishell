@@ -37,7 +37,6 @@
 
 # define WORD 0
 # define PIPE 3
-# define SEMICOLON 4
 # define LESS 5
 # define HEREDOC 6
 # define GREATER 7
@@ -45,10 +44,11 @@
 # define END 9
 # define SIMPLE_QUOTE 10
 # define DOUBLE_QUOTE 11
-extern int last_code;
+
 
 typedef struct s_command t_command;
 
+typedef struct s_inf t_inf;
 
 typedef struct s_command
 {
@@ -66,7 +66,7 @@ typedef struct s_command
 	t_command			*next;
 	int					pid;
 	int					pipe_out;
-		int					*fds;
+	int					*fds;
 }		t_command;
 
 
@@ -79,6 +79,7 @@ typedef struct s_inf
 	t_list		*tokens;
 	t_command	*commands;
 	int			pid;
+	int			last_code;
 }               t_inf;
 
 /** cd.c */
@@ -110,7 +111,7 @@ void	ft_free_split2(char ***split);
 
 
 /** get_info.c */
-int		get_enviroment(t_inf *info);
+int		get_enviroment(t_inf *info, char **env);
 int		get_pwd(t_inf *info);
 void	change_var_env(t_inf *info, char *var, char *value);
 char	*get_var(t_inf *info, char *var);
@@ -146,20 +147,16 @@ void	ft_clear_tokens(t_inf *info);
 t_list *save_args(t_list *tmp, t_command *command);
 int		num_args(t_list *tmp);
 char	**join_arguments(char	**args, char	**tmp);
-
 t_list	*save_word(t_inf *info, t_list *tmp);
-
 void	close_prev_redir(t_command *command);
 t_list	*save_input(t_inf *info, t_list *tmp);
-
 t_list	*save_output(t_inf *info, t_list *tmp, int type);
-
 t_list	*save_heredoc(t_inf *info, t_list *tmp);
-
 t_list	*save_pipe(t_inf *info, t_list *tmp, int pipe);
 
 /** ft_error.c */
-int	msg(char *str1, char *str2, char *str3, int code);
+int		msg(char *str1, char *str2, char *str3, int code);
+void	end_shell(t_inf *info, int code);
 
 
 char	*get_next_line(int fd);
