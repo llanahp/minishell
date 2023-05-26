@@ -19,7 +19,6 @@ int	is_space(char c)
 	return (0);
 }
 
-//temporal ||  &&  
 int	is_delimiter(char c)
 {
 	if (c == '|' || c == '<' || c == '>')

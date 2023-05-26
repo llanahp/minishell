@@ -66,7 +66,7 @@ typedef struct s_command
 	t_command			*next;
 	int					pid;
 	int					pipe_out;
-		int					*fds;
+	int					*fds;
 }		t_command;
 
 
@@ -147,16 +147,11 @@ void	ft_clear_tokens(t_inf *info);
 t_list *save_args(t_list *tmp, t_command *command);
 int		num_args(t_list *tmp);
 char	**join_arguments(char	**args, char	**tmp);
-
 t_list	*save_word(t_inf *info, t_list *tmp);
-
 void	close_prev_redir(t_command *command);
 t_list	*save_input(t_inf *info, t_list *tmp);
-
 t_list	*save_output(t_inf *info, t_list *tmp, int type);
-
 t_list	*save_heredoc(t_inf *info, t_list *tmp);
-
 t_list	*save_pipe(t_inf *info, t_list *tmp, int pipe);
 
 /** ft_error.c */
