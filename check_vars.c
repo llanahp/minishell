@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 14:08:25 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/05/25 02:19:44 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/05/25 12:32:10 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ char	*replace(char *string, char *search, char *replace)
 	len = i;
 	while (replace[++j] != '\0')
 		result[i++] = replace[j];
-	while (string[len] != '\0' && string[len] != ' ')
+	while (string[len] != '\0' && string[len] != ' ' && string[len] != '\'' && string[len] != '"')
 		len++;
 	while (string[len] != '\0')
 	{
@@ -116,10 +116,89 @@ int	ft_check_smpl_and_double_quotes(char *line, t_list *tmp)
 	}
 	return (is_quote);
 }
-// este caso no funciona bien, y muchos mas asi parecidos
-// bash$ echo "'$USER'"  >> devuelve >> 'mpizzolo' >> minishell >> devuelve mpizzolo
-// bash$ echo '"$USER"'  >> devuelve >> "$USER" >> minishell >> $USER
-// bash$ echo "$"HOME"" >> devuelve >> $HOME >> minishell >> cualq cosa
+
+int	ft_check_char_before(char *line, char c, char z)
+{
+	int	i;
+	int	is_quote;
+
+	i = 0;
+	is_quote = 1;
+	while (line[i] && line[i] != z)
+	{	
+		if (line[i] == c)
+			is_quote = 0;
+		i++;
+	}
+	return (is_quote);
+}
+
+int	ft_are_double_quotes(char *line)
+{
+	int	i;
+	int	is_quote;
+
+	i = 0;
+	is_quote = 1;
+	while (line[i])
+	{	
+		if (line[i] == '\'' && line[i + 1] == '\'')
+			is_quote = 0;
+		i++;
+	}
+	i = 0;
+	while (line[i])
+	{	
+		if (line[i] == '"' && line[i + 1] == '"')
+			is_quote = 0;
+		i++;
+	}
+	return (is_quote);
+}
+
+char *replace_d_quotes(char *line, char quote)
+{
+    int i, j;
+    int len = strlen(line);
+    char *result = malloc(len + 1);
+    
+    i = 0;
+    j = 0;
+    while (line[i])
+    {
+        if (line[i] == quote && line[i + 1] == quote)
+            i += 2;
+        result[j] = line[i];
+        i++;
+        j++;
+    }
+    result[j] = '\0';
+    free(line);
+    return result;
+}
+
+char	*ft_replace_double_quotes(char *line)
+{
+	int		i;
+	char	*result;
+
+	i = 0;
+	result = ft_strdup(line);
+	while (line[i])
+	{	
+		if (line[i] == '\'' && line[i + 1] == '\'')
+			result = replace_d_quotes(result, '\'');
+		i++;
+	}
+	i = 0;
+	while (line[i])
+	{	
+		if (line[i] == '"' && line[i + 1] == '"')
+			result = replace_d_quotes(result, '"');
+		i++;
+	}
+	return (result);
+}
 
 int	check_vars(t_inf *info)
 {
@@ -130,6 +209,11 @@ int	check_vars(t_inf *info)
 	tmp = info->tokens;
 	while (tmp)
 	{
+		if (!ft_are_double_quotes(tmp->content))
+		{
+			tmp->content = ft_replace_double_quotes(tmp->content);
+			tmp = info->tokens;
+		}
 		if (ft_strcontains(tmp->content, '$') && ft_check_smpl_and_double_quotes(tmp->content, tmp))
 		{
 			name = get_name_var(tmp->content);
@@ -141,7 +225,7 @@ int	check_vars(t_inf *info)
 			free(name);
 			tmp = info->tokens;
 		}
-		else if (ft_strcontains(tmp->content, '~'))
+		else if (ft_strcontains(tmp->content, '~') && ft_check_char_before(tmp->content, '\'', '~') && ft_check_char_before(tmp->content, '"', '~'))
 		{
 			var = get_var(info, "USER_ZDOTDIR");
 			tmp->content = replace(tmp->content, "~", var);
@@ -163,18 +247,23 @@ hola que tal | pers < ddfasddf> || "yes" 'per"otro"o' esto
 int	delete_quotes(t_inf *info)
 {
 	t_list	*tmp;
+	char	*temp;
 
 	tmp = info->tokens;
+	temp = NULL;
 	while (tmp)
 	{
-		if (ft_strcontains(tmp->content, '"'))
+		if (ft_strcontains(tmp->content, '"') && ft_check_char_before(tmp->content, '\'', '"') && temp != tmp->content)
 		{
+			// if (ft_check_char_before(tmp->content, '\''))
 			tmp->content = replace_quotes(tmp->content, '\"');
+			temp = tmp->content;
 			tmp = info->tokens;
 		}
-		else if (ft_strcontains(tmp->content, '\''))
-		{
+		else if (ft_strcontains(tmp->content, '\'') && temp != tmp->content)
+		{	
 			tmp->content = replace_quotes(tmp->content, '\'');
+			temp = tmp->content;
 			tmp = info->tokens;
 		}
 		else
@@ -183,3 +272,4 @@ int	delete_quotes(t_inf *info)
 //	mostrar_tokens2(info);
 	return (0);
 }
+// && ft_check_char_before(tmp->content, '\'')

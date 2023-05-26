@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:41:20 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/05/20 18:56:19 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/05/25 09:47:10 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	execute_builtin(t_command *cmd, t_inf *info)
 		unset(info, cmd);
 	else if (!ft_strcmp(cmd->cmd, "env"))
 		env(info);
-	// exit() ?????
+	exit(1);
 }
 
 /** create_cmd:
