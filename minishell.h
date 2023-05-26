@@ -48,9 +48,7 @@
 
 typedef struct s_command t_command;
 
-
-
-extern int last_code;
+typedef struct s_inf t_inf;
 
 typedef struct s_command
 {
@@ -81,6 +79,7 @@ typedef struct s_inf
 	t_list		*tokens;
 	t_command	*commands;
 	int			pid;
+	int			last_code;
 }               t_inf;
 
 /** cd.c */
@@ -108,7 +107,7 @@ void	ft_free_split2(char ***split);
 
 
 /** get_info.c */
-int		get_enviroment(t_inf *info);
+int		get_enviroment(t_inf *info, char **env);
 int		get_pwd(t_inf *info);
 void	change_var_env(t_inf *info, char *var, char *value);
 char	*get_var(t_inf *info, char *var);

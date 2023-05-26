@@ -380,7 +380,7 @@ void extend_var(char **str,t_inf *info)
 		update_status(str, i, &status);
 		if ((*str)[i] == '$'  && (*str)[i + 1] == '?')
 		{
-			replace_for_var(str, ft_itoa(last_code), i);
+			replace_for_var(str, ft_itoa(info->last_code), i);
 		}
 		if ((*str)[i] == '$' && (status == 0 || status == DOUBLE_QUOTE) && is_separator((*str)[i + 1]) == 0 && between_quotes((*str), i) == 0 && (*str)[i + 1] != '"')
 		{

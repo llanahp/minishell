@@ -13,7 +13,7 @@
 # include "minishell.h"
 
 
- int last_code;
+ t_inf info;
 
 void	display_prompt(t_inf *info)
 {
@@ -37,7 +37,7 @@ void	display_prompt(t_inf *info)
 		return ;
 	if (create_commands(info) == -1)
 		return ;
-	last_code  = execute_commands(info);
+	info->last_code  = execute_commands(info);
 	free(line);
 	ft_lstclear_cmds(info);
 	ft_clear_tokens(info);
@@ -47,22 +47,23 @@ void	display_prompt(t_inf *info)
 
 int	main(int argc, char *argv[], char **env)
 {
-	t_inf	info;
-
-	argc = argc;
-	argv = argv;
-	info.env = env;
+	if (1 == 2)
+	{
+		argc = 2;
+		argv =  NULL;
+	}
 	info.tokens = NULL;
 	info.commands = NULL;
 	info.pwd = NULL;
 	info.paths = NULL;
-	last_code = 0;
-	get_enviroment(&info);
+	info.last_code = 0;
+	info.env = NULL;
+		get_enviroment(&info, env);
 
 	while (1)
 	{
 		display_prompt(&info);
 	}
-	end_shell(&info, last_code);
+	end_shell(&info, info.last_code);
 	return (0);
 }

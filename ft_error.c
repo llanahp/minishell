@@ -15,6 +15,8 @@ int	msg(char *str1, char *str2, char *str3, int code)
 
 void	end_shell(t_inf *info, int code)
 {
+	if (1 == 2)
+		info = NULL;
 	//ft_lstclear_cmds(info);
 	//ft_lstclear_tokens(info);
 	//ft_free_array(info->paths);
