@@ -37,7 +37,6 @@
 
 # define WORD 0
 # define PIPE 3
-# define SEMICOLON 4
 # define LESS 5
 # define HEREDOC 6
 # define GREATER 7
