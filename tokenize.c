@@ -22,7 +22,7 @@ int	is_space(char c)
 //temporal ||  &&  
 int	is_delimiter(char c)
 {
-	if (c == '|' || c == ';' || c == '<' || c == '>')
+	if (c == '|' || c == '<' || c == '>')
 		return (1);
 	return (0);
 }
@@ -72,8 +72,6 @@ int	type_delimiter(char *line, int *i)
 {
 	if (line[*i] == '|')
 		return (PIPE);
-	else if (line[*i] == ';')
-		return (SEMICOLON);
 	else if (line[*i] == '<' && line[*i + 1] == '<')
 		return (HEREDOC);
 	else if (line[*i] == '>' && line[*i + 1] == '>')

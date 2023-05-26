@@ -48,8 +48,6 @@ int	create_commands(t_inf *info)
 			tmp  = save_output(info, tmp, O_APPEND);
 		else if (tmp->type == PIPE)// |
 			tmp = save_pipe(info, tmp, 1);
-		else if (tmp->type == SEMICOLON) // ;
-			tmp = save_pipe(info, tmp, 0);
 		else if (tmp->type == HEREDOC) //<<
 			tmp = save_heredoc(info, tmp);
 		else if (tmp != NULL && tmp->type == END)

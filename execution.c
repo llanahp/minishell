@@ -24,21 +24,26 @@ int	is_builtin(char *cmd)
 }
 
 
-void	execute_builtin(t_command *cmd, t_inf *info)
+void	execute_builtin(t_command *cmd, t_inf *info, int exi)
 {
+	int	code;
+
+	code = 127;
 	if (!ft_strcmp(cmd->cmd, "echo"))
-		echo(cmd);
+		code = echo(cmd);
 	else if (!ft_strcmp(cmd->cmd, "cd"))
-		cd(info, cmd);
+		code = cd(info, cmd);
 	else if (!ft_strcmp(cmd->cmd, "pwd"))
-		pwd(info, cmd);
+		code = pwd(info, cmd);
 	else if (!ft_strcmp(cmd->cmd, "export"))
-		export_binding(info, cmd);
+		code = export_binding(info, cmd);
 	else if (!ft_strcmp(cmd->cmd, "unset"))
-		unset(info, cmd);
+		code = unset(info, cmd);
 	else if (!ft_strcmp(cmd->cmd, "env"))
-		env(info);
-	exit(1);
+		code = env(info);
+	info->last_code = code;
+	if (exi)
+		exit(info->last_code);
 }
 
 /** create_cmd:
@@ -85,20 +90,23 @@ void	execute_cmd(t_command *cmd, t_inf *info)
 	cmd_original = ft_strdup(cmd->cmd);
 	redir(cmd, info);
 	if (cmd != NULL && is_builtin(cmd->cmd))
-		execute_builtin(cmd, info);
+		execute_builtin(cmd, info, 1);
 	else
 	{
 		cmd->cmd = get_path(cmd->cmd, info);
 		if (cmd->cmd == NULL)
 		{
 			msg("command not found", ": ", cmd_original , EXIT_FAILURE);
-			exit(127);
+			info->last_code = 127;
+			exit(info->last_code);
 		}
 		else if (execve(cmd->cmd, cmd->args, info->env) == -1)
 		{
 			msg("Execve", ": ", strerror(errno), EXIT_FAILURE);
-			exit(127);
+			info->last_code = 127;
+			exit(info->last_code);
 		}
+		info->last_code = 0;
 	}
 }
 
@@ -107,16 +115,45 @@ int	create_childs(t_inf *info)
 	t_command	*tmp;
 
 	tmp = info->commands;
+
 	while (tmp)
 	{
 		info->pid = fork();
 		if (info->pid == -1)
-			msg("fork", ": ", strerror(errno), EXIT_FAILURE);
+			info->last_code = msg("fork", ": ", strerror(errno), EXIT_FAILURE);
 		else if (info->pid == 0)
 			execute_cmd(tmp, info);
 		tmp = tmp->next;
 	}
 	return (wait_childs(info));
+}
+
+int	execute_single_cmd(t_inf *info)
+{
+	t_command	*tmp;
+	int			code;
+	
+	
+	tmp = info->commands;
+	execute_builtin(tmp, info, 0);
+	info->last_code = 0;
+	return (info->last_code);
+}
+
+
+int	num_cmds(t_inf *info)
+{
+	int	i;
+	t_command *aux;
+
+	i = 0;
+	aux = info->commands;
+	while (aux)
+	{
+		i++;
+		aux = aux->next;
+	}
+	return (i);
 }
 
 int	execute_commands(t_inf *info)
@@ -126,6 +163,9 @@ int	execute_commands(t_inf *info)
 	code = prepare_execution(info);
 	if (code != CMD_NOT_FOUND)
 		return (code);
-	code = create_childs(info);
+	if (num_cmds(info) == 1 && is_builtin(info->commands->cmd))
+		code = execute_single_cmd(info);
+	else
+		code = create_childs(info);
 	return (code);
 }
