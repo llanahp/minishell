@@ -26,19 +26,23 @@ int	is_builtin(char *cmd)
 
 void	execute_builtin(t_command *cmd, t_inf *info)
 {
+	int	code;
+
+	code = 127;
 	if (!ft_strcmp(cmd->cmd, "echo"))
-		echo(cmd);
+		code = echo(cmd);
 	else if (!ft_strcmp(cmd->cmd, "cd"))
-		cd(info, cmd);
+		code = cd(info, cmd);
 	else if (!ft_strcmp(cmd->cmd, "pwd"))
-		pwd(info, cmd);
+		code = pwd(info, cmd);
 	else if (!ft_strcmp(cmd->cmd, "export"))
-		export_binding(info, cmd);
+		code = export_binding(info, cmd);
 	else if (!ft_strcmp(cmd->cmd, "unset"))
-		unset(info, cmd);
+		code = unset(info, cmd);
 	else if (!ft_strcmp(cmd->cmd, "env"))
-		env(info);
-	exit(1);
+		code = env(info);
+	last_code = code;
+	exit(last_code);
 }
 
 /** create_cmd:
@@ -92,13 +96,16 @@ void	execute_cmd(t_command *cmd, t_inf *info)
 		if (cmd->cmd == NULL)
 		{
 			msg("command not found", ": ", cmd_original , EXIT_FAILURE);
-			exit(127);
+			last_code = 127;
+			exit(last_code);
 		}
 		else if (execve(cmd->cmd, cmd->args, info->env) == -1)
 		{
 			msg("Execve", ": ", strerror(errno), EXIT_FAILURE);
-			exit(127);
+			last_code = 127;
+			exit(last_code);
 		}
+		last_code = 0;
 	}
 }
 
@@ -111,7 +118,7 @@ int	create_childs(t_inf *info)
 	{
 		info->pid = fork();
 		if (info->pid == -1)
-			msg("fork", ": ", strerror(errno), EXIT_FAILURE);
+			last_code = msg("fork", ": ", strerror(errno), EXIT_FAILURE);
 		else if (info->pid == 0)
 			execute_cmd(tmp, info);
 		tmp = tmp->next;

@@ -13,3 +13,11 @@ int	msg(char *str1, char *str2, char *str3, int code)
 	return (code);
 }
 
+void	end_shell(t_inf *info, int code)
+{
+	//ft_lstclear_cmds(info);
+	//ft_lstclear_tokens(info);
+	//ft_free_array(info->paths);
+	//ft_free_array(info->env);
+	exit(code);
+}

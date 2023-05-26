@@ -306,7 +306,7 @@ void	replace_for_var(char **str, char *value, int index)
 
 	i = 0;
 	j = 0;
-	new  = (char *)malloc(sizeof(char) * (ft_strlen((*str) + ft_strlen(value) + 1)) + 1);
+	new  = (char *)malloc(sizeof(char) * (ft_strlen(*str) + ft_strlen(value) + 1) + 1);
 	if (!new)
 		return ;
 	while ((*str)[i])
@@ -378,6 +378,10 @@ void extend_var(char **str,t_inf *info)
 	while ((*str)[i])
 	{
 		update_status(str, i, &status);
+		if ((*str)[i] == '$'  && (*str)[i + 1] == '?')
+		{
+			replace_for_var(str, ft_itoa(last_code), i);
+		}
 		if ((*str)[i] == '$' && (status == 0 || status == DOUBLE_QUOTE) && is_separator((*str)[i + 1]) == 0 && between_quotes((*str), i) == 0 && (*str)[i + 1] != '"')
 		{
 			replace_var(str, i ,info);
@@ -402,9 +406,7 @@ int	check_vars(t_inf *info)
 		}
 		
 		if (ft_strcontains(tmp->content, '$'))//&& ft_check_smpl_and_double_quotes(tmp->content, tmp))
-		{
-			extend_var(&tmp->content, info);			
-		}
+			extend_var(&tmp->content, info);
 		else if (ft_strcontains(tmp->content, '~') && ft_check_char_before(tmp->content, '\'', '~') && ft_check_char_before(tmp->content, '"', '~'))
 		{
 			var = get_var(info, "USER_ZDOTDIR");
