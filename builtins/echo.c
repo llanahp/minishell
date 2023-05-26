@@ -6,18 +6,11 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:33:39 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/05/25 12:53:02 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/05/26 15:56:57 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-// Falta handle cuando:
-// Comillas simple, debe imprimir literalmente lo que tiene dentro, sin variables de entorno
-// \ para mostrar caracteres especiales, ej: echo "This is a \"quoted\" word.", echo "Line 1\nLine 2"
-
-// Hablar con Raul porque va a haber que hacer cambios en el tokeize.c
-// Si hacemos cambios, fijarse que functione con comillas dobles, igual que sin comillas
 
 int	ft_str_contains_n(char *str)
 {
@@ -48,7 +41,6 @@ int	echo(t_command *cmd)
 		while (!ft_str_contains_n(cmd->args[i]))
 			i++;
 	}
-	// saque del if la condicion i < 4
 	while (cmd != NULL && cmd->args[i])
 	{
 		printf("%s", cmd->args[i]);

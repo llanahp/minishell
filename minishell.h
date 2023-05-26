@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ralopez- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 09:47:00 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/03/10 09:47:01 by ralopez-         ###   ########.fr       */
+/*   Updated: 2023/05/26 16:03:28 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,11 @@ typedef struct s_inf
 }               t_inf;
 
 /** cd.c */
-int	cd(t_inf *info, t_command *cmd);
+int		cd(t_inf *info, t_command *cmd);
+char	*handle_back_cd(char *pwd);
+char	*handle_cmd_for_change_env_cd(char *arg, char *pwd);
+char	*handle_cd_to_usr(t_inf *info);
+char	*handle_absolute_path(char *absolute_path);
 
 /** echo.c */
 int	echo(t_command *cmd);
@@ -174,4 +178,8 @@ int	wait_childs(t_inf *info);
 void	redir(t_command *cmd, t_inf *info);
 
 int	is_builtin(char *cmd);
+
+/** utils */
+int	ft_strichr(char *str, char c);
+
 #endif
