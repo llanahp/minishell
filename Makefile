@@ -14,7 +14,7 @@
 
 NAME = minishell
 CC = gcc
-CFLAGS = -Wall -Wextra -I libft/ #-Werror
+CFLAGS = -Wall -Wextra -g -I libft/  #-Werror
 
 LDFLAGS		= -L/Users/$(USER)/.brew/opt/readline/lib
 CPPFLAGS	= -I/Users/$(USER)/.brew/opt/readline/include
@@ -34,11 +34,11 @@ COLRESET	:=	"\033[0m"
 endif
 
 SRC = builtins/echo.c builtins/cd/cd.c builtins/cd/handles_cd.c builtins/pwd.c builtins/env.c builtins/export.c builtins/unset.c \
-	ft_free_split.c env_utils.c sigaction.c token/token_utils.c token/tokenize.c  create_cmds.c command_utils.c \
+	token/token_utils.c token/tokenize.c \
 	utils/utils.c utils/quotes.c\
 	vars/check_vars.c vars/var_utils.c\
 	commands/save_args.c commands/save_heredoc.c  commands/save_input.c commands/save_output.c commands/save_pipe.c commands/save_word.c\
-	ft_error.c execution.c redir.c ft_pipes.c\
+	ft_error.c execution.c redir.c ft_pipes.c ft_free_split.c env_utils.c sigaction.c create_cmds.c command_utils.c \
 	minishell.c
 
 OBJ = $(SRC:.c=.o)
@@ -46,7 +46,7 @@ OBJ = $(SRC:.c=.o)
 
 %.o: %.c
 	@echo $(GREEN) Compiling file $< $(COLRESET)
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@ 
 
 $(NAME): $(OBJ) libft
 	@echo $(BLUE) Done!!! $(COLRESET)

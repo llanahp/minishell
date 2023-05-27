@@ -77,6 +77,7 @@ void	execute_cmd(t_command *cmd, t_inf *info)
 	
 	cmd_original = ft_strdup(cmd->cmd);
 	redir(cmd, info);
+
 	if (cmd != NULL && is_builtin(cmd->cmd))
 		execute_builtin(cmd, info, 1);
 	else
@@ -95,6 +96,8 @@ void	execute_cmd(t_command *cmd, t_inf *info)
 			exit(info->last_code);
 		}
 		info->last_code = 0;
+		if (cmd->cmd != NULL)
+			free(cmd->cmd);
 	}
 }
 
@@ -118,7 +121,6 @@ int	create_childs(t_inf *info)
 int	execute_single_cmd(t_inf *info)
 {
 	t_command	*tmp;
-	int			code;
 
 	tmp = info->commands;
 	execute_builtin(tmp, info, 0);

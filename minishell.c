@@ -24,6 +24,7 @@ void	display_prompt(t_inf *info)
 	if (line == NULL)
 	{
 		info->exit = 1;
+		printf("exit\n");
 		return ;
 	}
 	if (ft_strcmp(line, "") == 0)
@@ -45,8 +46,15 @@ void	display_prompt(t_inf *info)
 	ft_clear_tokens(info);
 }
 
+
+void	salida(void)
+{
+	system("leaks minishell");
+}
+
 int	main(int argc, char *argv[], char **env)
 {
+	atexit(salida);
 	(void)argc;
 	(void)argv;
 	info.tokens = NULL;

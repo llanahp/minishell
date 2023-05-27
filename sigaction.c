@@ -21,14 +21,20 @@ void	ignore_sigquit(void)
 	sigaction(SIGQUIT, &act, NULL);
 }
 
-void	signal_reset_prompt(int signo)
+void	signal_reset_prompt(int signal)
 {
-	(void)signo;
-	info.last_code = 130;
-	write(1, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
+	if (signal == SIGINT)
+	{
+		
+		(void)signal;
+		info.last_code = 130;
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
+	else if (signal == SIGQUIT)
+		SIG_IGN ;
 }
 
 void	signal_print_newline(int signal)
@@ -67,4 +73,3 @@ void set_signals_noninteractive(void)
 
 //SIGINT = Ctrl + C
 //SIGQUIT = Ctrl + \ = Ctrl + Shift + 7
-//Ctrl + D

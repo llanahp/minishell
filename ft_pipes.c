@@ -22,6 +22,7 @@ int	prepare_execution(t_inf *info)
 			return (CMD_FAILURE);
 		return (CMD_SUCCESS);
 	}
+	
 	if (prepare_pipes(info) == CMD_FAILURE)
 		return (CMD_FAILURE);
 	return (CMD_NOT_FOUND);
@@ -37,8 +38,7 @@ int	prepare_pipes(t_inf *info)
 		tmp->fds = malloc(sizeof(int *) * 2);
 		if (tmp->fds == NULL || pipe(tmp->fds) != 0)
 		{
-			//todo free memory de todo lo anterior
-			//free_error("error malloc", "", "", info);
+			msg("malloc", ": ", strerror(errno), EXIT_FAILURE);
 			return (1);
 		}
 		tmp = tmp->next;

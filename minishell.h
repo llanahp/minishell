@@ -20,6 +20,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <readline/readline.h>
+
 # include <readline/history.h>
 # include <signal.h>
 # include <limits.h>
@@ -73,7 +74,6 @@ typedef struct s_command
 
 typedef struct s_inf
 {
-	struct sigaction sa;
 	char		**env;
 	char		**paths;
 	char		*pwd;
@@ -106,8 +106,7 @@ int	export_binding(t_inf *info, t_command *cmd);
 /** unset.c */
 int 	unset(t_inf *info, t_command *cmd);
 
-
-
+/** free_split.c */
 void	ft_free_split(char **split);
 void	ft_free_split2(char ***split);
 
@@ -180,8 +179,6 @@ int	wait_childs(t_inf *info);
 
 /** redir.c */
 void	redir(t_command *cmd, t_inf *info);
-
-
 
 /** utils */
 int	ft_strichr(char *str, char c);

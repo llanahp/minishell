@@ -59,14 +59,12 @@ void	ft_lstadd_back_command(t_command **lst, t_command *new)
 		lst = &new;
 }
 
-//TODO falta liberar el previous y next 
 void	clear_command(t_command *cmd)
 {
 	if (cmd != NULL)
 	{
 		if (cmd->cmd != NULL)
 			free(cmd->cmd);
-		
 		if (cmd->args != NULL)
 			ft_free_split2(&cmd->args);
 		if (cmd->path != NULL)
@@ -80,6 +78,25 @@ void	clear_command(t_command *cmd)
 		{
 			free(cmd->output_name);
 			close(cmd->output);
+		}
+		if (cmd->fds != NULL)
+		{
+			free(cmd->fds);
+			cmd->fds = NULL;
+		}
+		/*if (cmd->previous != NULL)
+			free(cmd->previous);
+		if (cmd->next != NULL)
+			free(cmd->next);*/
+		if (cmd->redir != NULL)
+		{
+			int i = 0;
+			while (cmd->redir[i])
+			{
+				close(cmd->redir[i]);
+				i++;
+			}
+			free(cmd->redir);
 		}
 	}
 }

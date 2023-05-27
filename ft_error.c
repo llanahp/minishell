@@ -27,11 +27,13 @@ int	msg(char *str1, char *str2, char *str3, int code)
 
 void	end_shell(t_inf *info)
 {
-	if (1 == 2)
-		info = NULL;
-	//ft_lstclear_cmds(info);
-	//ft_lstclear_tokens(info);
-	//ft_free_array(info->paths);
-	//ft_free_array(info->env);
+	//close_allfds
+	ft_free_split(info->env);
+	ft_free_split(info->paths);
+	if (info->pwd != NULL)
+		free(info->pwd);
+	ft_clear_tokens(info);
+	ft_lstclear_cmds(info);
+	clear_history();
 	exit(0);
 } 
