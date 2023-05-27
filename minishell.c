@@ -53,7 +53,7 @@ void	display_prompt(t_inf *info)
 
 void	salida(void)
 {
-	system("leaks minishell");
+	system("leaks -q minishell");
 }
 
 int	main(int argc, char *argv[], char **env)

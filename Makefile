@@ -16,8 +16,30 @@ NAME = minishell
 CC = gcc
 CFLAGS = -Wall -Wextra -g -I libft/  #-Werror
 
-LDFLAGS		= -L/Users/$(USER)/.brew/opt/readline/lib
-CPPFLAGS	= -I/Users/$(USER)/.brew/opt/readline/include
+UNAME := $(shell uname -s)
+
+ifeq ($(UNAME), Darwin)
+    # Check for macOS version
+    MACOS_VERSION := $(shell sw_vers -productVersion | cut -d. -f1)
+    ifeq ($(MACOS_VERSION), 13)
+        # macOS Ventura (13.x)
+        LDFLAGS     = -L/opt/homebrew/Cellar/readline/8.2.1/lib
+        CPPFLAGS    = -I/opt/homebrew/Cellar/readline/8.2.1/include
+        $(info Using macOS Ventura paths)
+    else
+        # Other macOS versions (assume macOS Silicon)
+        LDFLAGS     = -L/Users/$(USER)/.brew/opt/readline/lib
+        CPPFLAGS    = -I/Users/$(USER)/.brew/opt/readline/include
+        $(info Using macOS Silicon paths)
+    endif
+else
+    # Non-Darwin systems
+    LDFLAGS     = -L/default/path/to/readline/lib
+    CPPFLAGS    = -I/default/path/to/readline/include
+    $(info Using default paths for non-Darwin systems)
+endif
+
+
 
 
 ifdef TERM
