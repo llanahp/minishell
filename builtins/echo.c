@@ -34,6 +34,8 @@ int	echo(t_command *cmd)
 
 	i = 0;
 	is_n = 0;
+	if (!cmd->args[1])
+		return (printf("\n"), 0);
 	if (!ft_str_contains_n(cmd->args[i]))
 	{
 		is_n = 1;
