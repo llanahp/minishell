@@ -24,6 +24,7 @@ void	ignore_sigquit(void)
 void	signal_reset_prompt(int signo)
 {
 	(void)signo;
+	info.last_code = 130;
 	write(1, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
@@ -36,7 +37,6 @@ void	signal_print_newline(int signal)
 	rl_on_new_line();
 }
 
-
 void set_signals_interactive(void)
 {
 	struct sigaction	act;
@@ -45,9 +45,16 @@ void set_signals_interactive(void)
 	ft_memset(&act, 0, sizeof(act));
 	act.sa_handler = &signal_reset_prompt;
 	sigaction(SIGINT, &act, NULL);
+	
 }
 
-
+/**
+ * set_signals_noninteractive:
+ * This function is called to make sure that the shell will ignore
+ * SIGINT and SIGQUIT signals. This is done to prevent the shell from
+ * exiting when the user presses Ctrl-C, Ctrl-\ or Ctrl-D.
+ * 
+*/
 void set_signals_noninteractive(void)
 {
 	struct sigaction	act;
@@ -57,3 +64,7 @@ void set_signals_noninteractive(void)
 	sigaction(SIGINT, &act, NULL);
 	sigaction(SIGQUIT, &act, NULL);
 }
+
+//SIGINT = Ctrl + C
+//SIGQUIT = Ctrl + \ = Ctrl + Shift + 7
+//Ctrl + D

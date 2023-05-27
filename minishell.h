@@ -49,6 +49,8 @@ typedef struct s_command t_command;
 
 typedef struct s_inf t_inf;
 
+t_inf info;
+
 typedef struct s_command
 {
 	char				*cmd;
@@ -79,6 +81,7 @@ typedef struct s_inf
 	t_command	*commands;
 	int			pid;
 	int			last_code;
+	int			exit;
 }               t_inf;
 
 /** cd.c */
@@ -165,7 +168,7 @@ t_list	*save_pipe(t_inf *info, t_list *tmp, int pipe);
 
 /** ft_error.c */
 int		msg(char *str1, char *str2, char *str3, int code);
-void	end_shell(t_inf *info, int code);
+void	end_shell(t_inf *info);
 
 /** execution.c */
 int execute_commands(t_inf *info);

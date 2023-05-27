@@ -10,10 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
-
-
- t_inf info;
+#include "minishell.h"
 
 void	display_prompt(t_inf *info)
 {
@@ -24,9 +21,14 @@ void	display_prompt(t_inf *info)
 	set_signals_interactive();
 	line = readline("minishell>");
 	set_signals_noninteractive();
+	if (line == NULL)
+	{
+		info->exit = 1;
+		return ;
+	}
 	if (ft_strcmp(line, "") == 0)
 		return ;
-	if (ft_strcmp(line, "exit") == 0)
+	if (ft_strcmp(line, "exit") == 0)//TODO por hacer
 		exit(0);//TODO mirar por si pasa el codigo con el que tiene que terminar
 	add_history(line);
 	if (tokenize(info, line) == -1)
@@ -37,33 +39,28 @@ void	display_prompt(t_inf *info)
 		return ;
 	if (create_commands(info) == -1)
 		return ;
-	info->last_code  = execute_commands(info);
+	info->last_code = execute_commands(info);
 	free(line);
 	ft_lstclear_cmds(info);
 	ft_clear_tokens(info);
-	
 }
-
 
 int	main(int argc, char *argv[], char **env)
 {
-	if (1 == 2)
-	{
-		argc = 2;
-		argv =  NULL;
-	}
+	(void)argc;
+	(void)argv;
 	info.tokens = NULL;
 	info.commands = NULL;
 	info.pwd = NULL;
 	info.paths = NULL;
 	info.last_code = 0;
 	info.env = NULL;
-		get_enviroment(&info, env);
-
-	while (1)
+	info.exit = 0;
+	get_enviroment(&info, env);
+	while (info.exit == 0)
 	{
 		display_prompt(&info);
 	}
-	end_shell(&info, info.last_code);
+	end_shell(&info);
 	return (0);
 }

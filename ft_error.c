@@ -25,7 +25,7 @@ int	msg(char *str1, char *str2, char *str3, int code)
 	return (code);
 }
 
-void	end_shell(t_inf *info, int code)
+void	end_shell(t_inf *info)
 {
 	if (1 == 2)
 		info = NULL;
@@ -33,5 +33,5 @@ void	end_shell(t_inf *info, int code)
 	//ft_lstclear_tokens(info);
 	//ft_free_array(info->paths);
 	//ft_free_array(info->env);
-	exit(code);
+	exit(0);
 } 
