@@ -24,14 +24,14 @@ int	ft_str_contains_n(char *str)
 		if (str[i] == '-' && str[i + 1] == 'n')
 			res = 0;
 	}
-	return (res);	
+	return (res);
 }
 
 int	echo(t_command *cmd)
 {
 	int	i;
 	int	is_n;
-	
+
 	i = 0;
 	is_n = 0;
 	if (!ft_str_contains_n(cmd->args[i]))
@@ -48,7 +48,7 @@ int	echo(t_command *cmd)
 			printf(" ");
 		i++;
 	}
-	if (!is_n) 
+	if (!is_n)
 		printf("\n");
 	return (0);
 }

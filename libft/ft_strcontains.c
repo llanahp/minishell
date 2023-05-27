@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-int				ft_strcontains(char *str, char c)
+int	ft_strcontains(char *str, char c)
 {
 	int	i;
 
@@ -21,7 +21,7 @@ int				ft_strcontains(char *str, char c)
 		return (0);
 	if (c == '\0')
 		return (0);
-	while(str[i] && str[i] != c)
+	while (str[i] && str[i] != c)
 		i++;
 	if (str[i] == c)
 		return (1);

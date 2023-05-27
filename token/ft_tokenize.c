@@ -47,7 +47,7 @@ int	type_delimiter(char *line, int *i)
 	else if (line[*i] == '<' && line[*i + 1] == '<')
 		return (HEREDOC);
 	else if (line[*i] == '>' && line[*i + 1] == '>')
-			return (APPEND);
+		return (APPEND);
 	else if (line[*i] == '<')
 		return (LESS);
 	else if (line[*i] == '>')
@@ -70,7 +70,6 @@ void	store_delimiter(t_inf *info, char *line, int *i)
 	}
 	else
 		tmp->content = ft_substr(line, *i, 1);
-	
 	*i += 1;
 	ft_lstadd_back(&info->tokens, tmp);
 }

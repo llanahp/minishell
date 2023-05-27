@@ -10,12 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../minishell.h"
+#include "../minishell.h"
 
 char	*replace_quotes(char *string, char quote)
 {
 	char	*result;
-	int 	i;
+	int		i;
 	int		j;
 
 	i = 0;
@@ -32,7 +32,7 @@ char	*replace_quotes(char *string, char quote)
 		}
 		i++;
 	}
-	result[j]='\0';
+	result[j] = '\0';
 	free(string);
 	return (result);
 }
@@ -60,25 +60,28 @@ int	ft_are_double_quotes(char *line)
 	return (is_quote);
 }
 
-char *replace_d_quotes(char *line, char quote)
+char	*replace_d_quotes(char *line, char quote)
 {
-    int i, j;
-    int len = strlen(line);
-    char *result = malloc(len + 1);
-    
-    i = 0;
-    j = 0;
-    while (line[i])
-    {
-        if (line[i] == quote && line[i + 1] == quote)
-            i += 2;
-        result[j] = line[i];
-        i++;
-        j++;
-    }
-    result[j] = '\0';
-    free(line);
-    return result;
+	int		i;
+	int		j;
+	int		len;
+	char	*result;
+
+	i = 0;
+	j = 0;
+	len = strlen(line);
+	result = malloc(len + 1);
+	while (line[i])
+	{
+		if (line[i] == quote && line[i + 1] == quote)
+			i += 2;
+		result[j] = line[i];
+		i++;
+		j++;
+	}
+	result[j] = '\0';
+	free(line);
+	return (result);
 }
 
 char	*ft_replace_double_quotes(char *line)

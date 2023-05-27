@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_var_utils.c                                        :+:      :+:    :+:   */
+/*   ft_var_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ralopez- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -14,9 +14,11 @@
 
 int	len_var(char *tmp)
 {
-	int i=0;
-	int len=0;
+	int	i;
+	int	len;
 
+	i = 0;
+	len = 0;
 	while (tmp[i] && tmp[i] != '$')
 		i++;
 	i++;
@@ -32,13 +34,15 @@ int	len_var(char *tmp)
 	return (len);
 }
 
-char *get_name(char *tmp)
+char	*get_name(char *tmp)
 {
-	int		i=0;
-	int		start=0;
+	int		i;
+	int		start;
 	int		len;
 	char	*res;
 
+	i = 0;
+	start = 0;
 	while (tmp[i])
 	{
 		if (tmp[i] == '$')
@@ -53,7 +57,7 @@ char *get_name(char *tmp)
 	return (res);
 }
 
-void update_status(char **str, int i, int *status)
+void	update_status(char **str, int i, int *status)
 {
 	if (*status == 0 && is_quote((*str)[i]))
 		(*status) = is_quote((*str)[i]);
@@ -61,73 +65,4 @@ void update_status(char **str, int i, int *status)
 		(*status) = 0;
 	else if (*status == SIMPLE_QUOTE && is_quote((*str)[i]) == SIMPLE_QUOTE)
 		(*status) = 0;
-}
-
-char	*get_name_var(char *line)
-{
-	int	i;
-	int	j;
-	int	type;
-
-	i = 0;
-	j = 0;
-	while (line[i] && line[i] != '$')
-		i++;
-	if (line[i] == '$')
-		i++;
-	if (line[i] == '"' || line[i] == '\'')
-	{
-		type = line[i];
-		j = i;
-		j++;
-		
-		while (line[j] && line[j] != type)
-		{
-			j++;
-		}
-		j++;
-	}
-	else
-	{
-		j = i;
-		while (line[j] && line[j] != ' ' && line[j] != '\t' && line[j] != '$' && line[j] != '"' && line[j] != '\'')
-			j++;
-	}
-	return (ft_substr(line, i, j - i));
-}
-
-char	*replace(char *string, char *search, char *replace)
-{
-	char	*result;
-	int		len;
-	int 	i;
-	int		j;
-
-	len = 0;
-	i = 0;
-	j = -1;
-	len = ft_strlen(string) - ft_strlen(search) + ft_strlen(replace) + 1;
-	result = (char *)malloc(sizeof(char) * (len + 1));
-	if (result == NULL)
-		return (NULL);
-	while (string[i] != '\0' && string[i] != '$')
-	{
-		result[i] = string[i];
-		i++;
-	}
-	result[i]='\0';
-	len = i;
-	while (replace[++j] != '\0')
-		result[i++] = replace[j];
-	while (string[len] != '\0' && string[len] != ' ' && string[len] != '\'' && string[len] != '"')
-		len++;
-	while (string[len] != '\0')
-	{
-		result[i] = string[len];
-		i++;
-		len++;
-	}
-	result[i] = '\0';
-	free(string);
-	return (result);
 }
