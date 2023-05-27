@@ -20,7 +20,7 @@ char	*handle_back_cd(char *pwd)
 	to_location = pwd;
 	tmp = ft_strrchr(to_location, '/');
 	*tmp = '\0';
-	return (ft_strdup(to_location));
+	return ((to_location));
 }
 
 char	*handle_cmd_for_change_env_cd(char *arg, char *pwd)

@@ -91,7 +91,7 @@ int	cd(t_inf *info, t_command *cmd)
 			return (0);
 		change_var_env(info, "OLDPWD", info->pwd);
 		change_var_env(info, "PWD", to_location);
-		free(to_location);
+		// free(to_location);
 	}
 	return (0);
 }
