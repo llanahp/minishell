@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-int	file_exists(char	*name)
+int	file_exists(char *name)
 {
 	if(access(name, F_OK) == 0)
         return (1);
@@ -113,6 +113,5 @@ t_list	*save_heredoc(t_inf *info, t_list *tmp)
 	command = get_last_cmd(info);
 	close_prev_redir(command);
 	tmp = set_name_heredoc( tmp, command);
-
 	return (tmp);
 }

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execution.c                                        :+:      :+:    :+:   */
+/*   ft_execution.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -74,7 +74,7 @@ char	*get_path(char *cmd, t_inf *info)
 void	execute_cmd(t_command *cmd, t_inf *info)
 {
 	char	*cmd_original;
-	
+
 	cmd_original = ft_strdup(cmd->cmd);
 	redir(cmd, info);
 	if (cmd != NULL && is_builtin(cmd->cmd))
@@ -84,7 +84,7 @@ void	execute_cmd(t_command *cmd, t_inf *info)
 		cmd->cmd = get_path(cmd->cmd, info);
 		if (cmd->cmd == NULL)
 		{
-			msg("command not found", ": ", cmd_original , EXIT_FAILURE);
+			msg("command not found", ": ", cmd_original, EXIT_FAILURE);
 			info->last_code = 127;
 			exit(info->last_code);
 		}
@@ -95,6 +95,8 @@ void	execute_cmd(t_command *cmd, t_inf *info)
 			exit(info->last_code);
 		}
 		info->last_code = 0;
+		if (cmd->cmd != NULL)
+			free(cmd->cmd);
 	}
 }
 
@@ -118,7 +120,6 @@ int	create_childs(t_inf *info)
 int	execute_single_cmd(t_inf *info)
 {
 	t_command	*tmp;
-	int			code;
 
 	tmp = info->commands;
 	execute_builtin(tmp, info, 0);
@@ -126,11 +127,10 @@ int	execute_single_cmd(t_inf *info)
 	return (info->last_code);
 }
 
-
 int	num_cmds(t_inf *info)
 {
-	int	i;
-	t_command *aux;
+	int			i;
+	t_command	*aux;
 
 	i = 0;
 	aux = info->commands;

@@ -66,7 +66,6 @@ char	*handle_for_absolute(char **to, char *to_loc)
 		tmp = ft_substr(to[0], 0, i_tmp + 1);
 	to[0] = ft_strchr(to[0] + 1, '/');
 	res = ft_strjoin(to_loc, tmp);
-	// free(to_loc);
 	return (res);
 }
 
