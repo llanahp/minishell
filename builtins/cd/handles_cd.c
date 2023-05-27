@@ -20,15 +20,26 @@ char	*handle_back_cd(char *pwd)
 	to_location = pwd;
 	tmp = ft_strrchr(to_location, '/');
 	*tmp = '\0';
-	return (to_location);
+	return (ft_strdup(to_location));
 }
 
 char	*handle_cmd_for_change_env_cd(char *arg, char *pwd)
 {
 	char	*to_location;
+	char	*tmp;
 
+	to_location = NULL;
+	tmp = NULL;
+	tmp = ft_substr(arg, 0, 2);
+	if (!ft_strcmp(tmp, "./"))
+		arg += 2;
+	if (arg[ft_strlen(arg) - 1] == '/')
+		arg[ft_strlen(arg) - 1] = '\0';
 	to_location = ft_strjoin("/", arg);
+	free(tmp);
+	tmp = to_location;
 	to_location = ft_strjoin(pwd, to_location);
+	free(tmp);
 	return (to_location);
 }
 
@@ -41,16 +52,23 @@ char	*handle_cd_to_usr(t_inf *info)
 	usr = ft_strjoin("/", get_var(info, "USER"));
 	to_location = handle_back_cd(info->pwd);
 	if (chdir(to_location) == -1)
-		return (printf("chdir error\n"), NULL);
+	{
+		printf("chdir error\n");
+		return (free(usr), NULL);
+	}
 	tmp = ft_strrchr(to_location, '/');
 	while (ft_strcmp(tmp, usr))
 	{
 		to_location = handle_back_cd(info->pwd);
 		if (chdir(to_location) == -1)
-			return (printf("chdir error\n"), NULL);
+		{
+			printf("chdir error\n");
+			return (free(usr), NULL);
+		}
 		tmp = ft_strrchr(to_location, '/');
 	}
-	return (to_location);
+	free(usr);
+	return (ft_strdup(to_location));
 }
 
 char	*handle_for_absolute(char **to, char *to_loc)
@@ -66,6 +84,7 @@ char	*handle_for_absolute(char **to, char *to_loc)
 		tmp = ft_substr(to[0], 0, i_tmp + 1);
 	to[0] = ft_strchr(to[0] + 1, '/');
 	res = ft_strjoin(to_loc, tmp);
+	free(tmp);
 	return (res);
 }
 
@@ -87,5 +106,6 @@ char	*handle_absolute_path(char *absolute_path)
 	}
 	if (to_loc[ft_strlen(to_loc) - 1] == '/')
 		to_loc = ft_substr(to_loc, 0, ft_strlen(to_loc) - 1);
+	free(to);
 	return (to_loc);
 }

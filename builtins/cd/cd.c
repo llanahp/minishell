@@ -31,6 +31,7 @@ char	*to_check_chdir(t_command *cmd, int *is_absolute)
 		to_location = ft_strjoin("./", cmd->args[0]);
 	else
 		to_location = cmd->args[0];
+	free(tmp);
 	return (to_location);
 }
 
@@ -48,8 +49,6 @@ int	chdir_exeptions(char *str)
 	return (res);
 }
 
-// else if (ft_strcmp(tmp, "/") && ft_isalnum(cmd->args[0][0] + 0) && abs == 0)
-// le saque ------------------- porque era la una que usaba tmp y tenia 5 args
 char	*cd_handler(int abs, char *loc, t_command *cmd, t_inf *info)
 {
 	if (abs)
@@ -57,7 +56,7 @@ char	*cd_handler(int abs, char *loc, t_command *cmd, t_inf *info)
 	else if (!ft_strcmp(cmd->args[0], "..") || !ft_strcmp(loc, "-"))
 		loc = handle_back_cd(info->pwd);
 	else if (!ft_strcmp(cmd->args[0], "."))
-		loc = info->pwd;
+		loc = ft_strdup(info->pwd);
 	else if (!ft_strcmp(cmd->args[0], "--") || !ft_strcmp(cmd->args[0], "~"))
 		loc = handle_cd_to_usr(info);
 	else
@@ -87,11 +86,12 @@ int	cd(t_inf *info, t_command *cmd)
 		return (printf("chdir error\n"), 0);
 	else
 	{
-		cd_handler(is_absolute, to_location, cmd, info);
+		to_location = cd_handler(is_absolute, to_location, cmd, info);
 		if (to_location == NULL)
 			return (0);
 		change_var_env(info, "OLDPWD", info->pwd);
 		change_var_env(info, "PWD", to_location);
+		free(to_location);
 	}
 	return (0);
 }
