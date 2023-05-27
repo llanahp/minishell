@@ -32,6 +32,8 @@ int	export_binding(t_inf *info, t_command *cmd)
 	char	*value;
 	int		equals;
 
+	if (cmd->args[0] == NULL)
+		return (env(info));
 	if (ft_strcontains(cmd->args[0], '=') == 0)
 		add_var(info, cmd->args[0], NULL);
 	else
