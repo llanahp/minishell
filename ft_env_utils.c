@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_info.c                                         :+:      :+:    :+:   */
+/*   ft_env_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,8 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
-
+#include "minishell.h"
 
 void	store_env(t_inf *info, char **env)
 {
@@ -20,21 +19,21 @@ void	store_env(t_inf *info, char **env)
 	i = 0;
 	if (env == NULL)
 	{
-		 info->env = NULL;
-		return ; 
+		info->env = NULL;
+		return ;
 	}
 	while (env[i])
 		i++;
-	 info->env = (char **)malloc(sizeof(char *) * (i + 1));
+	info->env = (char **)malloc(sizeof(char *) * (i + 1));
 	if (! info->env)
 		return ;
 	i = 0;
 	while (env[i])
 	{
-		 info->env[i] = ft_strdup(env[i]);
+		info->env[i] = ft_strdup(env[i]);
 		i++;
 	}
-	 info->env[i] = NULL;
+	info->env[i] = NULL;
 }
 
 /** get_enviroment:
@@ -57,13 +56,12 @@ int	get_enviroment(t_inf *info, char **env)
 	while (info->env[i] != NULL && info->env[i][0] != '\0'
 		&& ft_strncmp(info->env[i], "PATH=", 5) != 0)
 		i++;
-	
-	if (info->env != NULL &&( info->env[i] == NULL ||  ft_strncmp(info->env[i], "PATH=", 5) )!= 0)
+	if (info->env != NULL && (info->env[i] == NULL || ft_strncmp(info->env[i], "PATH=", 5)) != 0)
 		return (-1);
 	else
 	{
 		temp = ft_substr(info->env[i], 5, ft_strlen(info->env[i]));
-		 info->paths = ft_split(temp, ':');
+		info->paths = ft_split(temp, ':');
 		free(temp);
 		return (1);
 	}
@@ -76,9 +74,8 @@ int	get_pwd(t_inf *info)
 	i = 0;
 	if (info->pwd != NULL)
 	{
-			// Daba error, tratando de free algo no alocado
-			// free(info->pwd);
-			info->pwd = NULL;
+		free(info->pwd);
+		info->pwd = NULL;
 	}
 	while ((*info).env[i] != NULL && (*info).env[i][0] != '\0'
 		&& ft_strncmp((*info).env[i], "PWD=", 4) != 0)
@@ -101,7 +98,6 @@ int	delete_var(t_inf *info, char *var)
 	name = ft_strjoin(var, "=");
 	while (info->env[i] != NULL && ft_strncmp(info->env[i], name, ft_strlen(name)) != 0)
 		i++;
-	
 	if (info->env[i] == NULL || ft_strncmp(info->env[i], name, ft_strlen(name)) != 0)
 	{
 		free(name);
@@ -134,7 +130,7 @@ void	change_var_env(t_inf *info, char *var, char *value)
 	free(info->env[i]);
 	new = ft_strjoin(str, value);
 	free(str);
-	info->env[i] =ft_strdup(new);
+	info->env[i] = ft_strdup(new);
 }
 
 char	*get_var(t_inf *info, char *var)
@@ -167,13 +163,13 @@ void	copy_env(char **new, char **old)
 	new[i + 1] = NULL;
 }
 
-void malloc_new_env(t_inf *info)
+void	malloc_new_env(t_inf *info)
 {
-	char **aux;
-	int i;
+	char	**aux;
+	int		i;
 
 	i = 0;
-	while (info->env &&  info->env[i])
+	while (info->env && info->env[i])
 		i++;
 	aux = (char **)malloc(sizeof(char *) * (i + 1));
 	if (!aux)

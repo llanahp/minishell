@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "minishell.h"
 
 int	prepare_execution(t_inf *info)
 {
@@ -18,11 +18,11 @@ int	prepare_execution(t_inf *info)
 		return (CMD_SUCCESS);
 	if (info->commands->cmd == NULL)
 	{
-		if (info->commands->input_name != NULL || info->commands->output_name != NULL)
+		if (info->commands->input_name != NULL
+			|| info->commands->output_name != NULL)
 			return (CMD_FAILURE);
 		return (CMD_SUCCESS);
 	}
-	
 	if (prepare_pipes(info) == CMD_FAILURE)
 		return (CMD_FAILURE);
 	return (CMD_NOT_FOUND);
@@ -60,7 +60,6 @@ void	close_pipes(t_inf *info)
 		if (tmp->output != -2)
 			close(tmp->output);
 		tmp = tmp->next;
-
 	}
 }
 
@@ -73,7 +72,7 @@ int	wait_childs(t_inf *info)
 	close_pipes(info);
 	save_status = 0;
 	wpid = 0;
-	while ((wpid != -1 || errno != ECHILD) )
+	while ((wpid != -1 || errno != ECHILD))
 	{
 		wpid = waitpid(info->pid, &status, 0);
 		if (wpid == info->pid)

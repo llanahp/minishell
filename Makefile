@@ -34,11 +34,11 @@ COLRESET	:=	"\033[0m"
 endif
 
 SRC = builtins/echo.c builtins/cd/cd.c builtins/cd/handles_cd.c builtins/pwd.c builtins/env.c builtins/export.c builtins/unset.c \
-	token/token_utils.c token/tokenize.c \
-	utils/utils.c utils/quotes.c\
-	vars/check_vars.c vars/var_utils.c\
+	token/ft_token_utils.c token/ft_tokenize.c \
+	utils/ft_utils.c utils/ft_quotes.c\
+	vars/ft_check_vars.c vars/ft_var_utils.c\
 	commands/save_args.c commands/save_heredoc.c  commands/save_input.c commands/save_output.c commands/save_pipe.c commands/save_word.c\
-	ft_error.c execution.c redir.c ft_pipes.c ft_free_split.c env_utils.c sigaction.c create_cmds.c command_utils.c \
+	ft_error.c ft_execution.c ft_redir.c ft_pipes.c ft_free_split.c ft_env_utils.c ft_sigaction.c ft_create_cmds.c ft_command_utils.c \
 	minishell.c
 
 OBJ = $(SRC:.c=.o)

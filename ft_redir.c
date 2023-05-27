@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redir.c                                            :+:      :+:    :+:   */
+/*   ft_redir.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ralopez- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/10 10:41:20 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/05/25 00:49:35 by mpizzolo         ###   ########.fr       */
+/*   Created: 2023/05/27 14:32:31 by ralopez-          #+#    #+#             */
+/*   Updated: 2023/05/27 14:32:34 by ralopez-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "minishell.h"
 
 /** fds_pipes:
  * This function dups the input and output of two file descriptors.
@@ -21,24 +21,21 @@ void	fds_pipes(int in, int out)
 {
 	if (dup2(in, STDIN_FILENO) == -1)
 	{
-		//wfree_memory(info);
 		exit(EXIT_FAILURE);
 	}
 	if (dup2(out, STDOUT_FILENO) == -1)
 	{
-		//free_memory(info);
 		exit(EXIT_FAILURE);
 	}
 }
 
 void	redir_files(t_command *cmd)
 {
-	if (cmd->input != -2 &&  cmd->output != -2)
+	if (cmd->input != -2 && cmd->output != -2)
 	{
 		fds_pipes(cmd->input, cmd->output);
 		close(cmd->input);
 		close(cmd->output);
-
 	}
 	else if (cmd->input != -2)
 	{
@@ -65,14 +62,12 @@ void	close_pipe_fds(t_command *cmds, t_command *skip_cmd)
 	}
 }
 
-
 void	redir(t_command *cmd, t_inf *info)
 {
 	redir_files(cmd);
-	
 	if (cmd->previous != NULL && cmd->previous->pipe_out == 1)
 		dup2(cmd->previous->fds[0], STDIN_FILENO);
 	if (cmd->pipe_out)
 		dup2(cmd->fds[1], STDOUT_FILENO);
-	close_pipe_fds(info->commands ,cmd);
+	close_pipe_fds(info->commands, cmd);
 }

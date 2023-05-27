@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenize.c                                         :+:      :+:    :+:   */
+/*   ft_tokenize.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ralopez- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,25 +10,24 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../minishell.h"
-
+#include "../minishell.h"
 
 int	store_word(t_inf *info, char *line, int i)
 {
 	int		j;
 	int		type;
 	char	*word;
-	
-	j=i;
+
+	j = i;
 	type = is_quote(line[j]);
 	if (type)
 		j++;
 	while (line[j] && ((type > 1 && is_quote(line[j]) != type)
-			|| (type == 0 && !is_space(line[j]) && !is_delimiter(line[j])) ))
+			|| (type == 0 && !is_space(line[j]) && !is_delimiter(line[j]))))
 		j++;
 	if (line[j] && type > 0 && !is_space(line[j]))
 		type = 0 ;
-	while(line[j] && !is_space(line[j]) && !is_delimiter(line[j]))
+	while (line[j] && !is_space(line[j]) && !is_delimiter(line[j]))
 		j++;
 	if (type > 0)
 		j++;
@@ -41,7 +40,7 @@ int	store_word(t_inf *info, char *line, int i)
 	return (j);
 }
 
-int	type_delimiter(char *line, int *i) 
+int	type_delimiter(char *line, int *i)
 {
 	if (line[*i] == '|')
 		return (PIPE);
@@ -86,14 +85,9 @@ int	tokenize(t_inf *info, char *line)
 		if (is_space(line[i]))
 			i++;
 		else if (is_delimiter(line[i]))
-		{
 			store_delimiter(info, line, &i);
-		}
 		else
-		{
 			i = store_word(info, line, i);
-		}
 	}
 	return (0);
 }
-

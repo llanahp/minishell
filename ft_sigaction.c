@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sigaction.c                                        :+:      :+:    :+:   */
+/*   ft_sigaction.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ralopez- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "minishell.h"
 
 void	ignore_sigquit(void)
 {
@@ -25,9 +25,8 @@ void	signal_reset_prompt(int signal)
 {
 	if (signal == SIGINT)
 	{
-		
 		(void)signal;
-		info.last_code = 130;
+		g_info.last_code = 130;
 		printf("\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);
@@ -43,7 +42,7 @@ void	signal_print_newline(int signal)
 	rl_on_new_line();
 }
 
-void set_signals_interactive(void)
+void	set_signals_interactive(void)
 {
 	struct sigaction	act;
 
@@ -51,7 +50,6 @@ void set_signals_interactive(void)
 	ft_memset(&act, 0, sizeof(act));
 	act.sa_handler = &signal_reset_prompt;
 	sigaction(SIGINT, &act, NULL);
-	
 }
 
 /**
@@ -61,7 +59,7 @@ void set_signals_interactive(void)
  * exiting when the user presses Ctrl-C, Ctrl-\ or Ctrl-D.
  * 
 */
-void set_signals_noninteractive(void)
+void	set_signals_noninteractive(void)
 {
 	struct sigaction	act;
 

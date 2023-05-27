@@ -27,7 +27,6 @@ int	msg(char *str1, char *str2, char *str3, int code)
 
 void	end_shell(t_inf *info)
 {
-	//close_allfds
 	ft_free_split(info->env);
 	ft_free_split(info->paths);
 	if (info->pwd != NULL)
@@ -36,4 +35,4 @@ void	end_shell(t_inf *info)
 	ft_lstclear_cmds(info);
 	clear_history();
 	exit(0);
-} 
+}

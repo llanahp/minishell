@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command_utils.c                                    :+:      :+:    :+:   */
+/*   ft_command_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ralopez- <ralopez-@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -35,7 +35,6 @@ t_command	*ft_lstnew_command(char *cmd)
 	obj->num_cmd_pipe = 0;
 	return (obj);
 }
-
 
 void	ft_lstadd_back_command(t_command **lst, t_command *new)
 {
@@ -84,10 +83,6 @@ void	clear_command(t_command *cmd)
 			free(cmd->fds);
 			cmd->fds = NULL;
 		}
-		/*if (cmd->previous != NULL)
-			free(cmd->previous);
-		if (cmd->next != NULL)
-			free(cmd->next);*/
 		if (cmd->redir != NULL)
 		{
 			int i = 0;
@@ -105,7 +100,7 @@ void	ft_lstclear_cmds(t_inf *info)
 {
 	t_command	*aux;
 	t_command	*aux2;
-	
+
 	if (info->commands != NULL)
 	{
 		aux = info->commands;
@@ -136,7 +131,7 @@ void	ft_clear_tokens(t_inf *info)
 {
 	t_list	*aux;
 	t_list	*aux2;
-	
+
 	if (info->tokens != NULL)
 	{	
 		aux = info->tokens;
@@ -168,6 +163,7 @@ void	ft_clear_tokens(t_inf *info)
 t_command	*get_last_cmd(t_inf *info)
 {
 	t_command	*tmp;
+
 	if (info->commands == NULL)
 	{
 		tmp = ft_lstnew_command(NULL);
