@@ -83,7 +83,11 @@ int	cd(t_inf *info, t_command *cmd)
 		to_location = to_check_chdir(cmd, &is_absolute);
 	chdir_exeption = chdir_exeptions(to_location);
 	if (chdir(to_location) == -1 && is_absolute == 0 && chdir_exeption == 0)
-		return (printf("chdir error\n"), 0);
+	{
+		printf("cd: no such file or directory: %s\n", to_location);
+		//free(to_location);
+		return (0);
+	}
 	else
 	{
 		to_location = cd_handler(is_absolute, to_location, cmd, info);

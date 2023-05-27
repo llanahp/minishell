@@ -40,6 +40,12 @@ char	*handle_cmd_for_change_env_cd(char *arg, char *pwd)
 	tmp = to_location;
 	to_location = ft_strjoin(pwd, to_location);
 	free(tmp);
+	if (chdir(to_location) == -1)
+	{
+		to_location = ft_strrchr(to_location, '/') + 1;
+		printf("cd: no such file or directory: %s\n", to_location);
+		return (free(to_location), NULL);
+	}
 	return (to_location);
 }
 
@@ -53,7 +59,8 @@ char	*handle_cd_to_usr(t_inf *info)
 	to_location = handle_back_cd(info->pwd);
 	if (chdir(to_location) == -1)
 	{
-		printf("chdir error\n");
+		to_location = ft_strrchr(to_location, '/') + 1;
+		printf("cd: no such file or directory: %s\n", to_location);
 		return (free(usr), NULL);
 	}
 	tmp = ft_strrchr(to_location, '/');
@@ -62,7 +69,8 @@ char	*handle_cd_to_usr(t_inf *info)
 		to_location = handle_back_cd(info->pwd);
 		if (chdir(to_location) == -1)
 		{
-			printf("chdir error\n");
+			to_location = ft_strrchr(to_location, '/') + 1;
+			printf("cd: no such file or directory: %s\n", to_location);
 			return (free(usr), NULL);
 		}
 		tmp = ft_strrchr(to_location, '/');
@@ -97,12 +105,20 @@ char	*handle_absolute_path(char *absolute_path)
 	to_loc = "";
 	to_loc = handle_for_absolute(&to, to_loc);
 	if (chdir(to_loc) == -1)
-		return (printf("chdir error, d: %s\n", to_loc), NULL);
+	{
+		to_loc = ft_strrchr(to_loc, '/') + 1;
+		printf("cd: no such file or directory: %s\n", to_loc);
+		return (NULL);
+	}
 	while (ft_strcmp(to_loc, absolute_path) && to)
 	{
 		to_loc = handle_for_absolute(&to, to_loc);
 		if (chdir(to_loc) == -1)
-			return (printf("chdir error, d: %s\n", to_loc), NULL);
+		{
+			to_loc = ft_strrchr(to_loc, '/') + 1;
+			printf("cd: no such file or directory: %s\n", to_loc);
+			return (NULL);
+		}
 	}
 	if (to_loc[ft_strlen(to_loc) - 1] == '/')
 		to_loc = ft_substr(to_loc, 0, ft_strlen(to_loc) - 1);
