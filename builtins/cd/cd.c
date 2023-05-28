@@ -105,6 +105,7 @@ int	cd(t_inf *info, t_command *cmd)
 		printf("cd: no such file or directory: %s\n", to_location);
 		if (is_abs_free[1] == 1)
 			free(to_location);
+		free(is_abs_free);
 		return (0);
 	}
 	else
