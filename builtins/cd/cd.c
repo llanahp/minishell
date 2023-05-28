@@ -12,20 +12,25 @@
 
 #include "../minishell.h"
 
-char	*to_check_chdir(t_command *cmd, int *is_absolute)
+char	*to_check_chdir(t_command *cmd, int **is_absolute)
 {
 	char	*to_location;
 	char	*tmp;
 
 	tmp = ft_substr(cmd->args[0], 0, 2);
 	to_location = NULL;
-	if (!ft_strcmp(tmp, "./") || !ft_strcmp(tmp, "..")
-		|| !ft_strcmp(tmp, "."))
+	if (!ft_strcmp(tmp, "./") || !ft_strcmp(tmp, "."))
 		to_location = cmd->args[0];
+	else if (!ft_strcmp(tmp, ".."))
+	{
+		if (cmd->args[0][ft_strlen(cmd->args[0]) - 1] == '/')
+			cmd->args[0][ft_strlen(cmd->args[0]) - 1] = '\0';
+		to_location = cmd->args[0];
+	}
 	else if (tmp[0] == '/')
 	{	
 		to_location = cmd->args[0];
-		*is_absolute = 1;
+		*is_absolute[0] = 1;
 	}
 	else if (ft_strcmp(tmp, "./") && ft_isalnum(cmd->args[0][2] + 0))
 		to_location = ft_strjoin("./", cmd->args[0]);
@@ -49,30 +54,43 @@ int	chdir_exeptions(char *str)
 	return (res);
 }
 
-char	*cd_handler(int abs, char *loc, t_command *cmd, t_inf *info)
+char	*cd_handler(int *(*abs), char *loc, t_command *cmd, t_inf *info)
 {
-	if (abs)
+	if ((*abs)[0])
+	{
 		loc = handle_absolute_path(loc);
+		(*abs)[1] = 1;
+	}
 	else if (!ft_strcmp(cmd->args[0], "..") || !ft_strcmp(loc, "-"))
 		loc = handle_back_cd(info->pwd);
 	else if (!ft_strcmp(cmd->args[0], "."))
+	{
 		loc = ft_strdup(info->pwd);
+		(*abs)[1] = 1;
+	}
 	else if (!ft_strcmp(cmd->args[0], "--") || !ft_strcmp(cmd->args[0], "~"))
+	{
 		loc = handle_cd_to_usr(info);
+		(*abs)[1] = 1;
+	}
 	else
+	{	
 		loc = handle_cmd_for_change_env_cd(cmd->args[0], info->pwd);
+		(*abs)[1] = 1;
+	}
 	if (loc == NULL)
-		return (NULL);
+		return ((*abs)[1] = 0, NULL);
 	return (loc);
 }
 
 int	cd(t_inf *info, t_command *cmd)
 {
 	char	*to_location;
-	int		is_absolute;
+	int		*is_abs_free;
 	int		chdir_exeption;
 
-	is_absolute = 0;
+	is_abs_free = malloc(sizeof(int) * 2);
+	is_abs_free[0] = 0;
 	get_pwd(info);
 	if (!cmd->args[0])
 	{
@@ -80,22 +98,26 @@ int	cd(t_inf *info, t_command *cmd)
 		cmd->args[0] = "~";
 	}
 	else
-		to_location = to_check_chdir(cmd, &is_absolute);
+		to_location = to_check_chdir(cmd, &is_abs_free);
 	chdir_exeption = chdir_exeptions(to_location);
-	if (chdir(to_location) == -1 && is_absolute == 0 && chdir_exeption == 0)
+	if (chdir(to_location) == -1 && is_abs_free[0] == 0 && chdir_exeption == 0)
 	{
 		printf("cd: no such file or directory: %s\n", to_location);
-		//free(to_location);
+		if (is_abs_free[1] == 1)
+			free(to_location);
 		return (0);
 	}
 	else
 	{
-		to_location = cd_handler(is_absolute, to_location, cmd, info);
+		is_abs_free[1] = 0;
+		to_location = cd_handler(&is_abs_free, to_location, cmd, info);
 		if (to_location == NULL)
-			return (0);
+			return (free(is_abs_free), 0);
 		change_var_env(info, "OLDPWD", info->pwd);
 		change_var_env(info, "PWD", to_location);
-		// free(to_location);
+		if (is_abs_free[1] == 1)
+			free(to_location);
+		free(is_abs_free);
 	}
 	return (0);
 }
