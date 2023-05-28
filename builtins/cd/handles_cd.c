@@ -43,8 +43,10 @@ char	*handle_cmd_for_change_env_cd(char *arg, char *pwd)
 	free(tmp);
 	if (chdir(to_location) == -1)
 	{
+		tmp = to_location;
 		to_location = ft_strrchr(to_location, '/') + 1;
 		printf("cd: no such file or directory: %s\n", to_location);
+		free(tmp);
 		return (NULL);
 	}
 	return (to_location);
