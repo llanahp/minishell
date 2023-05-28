@@ -99,6 +99,9 @@ int			export_binding(t_inf *info, t_command *cmd);
 /** unset.c */
 int			unset(t_inf *info, t_command *cmd);
 
+/** exit.c */
+void		ft_exit(t_command *cmd);
+
 /** free_split.c */
 void		ft_free_split(char **split);
 void		ft_free_split2(char ***split);
@@ -179,6 +182,7 @@ int			ft_strichr(char *str, char c);
 bool		is_separator(char c);
 bool		is_var_compliant(char c);
 int			is_builtin(char *cmd);
+void		puterror(char *cmd, char *msg);
 
 /** quotes.c */
 char		*replace_quotes(char *string, char quote);
