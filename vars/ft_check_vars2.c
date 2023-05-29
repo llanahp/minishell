@@ -86,4 +86,8 @@ void	replace_var(char **str, int i, t_inf *info)
 		replace_for_var(str, value, i);
 	else
 		replace_for_null(str, i);
+	if (var != NULL)
+		free(var);
+	if (value != NULL)
+		free(value);
 }

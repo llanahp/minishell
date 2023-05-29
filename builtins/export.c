@@ -32,13 +32,24 @@ int	export_binding(t_inf *info, t_command *cmd)
 	char	*value;
 	int		equals;
 
-	equals = ft_find(cmd->args[0], '=');
-	name = ft_substr(cmd->args[0], 0, equals);
-	equals++;
-	value = ft_substr(cmd->args[0], equals, (ft_strlen(cmd->args[0]) - equals));
-	if (get_var(info, name) == NULL)
-		add_var(info, name, value);
+	if (cmd->args[0] == NULL)
+		return (env(info));
+	if (ft_strcontains(cmd->args[0], '=') == 0)
+		add_var(info, cmd->args[0], NULL);
 	else
-		change_var_env(info, name, value);
+	{
+		equals = ft_find(cmd->args[0], '=');
+		name = ft_substr(cmd->args[0], 0, equals);
+		equals++;
+		value = ft_substr(cmd->args[0], equals, (ft_strlen(cmd->args[0]) - equals));
+		if (get_var(info, name) == NULL)
+			add_var(info, name, value);
+		else
+			change_var_env(info, name, value);
+		if (name)
+			free(name);
+		if (value)
+			free(value);
+	}
 	return (0);
 }

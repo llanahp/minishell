@@ -40,10 +40,10 @@ int	echo(t_command *cmd)
 	{
 		is_n = 1;
 		i++;
-		while (!ft_str_contains_n(cmd->args[i]))
+		while (cmd->args != NULL && !ft_str_contains_n(cmd->args[i]))
 			i++;
 	}
-	while (cmd != NULL && cmd->args[i])
+	while (cmd != NULL && cmd->args[i] != NULL && cmd->args && cmd->args[i])
 	{
 		printf("%s", cmd->args[i]);
 		if (cmd->args[i + 1])
