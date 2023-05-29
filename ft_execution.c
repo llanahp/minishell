@@ -84,14 +84,12 @@ void	execute_cmd(t_command *cmd, t_inf *info)
 		cmd->cmd = get_path(cmd->cmd, info);
 		if (cmd->cmd == NULL)
 		{
-			msg("command not found", ": ", cmd_original, EXIT_FAILURE);
-			info->last_code = 127;
+			info->last_code = msg("command not found", ": ", cmd_original, 127);
 			exit(info->last_code);
 		}
 		else if (execve(cmd->cmd, cmd->args, info->env) == -1)
 		{
-			msg("Execve", ": ", strerror(errno), EXIT_FAILURE);
-			info->last_code = 127;
+			info->last_code = msg("Execve", ": ", strerror(errno), errno);
 			exit(info->last_code);
 		}
 		info->last_code = 0;

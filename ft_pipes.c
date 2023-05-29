@@ -79,5 +79,11 @@ int	wait_childs(t_inf *info)
 			save_status = status;
 		continue ;
 	}
-	return (save_status);
+	if (WIFSIGNALED(save_status))
+		status = 128 + WTERMSIG(save_status);
+	else if (WIFEXITED(save_status))
+		status = WEXITSTATUS(save_status);
+	else
+		status = save_status;
+	return (status);
 }
