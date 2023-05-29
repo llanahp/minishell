@@ -47,7 +47,17 @@ int	is_builtin(char *cmd)
 		return (0);
 	if (ft_strcmp(cmd, "echo") == 0 || ft_strcmp(cmd, "cd") == 0
 		|| ft_strcmp(cmd, "pwd") == 0 || ft_strcmp(cmd, "export") == 0
-		|| ft_strcmp(cmd, "unset") == 0 || ft_strcmp(cmd, "env") == 0)
+		|| ft_strcmp(cmd, "unset") == 0 || ft_strcmp(cmd, "env") == 0
+		|| ft_strcmp(cmd, "exit") == 0)
 		return (1);
 	return (0);
+}
+
+void	puterror(char *cmd, char *msg)
+{
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(cmd, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putstr_fd(msg, 2);
+	ft_putstr_fd("\n", 2);
 }

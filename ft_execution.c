@@ -29,6 +29,8 @@ void	execute_builtin(t_command *cmd, t_inf *info, int exi)
 		code = unset(info, cmd);
 	else if (!ft_strcmp(cmd->cmd, "env"))
 		code = env(info);
+	else if (!ft_strcmp(cmd->cmd, "exit"))
+		ft_exit(cmd);
 	info->last_code = code;
 	if (exi)
 		exit(info->last_code);

@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+void rl_replace_line(const char *text, int clear_undo);
+
 void	ignore_sigquit(void)
 {
 	struct sigaction	act;

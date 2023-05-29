@@ -131,6 +131,7 @@ void	change_var_env(t_inf *info, char *var, char *value)
 	new = ft_strjoin(str, value);
 	free(str);
 	info->env[i] = ft_strdup(new);
+	free(new);
 }
 
 char	*get_var(t_inf *info, char *var)

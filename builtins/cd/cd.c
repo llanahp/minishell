@@ -19,9 +19,14 @@ char	*to_check_chdir(t_command *cmd, int *is_absolute)
 
 	tmp = ft_substr(cmd->args[0], 0, 2);
 	to_location = NULL;
-	if (!ft_strcmp(tmp, "./") || !ft_strcmp(tmp, "..")
-		|| !ft_strcmp(tmp, "."))
+	if (!ft_strcmp(tmp, "./") || !ft_strcmp(tmp, "."))
 		to_location = cmd->args[0];
+	else if (!ft_strcmp(tmp, ".."))
+	{
+		if (cmd->args[0][ft_strlen(cmd->args[0]) - 1] == '/')
+			cmd->args[0][ft_strlen(cmd->args[0]) - 1] = '\0';
+		to_location = cmd->args[0];
+	}
 	else if (tmp[0] == '/')
 	{	
 		to_location = cmd->args[0];
@@ -31,6 +36,7 @@ char	*to_check_chdir(t_command *cmd, int *is_absolute)
 		to_location = ft_strjoin("./", cmd->args[0]);
 	else
 		to_location = cmd->args[0];
+	free(tmp);
 	return (to_location);
 }
 
@@ -48,16 +54,14 @@ int	chdir_exeptions(char *str)
 	return (res);
 }
 
-// else if (ft_strcmp(tmp, "/") && ft_isalnum(cmd->args[0][0] + 0) && abs == 0)
-// le saque ------------------- porque era la una que usaba tmp y tenia 5 args
-char	*cd_handler(int abs, char *loc, t_command *cmd, t_inf *info)
+char	*cd_handler(int *abs, char *loc, t_command *cmd, t_inf *info)
 {
-	if (abs)
+	if (*abs == 1)
 		loc = handle_absolute_path(loc);
 	else if (!ft_strcmp(cmd->args[0], "..") || !ft_strcmp(loc, "-"))
 		loc = handle_back_cd(info->pwd);
 	else if (!ft_strcmp(cmd->args[0], "."))
-		loc = info->pwd;
+		loc = ft_strdup(info->pwd);
 	else if (!ft_strcmp(cmd->args[0], "--") || !ft_strcmp(cmd->args[0], "~"))
 		loc = handle_cd_to_usr(info);
 	else
@@ -70,10 +74,10 @@ char	*cd_handler(int abs, char *loc, t_command *cmd, t_inf *info)
 int	cd(t_inf *info, t_command *cmd)
 {
 	char	*to_location;
-	int		is_absolute;
+	int		is_abs;
 	int		chdir_exeption;
 
-	is_absolute = 0;
+	is_abs = 0;
 	get_pwd(info);
 	if (!cmd->args[0])
 	{
@@ -81,17 +85,22 @@ int	cd(t_inf *info, t_command *cmd)
 		cmd->args[0] = "~";
 	}
 	else
-		to_location = to_check_chdir(cmd, &is_absolute);
+		to_location = to_check_chdir(cmd, &is_abs);
 	chdir_exeption = chdir_exeptions(to_location);
-	if (chdir(to_location) == -1 && is_absolute == 0 && chdir_exeption == 0)
-		return (printf("chdir error\n"), 0);
+	if (chdir(to_location) == -1 && is_abs == 0 && chdir_exeption == 0)
+	{
+		printf("cd: no such file or directory: %s\n", to_location);
+		free(to_location);
+		return (0);
+	}
 	else
 	{
-		cd_handler(is_absolute, to_location, cmd, info);
+		to_location = cd_handler(&is_abs, to_location, cmd, info);
 		if (to_location == NULL)
 			return (0);
 		change_var_env(info, "OLDPWD", info->pwd);
 		change_var_env(info, "PWD", to_location);
+		free(to_location);
 	}
 	return (0);
 }
