@@ -6,21 +6,24 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 15:57:41 by mpizzolo          #+#    #+#             */
-/*   Updated: 2023/05/26 16:58:06 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/05/29 19:05:52 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*handle_back_cd(char *pwd)
+void	handling_cd(char *to_location, t_command *cmd, t_inf *info, int is_abs)
 {
-	char	*to_location;
 	char	*tmp;
 
-	to_location = pwd;
-	tmp = ft_strrchr(to_location, '/');
-	*tmp = '\0';
-	return ((to_location));
+	tmp = to_location;
+	to_location = cd_handler(is_abs, to_location, cmd, info);
+	free(tmp);
+	if (to_location == NULL)
+		return ;
+	change_var_env(info, "OLDPWD", info->pwd);
+	change_var_env(info, "PWD", to_location);
+	free(to_location);
 }
 
 char	*handle_cmd_for_change_env_cd(char *arg, char *pwd)
@@ -33,13 +36,21 @@ char	*handle_cmd_for_change_env_cd(char *arg, char *pwd)
 	tmp = ft_substr(arg, 0, 2);
 	if (!ft_strcmp(tmp, "./"))
 		arg += 2;
+	free(tmp);
 	if (arg[ft_strlen(arg) - 1] == '/')
 		arg[ft_strlen(arg) - 1] = '\0';
 	to_location = ft_strjoin("/", arg);
-	free(tmp);
 	tmp = to_location;
 	to_location = ft_strjoin(pwd, to_location);
 	free(tmp);
+	if (chdir(to_location) == -1)
+	{
+		tmp = to_location;
+		to_location = ft_strrchr(to_location, '/') + 1;
+		printf("cd: no such file or directory: %s\n", to_location);
+		free(tmp);
+		return (NULL);
+	}
 	return (to_location);
 }
 
@@ -48,27 +59,26 @@ char	*handle_cd_to_usr(t_inf *info)
 	char	*to_location;
 	char	*usr;
 	char	*tmp;
+	char	*tmp_free;
 
-	usr = ft_strjoin("/", get_var(info, "USER"));
+	tmp = get_var(info, "USER");
+	usr = ft_strjoin("/", tmp);
+	free(tmp);
 	to_location = handle_back_cd(info->pwd);
 	if (chdir(to_location) == -1)
-	{
-		printf("chdir error\n");
-		return (free(usr), NULL);
-	}
+		return (handle_chdir_error(to_location, usr), NULL);
 	tmp = ft_strrchr(to_location, '/');
 	while (ft_strcmp(tmp, usr))
 	{
-		to_location = handle_back_cd(info->pwd);
+		tmp_free = to_location;
+		to_location = handle_back_cd(to_location);
+		free(tmp_free);
 		if (chdir(to_location) == -1)
-		{
-			printf("chdir error\n");
-			return (free(usr), NULL);
-		}
+			return (handle_chdir_error(to_location, usr), NULL);
 		tmp = ft_strrchr(to_location, '/');
 	}
 	free(usr);
-	return (ft_strdup(to_location));
+	return (to_location);
 }
 
 char	*handle_for_absolute(char **to, char *to_loc)
@@ -92,20 +102,22 @@ char	*handle_absolute_path(char *absolute_path)
 {
 	char	*to;
 	char	*to_loc;
+	char	*tmp;
 
 	to = absolute_path;
-	to_loc = "";
-	to_loc = handle_for_absolute(&to, to_loc);
+	to_loc = handle_for_absolute(&to, "");
 	if (chdir(to_loc) == -1)
-		return (printf("chdir error, d: %s\n", to_loc), NULL);
+		return (handle_chdir_error(to_loc, NULL), NULL);
 	while (ft_strcmp(to_loc, absolute_path) && to)
 	{
+		tmp = to_loc;
 		to_loc = handle_for_absolute(&to, to_loc);
+		free(tmp);
 		if (chdir(to_loc) == -1)
-			return (printf("chdir error, d: %s\n", to_loc), NULL);
+			return (handle_chdir_error(to_loc, NULL), NULL);
 	}
 	if (to_loc[ft_strlen(to_loc) - 1] == '/')
-		to_loc = ft_substr(to_loc, 0, ft_strlen(to_loc) - 1);
+		to_loc[ft_strlen(to_loc) - 1] = '\0';
 	free(to);
 	return (to_loc);
 }

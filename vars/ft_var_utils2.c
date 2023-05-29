@@ -84,13 +84,13 @@ char	*replace(char *string, char *search, char *replace)
 	result = (char *)malloc(sizeof(char) * (len + 1));
 	if (result == NULL)
 		return (NULL);
-	copy_content(*&i, &len, result, string);
+	copy_content(&i, &len, result, string);
 	while (replace[++j] != '\0')
 		result[i++] = replace[j];
 	while (string[len] != '\0' && string[len] != ' ' && string[len]
 		!= '\'' && string[len] != '"')
 		len++;
-	copy_content2(*&len, &i, result, string);
+	copy_content2(&len, &i, result, string);
 	free(string);
 	return (result);
 }

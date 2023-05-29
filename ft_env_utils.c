@@ -131,6 +131,7 @@ void	change_var_env(t_inf *info, char *var, char *value)
 	new = ft_strjoin(str, value);
 	free(str);
 	info->env[i] = ft_strdup(new);
+	free(new);
 }
 
 char	*get_var(t_inf *info, char *var)
@@ -138,6 +139,8 @@ char	*get_var(t_inf *info, char *var)
 	int		i;
 
 	i = 0;
+	if (var == NULL)
+		return (NULL);
 	while ((*info).env[i] != NULL && (*info).env[i][0] != '\0'
 		&& ft_strncmp((*info).env[i], var, ft_strlen(var)) != 0)
 		i++;
@@ -191,10 +194,17 @@ void	add_var(t_inf *info, char *var, char *value)
 	while (info->env[i] != NULL)
 		i++;
 	str = ft_strjoin(var, "=");
-	new = ft_strjoin(str, value);
+	if (value == NULL)
+		new = ft_strdup(str);
+	else
+		new = ft_strjoin(str, value);
 	info->env[i] = ft_strdup(new);
-	free(str);
-	free(new);
+	if (value == NULL)
+		free(str);
+	if (value != NULL)
+		free(new);
+	if (new != NULL)
+		free(new);
 	i++;
 	info->env[i] = NULL;
 }

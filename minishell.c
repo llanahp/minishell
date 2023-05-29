@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:41:20 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/05/19 14:51:29 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/05/29 19:07:14 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ void	display_prompt(t_inf *info)
 	}
 	if (ft_strcmp(line, "") == 0)
 		return ;
-	if (ft_strcmp(line, "exit") == 0)//TODO por hacer
-		exit(0);//TODO mirar por si pasa el codigo con el que tiene que terminar
+	// if (ft_strcmp(line, "exit") == 0)
+	// 	ft_exit(0);
 	add_history(line);
 	prepare_line(info, line);
 }
@@ -58,7 +58,7 @@ void	salida(void)
 
 int	main(int argc, char *argv[], char **env)
 {
-	atexit(salida);
+//	atexit(salida);
 	(void)argc;
 	(void)argv;
 	g_info.tokens = NULL;

@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 09:47:00 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/05/26 16:03:28 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/05/29 19:02:40 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,11 @@ char		*handle_back_cd(char *pwd);
 char		*handle_cmd_for_change_env_cd(char *arg, char *pwd);
 char		*handle_cd_to_usr(t_inf *info);
 char		*handle_absolute_path(char *absolute_path);
+void		handle_no_arg_cd(t_command *cmd, char **to_location);
+char		*cd_handler(int abs, char *loc, t_command *cmd, t_inf *info);
+void		handling_cd(char *to_location, t_command *cmd,
+				t_inf *info, int is_abs);
+void		handle_chdir_error(char *to_loc, char *free_var);
 
 /** echo.c */
 int			echo(t_command *cmd);
@@ -98,6 +103,9 @@ int			export_binding(t_inf *info, t_command *cmd);
 
 /** unset.c */
 int			unset(t_inf *info, t_command *cmd);
+
+/** exit.c */
+void		ft_exit(t_command *cmd);
 
 /** free_split.c */
 void		ft_free_split(char **split);
@@ -179,6 +187,7 @@ int			ft_strichr(char *str, char c);
 bool		is_separator(char c);
 bool		is_var_compliant(char c);
 int			is_builtin(char *cmd);
+void		puterror(char *cmd, char *msg);
 
 /** quotes.c */
 char		*replace_quotes(char *string, char quote);
