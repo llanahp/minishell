@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:41:20 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/05/29 20:43:39 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/05/29 22:11:09 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,3 @@ int	main(int argc, char *argv[], char **env)
 	end_shell(&g_info);
 	return (0);
 }
-
