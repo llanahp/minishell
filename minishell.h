@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 09:47:00 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/05/29 19:02:40 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/05/29 19:33:48 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ int			unset(t_inf *info, t_command *cmd);
 
 /** exit.c */
 void		ft_exit(t_command *cmd);
+int			ft_atoi_exit(const char *str);
 
 /** free_split.c */
 void		ft_free_split(char **split);
