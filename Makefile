@@ -6,7 +6,7 @@
 #    By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/27 12:35:10 by ralopez-          #+#    #+#              #
-#    Updated: 2023/05/26 16:01:11 by mpizzolo         ###   ########.fr        #
+#    Updated: 2023/05/29 18:07:35 by mpizzolo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,7 +55,7 @@ GREY		:=	"\033[0;37m"
 COLRESET	:=	"\033[0m"
 endif
 
-SRC = builtins/echo.c builtins/cd/cd.c builtins/cd/handles_cd.c builtins/pwd.c builtins/env.c builtins/export.c builtins/unset.c builtins/exit.c\
+SRC = builtins/echo.c builtins/cd/cd.c builtins/cd/handles_cd.c builtins/cd/handles_cd_2.c builtins/pwd.c builtins/env.c builtins/export.c builtins/unset.c builtins/exit.c\
 	token/ft_token_utils.c token/ft_tokenize.c \
 	utils/ft_utils.c utils/ft_quotes.c\
 	vars/ft_check_vars.c vars/ft_var_utils.c vars/ft_var_utils2.c vars/ft_check_vars2.c\

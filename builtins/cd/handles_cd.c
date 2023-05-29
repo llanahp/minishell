@@ -6,22 +6,24 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 15:57:41 by mpizzolo          #+#    #+#             */
-/*   Updated: 2023/05/26 16:58:06 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/05/29 19:05:52 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*handle_back_cd(char *pwd)
+void	handling_cd(char *to_location, t_command *cmd, t_inf *info, int is_abs)
 {
-	char	*to_location;
 	char	*tmp;
 
-	to_location = ft_strdup(pwd);
-	tmp = ft_strrchr(to_location, '/');
-	if (tmp != NULL)
-		*tmp = '\0';
-	return ((to_location));
+	tmp = to_location;
+	to_location = cd_handler(is_abs, to_location, cmd, info);
+	free(tmp);
+	if (to_location == NULL)
+		return ;
+	change_var_env(info, "OLDPWD", info->pwd);
+	change_var_env(info, "PWD", to_location);
+	free(to_location);
 }
 
 char	*handle_cmd_for_change_env_cd(char *arg, char *pwd)
@@ -64,11 +66,7 @@ char	*handle_cd_to_usr(t_inf *info)
 	free(tmp);
 	to_location = handle_back_cd(info->pwd);
 	if (chdir(to_location) == -1)
-	{
-		to_location = ft_strrchr(to_location, '/') + 1;
-		printf("cd: no such file or directory: %s\n", to_location);
-		return (free(usr), NULL);
-	}
+		return (handle_chdir_error(to_location, usr), NULL);
 	tmp = ft_strrchr(to_location, '/');
 	while (ft_strcmp(tmp, usr))
 	{
@@ -76,15 +74,11 @@ char	*handle_cd_to_usr(t_inf *info)
 		to_location = handle_back_cd(to_location);
 		free(tmp_free);
 		if (chdir(to_location) == -1)
-		{
-			to_location = ft_strrchr(to_location, '/') + 1;
-			printf("cd: no such file or directory: %s\n", to_location);
-			return (free(usr), NULL);
-		}
+			return (handle_chdir_error(to_location, usr), NULL);
 		tmp = ft_strrchr(to_location, '/');
 	}
 	free(usr);
-	return (ft_strdup(to_location));
+	return (to_location);
 }
 
 char	*handle_for_absolute(char **to, char *to_loc)
@@ -113,29 +107,17 @@ char	*handle_absolute_path(char *absolute_path)
 	to = absolute_path;
 	to_loc = handle_for_absolute(&to, "");
 	if (chdir(to_loc) == -1)
-	{
-		to_loc = ft_strrchr(to_loc, '/') + 1;
-		printf("cd: no such file or directory: %s\n", to_loc);
-		return (NULL);
-	}
+		return (handle_chdir_error(to_loc, NULL), NULL);
 	while (ft_strcmp(to_loc, absolute_path) && to)
 	{
 		tmp = to_loc;
 		to_loc = handle_for_absolute(&to, to_loc);
 		free(tmp);
 		if (chdir(to_loc) == -1)
-		{
-			to_loc = ft_strrchr(to_loc, '/') + 1;
-			printf("cd: no such file or directory: %s\n", to_loc);
-			return (NULL);
-		}
+			return (handle_chdir_error(to_loc, NULL), NULL);
 	}
 	if (to_loc[ft_strlen(to_loc) - 1] == '/')
-	{
-		tmp = to_loc;
-		to_loc = ft_substr(to_loc, 0, ft_strlen(to_loc) - 1);
-		free(tmp);	
-	}
+		to_loc[ft_strlen(to_loc) - 1] = '\0';
 	free(to);
 	return (to_loc);
 }
