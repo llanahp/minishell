@@ -1,29 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_token_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ralopez- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/24 12:43:41 by ralopez-          #+#    #+#             */
-/*   Updated: 2022/09/24 12:43:42 by ralopez-         ###   ########.fr       */
+/*   Created: 2023/05/26 19:51:58 by ralopez-          #+#    #+#             */
+/*   Updated: 2023/05/26 19:51:59 by ralopez-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#include "../minishell.h"
 
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 1
-# endif
+int	is_space(char c)
+{
+	if (c == ' ' || c == '\t')
+		return (1);
+	return (0);
+}
 
-# include <stdlib.h>
-# include <unistd.h>
+int	is_delimiter(char c)
+{
+	if (c == '|' || c == '<' || c == '>')
+		return (1);
+	return (0);
+}
 
-char	*get_next_line(int fd);
-void	*ft_calloc_gnl(size_t count, size_t size);
-void	ft_bzero_gnl(void *s, size_t n);
-size_t	ft_strlen_gnl(const char *c);
-char	*ft_strjoin_gnl(char const *s1, char const *s2);
-char	*ft_strchr_gnl(const char *s, int c);
-#endif
+int	is_quote(char c)
+{
+	if (c == '"')
+		return (DOUBLE_QUOTE);
+	if (c == '\'')
+		return (SIMPLE_QUOTE);
+	return (0);
+}

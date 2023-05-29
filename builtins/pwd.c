@@ -27,7 +27,7 @@ int	pwd(t_inf *info, t_command *cmd)
 	else
 	{
 		code = get_pwd(info);
-		printf("%s\n",info->pwd);
+		printf("%s\n", info->pwd);
 	}
 	return (code);
 }

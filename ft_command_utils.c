@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command_utils.c                                    :+:      :+:    :+:   */
+/*   ft_command_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ralopez- <ralopez-@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -36,7 +36,6 @@ t_command	*ft_lstnew_command(char *cmd)
 	return (obj);
 }
 
-
 void	ft_lstadd_back_command(t_command **lst, t_command *new)
 {
 	t_command	*aux;
@@ -58,31 +57,13 @@ void	ft_lstadd_back_command(t_command **lst, t_command *new)
 	else
 		lst = &new;
 }
-/*
-void ft_free_array(char ***array)
-{
-	int i;
 
-	i = 0;
-	while ((*array) != NULL && (*array)[i] != NULL)
-	{
-		free((*array)[i]);
-		(*array)[i] = NULL;
-		i++;
-	}
-	if ((*array) != NULL)
-		free((*array));
-	(*array) = NULL;
-}*/
-
-//TODO falta liberar el previous y next 
 void	clear_command(t_command *cmd)
 {
 	if (cmd != NULL)
 	{
 		if (cmd->cmd != NULL)
 			free(cmd->cmd);
-		
 		if (cmd->args != NULL)
 			ft_free_split2(&cmd->args);
 		if (cmd->path != NULL)
@@ -97,6 +78,21 @@ void	clear_command(t_command *cmd)
 			free(cmd->output_name);
 			close(cmd->output);
 		}
+		if (cmd->fds != NULL)
+		{
+			free(cmd->fds);
+			cmd->fds = NULL;
+		}
+		if (cmd->redir != NULL)
+		{
+			int i = 0;
+			while (cmd->redir[i])
+			{
+				close(cmd->redir[i]);
+				i++;
+			}
+			free(cmd->redir);
+		}
 	}
 }
 
@@ -104,10 +100,9 @@ void	ft_lstclear_cmds(t_inf *info)
 {
 	t_command	*aux;
 	t_command	*aux2;
-	
+
 	if (info->commands != NULL)
 	{
-		
 		aux = info->commands;
 		if (aux != NULL)
 		{
@@ -136,7 +131,7 @@ void	ft_clear_tokens(t_inf *info)
 {
 	t_list	*aux;
 	t_list	*aux2;
-	
+
 	if (info->tokens != NULL)
 	{	
 		aux = info->tokens;
@@ -168,11 +163,9 @@ void	ft_clear_tokens(t_inf *info)
 t_command	*get_last_cmd(t_inf *info)
 {
 	t_command	*tmp;
+
 	if (info->commands == NULL)
 	{
-		/*tmp = (t_command *)malloc(sizeof(t_command) * 1);
-		if (!tmp)
-			return (NULL);*/
 		tmp = ft_lstnew_command(NULL);
 		ft_lstadd_back_command(&info->commands, tmp);
 		return (tmp);

@@ -6,35 +6,49 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:33:39 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/05/24 22:45:19 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/05/26 15:56:57 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-// Falta handle cuando:
-// Comillas simple, debe imprimir literalmente lo que tiene dentro, sin variables de entorno
-// \ para mostrar caracteres especiales, ej: echo "This is a \"quoted\" word.", echo "Line 1\nLine 2"
+int	ft_str_contains_n(char *str)
+{
+	int		res;
+	int		i;
 
-// Hablar con Raul porque va a haber que hacer cambios en el tokeize.c
-// Si hacemos cambios, fijarse que functione con comillas dobles, igual que sin comillas
+	res = 1;
+	i = -1;
+	while (str[++i] && res)
+	{
+		if (str[i] == '-' && str[i + 1] == 'n')
+			res = 0;
+	}
+	return (res);
+}
 
 int	echo(t_command *cmd)
 {
 	int	i;
+	int	is_n;
 
-	i = -1;
-	if (!ft_strcmp(cmd->args[0], "-n")) 
+	i = 0;
+	is_n = 0;
+	if (!ft_str_contains_n(cmd->args[i]))
+	{
+		is_n = 1;
 		i++;
-	// why i < 4 ??		
-	// check if the cmd->args is a possible command, as echo cd ~ should print 
-	while (cmd != NULL && cmd->args[++i] && i < 4)
+		while (!ft_str_contains_n(cmd->args[i]))
+			i++;
+	}
+	while (cmd != NULL && cmd->args[i])
 	{
 		printf("%s", cmd->args[i]);
 		if (cmd->args[i + 1])
 			printf(" ");
+		i++;
 	}
-	if (ft_strcmp(cmd->args[0], "-n")) 
+	if (!is_n)
 		printf("\n");
 	return (0);
 }

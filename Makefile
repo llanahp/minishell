@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ralopez- <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/27 12:35:10 by ralopez-          #+#    #+#              #
-#    Updated: 2023/01/27 12:35:13 by ralopez-         ###   ########.fr        #
+#    Updated: 2023/05/26 16:01:11 by mpizzolo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,31 @@
 
 NAME = minishell
 CC = gcc
-CFLAGS = -Wall -Wextra -I libft/ #-Werror
+CFLAGS = -Wall -Wextra -g -I libft/  #-Werror
+
+UNAME := $(shell uname -s)
+
+ifeq ($(UNAME), Darwin)
+    # Check for macOS version
+    MACOS_VERSION := $(shell sw_vers -productVersion | cut -d. -f1)
+    ifeq ($(MACOS_VERSION), 13)
+        # macOS Ventura (13.x)
+        LDFLAGS     = -L/opt/homebrew/Cellar/readline/8.2.1/lib
+        CPPFLAGS    = -I/opt/homebrew/Cellar/readline/8.2.1/include
+        $(info Using macOS Ventura paths)
+    else
+        # Other macOS versions (assume macOS Silicon)
+        LDFLAGS     = -L/Users/$(USER)/.brew/opt/readline/lib
+        CPPFLAGS    = -I/Users/$(USER)/.brew/opt/readline/include
+        $(info Using macOS Silicon paths)
+    endif
+else
+    # Non-Darwin systems
+    LDFLAGS     = -L/default/path/to/readline/lib
+    CPPFLAGS    = -I/default/path/to/readline/include
+    $(info Using default paths for non-Darwin systems)
+endif
+
 
 
 
@@ -31,11 +55,12 @@ GREY		:=	"\033[0;37m"
 COLRESET	:=	"\033[0m"
 endif
 
-SRC = builtins/echo.c builtins/cd.c builtins/pwd.c builtins/env.c builtins/export.c builtins/unset.c \
-	ft_free_split.c get_info.c sigaction.c tokenize.c check_vars.c create_cmds.c command_utils.c\
+SRC = builtins/echo.c builtins/cd/cd.c builtins/cd/handles_cd.c builtins/pwd.c builtins/env.c builtins/export.c builtins/unset.c \
+	token/ft_token_utils.c token/ft_tokenize.c \
+	utils/ft_utils.c utils/ft_quotes.c\
+	vars/ft_check_vars.c vars/ft_var_utils.c vars/ft_var_utils2.c vars/ft_check_vars2.c\
 	commands/save_args.c commands/save_heredoc.c  commands/save_input.c commands/save_output.c commands/save_pipe.c commands/save_word.c\
-	get_next_line/get_next_line.c get_next_line/get_next_line_utils.c \
-	ft_error.c execution.c redir.c ft_pipes.c\
+	ft_error.c ft_execution.c ft_redir.c ft_pipes.c ft_free_split.c ft_env_utils.c ft_sigaction.c ft_create_cmds.c ft_command_utils.c \
 	minishell.c
 
 OBJ = $(SRC:.c=.o)
@@ -43,11 +68,11 @@ OBJ = $(SRC:.c=.o)
 
 %.o: %.c
 	@echo $(GREEN) Compiling file $< $(COLRESET)
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@ 
 
 $(NAME): $(OBJ) libft
 	@echo $(BLUE) Done!!! $(COLRESET)
-	@$(CC) -o $@ $(OBJ) -Llibft -lft  -lreadline
+	@$(CC) -o $@ $(OBJ) -Llibft -lft $(LDFLAGS) $(CPPFLAGS) -lreadline
 
 libft:
 	@make -C libft 

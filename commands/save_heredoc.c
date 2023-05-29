@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-int	file_exists(char	*name)
+int	file_exists(char *name)
 {
 	if(access(name, F_OK) == 0)
         return (1);
@@ -69,7 +69,7 @@ int	read_heredoc( char *name, char *delimiter)
 		set_signals_noninteractive();
 		if (buf == NULL)
 			return (msg("Error reading", ": ", strerror(errno), -1));
-		buf[ft_strlen(buf) - 1] = '\0';
+		buf[ft_strlen(buf)] = '\0';
 		if (ft_strcmp(buf, delimiter) == 0)
 		{
 			free(buf);
@@ -113,6 +113,5 @@ t_list	*save_heredoc(t_inf *info, t_list *tmp)
 	command = get_last_cmd(info);
 	close_prev_redir(command);
 	tmp = set_name_heredoc( tmp, command);
-
 	return (tmp);
 }

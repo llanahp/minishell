@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "minishell.h"
 
 int	prepare_execution(t_inf *info)
 {
@@ -18,7 +18,8 @@ int	prepare_execution(t_inf *info)
 		return (CMD_SUCCESS);
 	if (info->commands->cmd == NULL)
 	{
-		if (info->commands->input_name != NULL || info->commands->output_name != NULL)
+		if (info->commands->input_name != NULL
+			|| info->commands->output_name != NULL)
 			return (CMD_FAILURE);
 		return (CMD_SUCCESS);
 	}
@@ -26,50 +27,6 @@ int	prepare_execution(t_inf *info)
 		return (CMD_FAILURE);
 	return (CMD_NOT_FOUND);
 }
-/*
-int	num_cmd_pipe(t_command *tmp)
-{
-	int	i;
-
-	i = 0;
-	tmp->type_redir = 1;//start pipe
-	tmp->num_cmd_pipe = i;
-	//printf("(1)\n");
-	tmp = tmp->next;
-	while (tmp != NULL && tmp->pipe_out)
-	{
-		i++;
-		tmp->type_redir = 2;//middle pipe
-		//printf("(2)\n");
-		tmp->num_cmd_pipe = i;
-		tmp = tmp->next;
-	}
-	if (tmp != NULL)
-	{
-		i++;
-		tmp->type_redir = 3;//end pipe
-	//	printf("(3)\n");
-		tmp->num_cmd_pipe = i ;
-	}
-	//printf("->num_cmd_pipe = %d<-\n", i);
-	return (i);
-}
-
-t_command	*reserve_space_redir(t_command *tmp)
-{
-
-	tmp->redir = malloc(sizeof(int *) * num_cmd_pipe(tmp) * 2);
-	if (tmp->redir == NULL || pipe(tmp->redir) != 0)
-	{
-			//todo free memory de todo lo anterior
-			//free_error("error malloc", "", "", info);
-			return (NULL);
-	}
-	while (tmp != NULL && tmp->pipe_out)
-		tmp = tmp->next;
-	return (tmp);
-}*/
-
 
 int	prepare_pipes(t_inf *info)
 {
@@ -81,29 +38,13 @@ int	prepare_pipes(t_inf *info)
 		tmp->fds = malloc(sizeof(int *) * 2);
 		if (tmp->fds == NULL || pipe(tmp->fds) != 0)
 		{
-			//todo free memory de todo lo anterior
-			//free_error("error malloc", "", "", info);
+			msg("malloc", ": ", strerror(errno), EXIT_FAILURE);
 			return (1);
 		}
 		tmp = tmp->next;
 	}
 	return (0);
 }
-/*
-int	prepare_pipes(t_inf *info)
-{
-	t_command	*tmp;
-
-	tmp = info->commands;
-	while (tmp != NULL)
-	{
-		if (tmp->pipe_out)
-			tmp = reserve_space_redir(tmp);
-		else
-			tmp = tmp->next;		
-	}
-	return (0);
-}*/
 
 void	close_pipes(t_inf *info)
 {
@@ -119,7 +60,6 @@ void	close_pipes(t_inf *info)
 		if (tmp->output != -2)
 			close(tmp->output);
 		tmp = tmp->next;
-
 	}
 }
 
@@ -132,7 +72,7 @@ int	wait_childs(t_inf *info)
 	close_pipes(info);
 	save_status = 0;
 	wpid = 0;
-	while ((wpid != -1 || errno != ECHILD) )
+	while ((wpid != -1 || errno != ECHILD))
 	{
 		wpid = waitpid(info->pid, &status, 0);
 		if (wpid == info->pid)

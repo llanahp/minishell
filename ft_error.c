@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_error.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ralopez- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/26 19:55:53 by ralopez-          #+#    #+#             */
+/*   Updated: 2023/05/26 19:55:54 by ralopez-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 /** msg:
  * This function display an error message.
@@ -13,3 +25,14 @@ int	msg(char *str1, char *str2, char *str3, int code)
 	return (code);
 }
 
+void	end_shell(t_inf *info)
+{
+	ft_free_split(info->env);
+	ft_free_split(info->paths);
+	if (info->pwd != NULL)
+		free(info->pwd);
+	ft_clear_tokens(info);
+	ft_lstclear_cmds(info);
+	clear_history();
+	exit(0);
+}
