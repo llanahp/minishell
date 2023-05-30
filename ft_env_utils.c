@@ -193,7 +193,7 @@ void	malloc_new_env(t_inf *info)
 	i = 0;
 	while (info->env && info->env[i])
 		i++;
-	aux = (char **)malloc(sizeof(char *) * (i + 1));
+	aux = (char **)malloc(sizeof(char *) * (i + 2));
 	if (!aux)
 		return ;
 	copy_env(aux, info->env);
@@ -206,9 +206,12 @@ void	add_var(t_inf *info, char *var, char *value)
 {
 	int		i;
 	char	*str;
+	char 	*aux;
 	char	*new;
 
 	i = 0;
+	aux= NULL;
+	new = NULL;
 	malloc_new_env(info);
 	while (info->env[i] != NULL)
 		i++;
@@ -218,7 +221,7 @@ void	add_var(t_inf *info, char *var, char *value)
 	else
 		new = ft_strjoin(str, value);
 	info->env[i] = ft_strdup(new);
-	if (str == NULL)
+	if (str != NULL)
 		free(str);
 	if (new != NULL)
 		free(new);

@@ -105,7 +105,7 @@ int			export_binding(t_inf *info, t_command *cmd);
 int			unset(t_inf *info, t_command *cmd);
 
 /** exit.c */
-void		ft_exit(t_command *cmd);
+void	ft_exit(t_command *cmd, t_inf *info);
 
 /** free_split.c */
 void		ft_free_split(char **split);
@@ -171,6 +171,7 @@ t_list		*save_pipe(t_inf *info, t_list *tmp, int pipe);
 /** ft_error.c */
 int			msg(char *str1, char *str2, char *str3, int code);
 void		end_shell(t_inf *info);
+void		free_memory(t_inf *info);
 
 /** execution.c */
 int			execute_commands(t_inf *info);

@@ -52,7 +52,10 @@ char	*get_value_var_line(char *name, char *line)
 		return (NULL);
 	value = ft_substr(line, ft_strlen(name) + 1, ft_strlen(line));
 	if (value != NULL && value[0] == '\0')
+	{
+		free(value);
 		value = NULL;
+	}
 	return (value);
 }
 
@@ -82,6 +85,7 @@ int	export_binding(t_inf *info, t_command *cmd)
 			free(name);
 		if (value)
 			free(value);
+			
 		i++;
 	}
 	return (0);

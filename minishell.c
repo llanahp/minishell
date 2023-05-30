@@ -45,8 +45,6 @@ void	display_prompt(t_inf *info)
 	}
 	if (ft_strcmp(line, "") == 0)
 		return ;
-	// if (ft_strcmp(line, "exit") == 0)
-	// 	ft_exit(0);
 	add_history(line);
 	prepare_line(info, line);
 }
@@ -58,7 +56,7 @@ void	salida(void)
 
 int	main(int argc, char *argv[], char **env)
 {
-	//atexit(salida);
+	atexit(salida);
 	(void)argc;
 	(void)argv;
 	g_info.tokens = NULL;

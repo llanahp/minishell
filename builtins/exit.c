@@ -12,9 +12,9 @@
 
 #include "../minishell.h"
 
-void    exiting(int numerror)
+void    exiting(int numerror, t_inf *info)
 {
-	// frees
+	free_memory(info);
 	exit(numerror);
 }
 
@@ -57,14 +57,15 @@ int	get_exit_error(t_command *cmd)
 	return (res);
 }
 
-void    ft_exit(t_command *cmd)
+void	ft_exit(t_command *cmd, t_inf *info)
 {
 	int	numerror;
 
+	
 	if (!cmd->args[0])
 		exit(0);
 	if (check_exit(cmd) == 1)
 		exit(-1);
 	numerror = get_exit_error(cmd);
-	exiting(numerror);
+	exiting(numerror, info);
 }

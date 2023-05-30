@@ -25,7 +25,7 @@ int	msg(char *str1, char *str2, char *str3, int code)
 	return (code);
 }
 
-void	end_shell(t_inf *info)
+void	free_memory(t_inf *info)
 {
 	ft_free_split(info->env);
 	ft_free_split(info->paths);
@@ -34,5 +34,10 @@ void	end_shell(t_inf *info)
 	ft_clear_tokens(info);
 	ft_lstclear_cmds(info);
 	clear_history();
+}
+
+void	end_shell(t_inf *info)
+{
+	free_memory(info);
 	exit(0);
 }
