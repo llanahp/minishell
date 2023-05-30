@@ -112,7 +112,7 @@ char	*replace_string(char *string, char stop, char *new)
 	char	*result;
 	int		i;
 	int		j;
-	int 	k;
+	int		k;
 
 	i = 0;
 	j = 0;

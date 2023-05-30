@@ -74,7 +74,6 @@ int	check_vars(t_inf *info)
 	char	*var;
 
 	tmp = info->tokens;
-
 	while (tmp != NULL)
 	{
 		if (!ft_are_double_quotes(tmp->content))
