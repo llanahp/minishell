@@ -15,14 +15,22 @@
 int	pwd(t_inf *info, t_command *cmd)
 {
 	int	code;
+	int	fd_write;
 
 	code = 0;
+	fd_write = 1;
+	if (cmd->output != -2)
+		fd_write = cmd->output;
 	if (cmd->args != NULL && cmd->args[0] != NULL)
 	{
 		if (cmd->args != NULL && cmd->args[0] != NULL && cmd->args[0][0] == '-')
-			printf("pwd: bad option: -%c\n", cmd->args[0][1]);
+		{
+			ft_putstr_fd("pwd: bad option: -", 2);
+			ft_putchar_fd(cmd->args[0][1], 2);
+			ft_putchar_fd('\n', 2);
+		}
 		else
-			printf("pwd: too many arguments\n");
+			ft_putendl_fd("pwd: too many arguments", 2);
 		code = 1;
 		info->last_code = code;
 	}
@@ -30,7 +38,7 @@ int	pwd(t_inf *info, t_command *cmd)
 	{
 		code = get_pwd(info);
 		info->last_code = code;
-		printf("%s\n", info->pwd);
+		ft_putendl_fd(info->pwd, fd_write);
 	}
 	return (code);
 }

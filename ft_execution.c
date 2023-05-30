@@ -123,7 +123,10 @@ int	execute_single_cmd(t_inf *info)
 	t_command	*tmp;
 
 	tmp = info->commands;
+	//redir_files(tmp);
 	execute_builtin(tmp, info, 0);
+	//close_files(tmp);
+	//fds_pipes(0, 1);
 	return (info->last_code);
 }
 

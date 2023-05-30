@@ -181,9 +181,12 @@ int			execute_commands(t_inf *info);
 int			prepare_execution(t_inf *info);
 int			prepare_pipes(t_inf *info);
 int			wait_childs(t_inf *info);
+void	fds_pipes(int in, int out);
 
 /** redir.c */
 void		redir(t_command *cmd, t_inf *info);
+void		close_files(t_command *cmd);
+void		redir_files(t_command *cmd);
 
 /** utils */
 int			ft_strichr(char *str, char c);
