@@ -56,7 +56,7 @@ void	salida(void)
 
 int	main(int argc, char *argv[], char **env)
 {
-	atexit(salida);
+	//atexit(salida);
 	(void)argc;
 	(void)argv;
 	g_info.tokens = NULL;

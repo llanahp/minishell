@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	execute_builtin(t_command *cmd, t_inf *info, int exi)
+int	execute_builtin(t_command *cmd, t_inf *info, int exi)
 {
 	int	code;
 
@@ -34,6 +34,7 @@ void	execute_builtin(t_command *cmd, t_inf *info, int exi)
 	info->last_code = code;
 	if (exi)
 		exit(info->last_code);
+	return (code);
 }
 
 /** create_cmd:
@@ -123,7 +124,6 @@ int	execute_single_cmd(t_inf *info)
 
 	tmp = info->commands;
 	execute_builtin(tmp, info, 0);
-	info->last_code = 0;
 	return (info->last_code);
 }
 
