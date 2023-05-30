@@ -170,6 +170,7 @@ t_list		*save_pipe(t_inf *info, t_list *tmp, int pipe);
 
 /** ft_error.c */
 int			msg(char *str1, char *str2, char *str3, int code);
+int			msg_error(char *str1, char *str2, char *str3, int code);
 void		end_shell(t_inf *info);
 void		free_memory(t_inf *info);
 

@@ -25,6 +25,14 @@ int	msg(char *str1, char *str2, char *str3, int code)
 	return (code);
 }
 
+int	msg_error(char *str1, char *str2, char *str3, int code)
+{
+	ft_putstr_fd(str1, 2);
+	ft_putstr_fd(str2, 2);
+	ft_putendl_fd(str3, 2);
+	return (code);
+}
+
 void	free_memory(t_inf *info)
 {
 	ft_free_split(info->env);
