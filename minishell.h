@@ -118,6 +118,7 @@ void		change_var_env(t_inf *info, char *var, char *value);
 char		*get_var(t_inf *info, char *var);
 void		add_var(t_inf *info, char *var, char *value);
 int			delete_var(t_inf *info, char *var);
+int			exist_var(t_inf *info, char *name);
 
 /** sigaction.c */
 void		set_signals_interactive(void);
@@ -194,4 +195,6 @@ char		*replace_quotes(char *string, char quote);
 int			ft_are_double_quotes(char *line);
 char		*replace_d_quotes(char *line, char quote);
 char		*ft_replace_double_quotes(char *line);
+
+char	*replace_string(char *string, char stop, char *new);
 #endif

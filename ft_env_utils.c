@@ -134,9 +134,25 @@ void	change_var_env(t_inf *info, char *var, char *value)
 	free(new);
 }
 
+int	exist_var(t_inf *info, char *name)
+{
+	int	i;
+
+	i = 0;
+	if (name == NULL)
+		return (NULL);
+	while ((*info).env[i] != NULL && (*info).env[i][0] != '\0'
+		&& ft_strcmp((*info).env[i], name) != 0)
+		i++;
+	if ((*info).env[i] == NULL || ft_strcmp((*info).env[i], name) != 0)
+		return (0);
+	else
+		return (1);
+}
+
 char	*get_var(t_inf *info, char *var)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	if (var == NULL)

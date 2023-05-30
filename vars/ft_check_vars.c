@@ -74,7 +74,8 @@ int	check_vars(t_inf *info)
 	char	*var;
 
 	tmp = info->tokens;
-	while (tmp)
+
+	while (tmp != NULL)
 	{
 		if (!ft_are_double_quotes(tmp->content))
 		{
@@ -88,8 +89,7 @@ int	check_vars(t_inf *info)
 			&& ft_check_char_before(tmp->content, '"', '~'))
 		{
 			var = get_var(info, "USER_ZDOTDIR");
-			tmp->content = replace(tmp->content, "~", var);
-			tmp->content = replace_quotes(tmp->content, '~');
+			tmp->content = replace_string(tmp->content, '~', var);
 		}	
 		tmp = tmp->next;
 	}

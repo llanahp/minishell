@@ -106,3 +106,41 @@ char	*ft_replace_double_quotes(char *line)
 	}
 	return (result);
 }
+
+char	*replace_string(char *string, char stop, char *new)
+{
+	char	*result;
+	int		i;
+	int		j;
+	int 	k;
+
+	i = 0;
+	j = 0;
+	result = (char *)malloc(sizeof(char) * (ft_strlen(string) + ft_strlen(new) + 1));
+	if (result == NULL)
+		return (NULL);
+	while (string[i] != '\0' && string[i] != stop)
+	{
+		result[j] = string[i];
+		j++;
+		i++;
+	}
+	if (string[i] == stop)
+		i++;
+	k = 0;
+	while (new[k])
+	{
+		result[j] = new[k];
+		j++;
+		k++;
+	}
+	while (string[i] != '\0')
+	{
+		result[j] = string[i];
+		j++;
+		i++;
+	}
+	result[j] = '\0';
+	free(string);
+	return (result);
+}
