@@ -48,9 +48,11 @@ char	*get_value_var_line(char *name, char *line)
 	char	*value;
 
 	value = NULL;
-	if (line == NULL || name == NULL)
+	if (name == NULL || line == NULL)
 		return (NULL);
 	value = ft_substr(line, ft_strlen(name) + 1, ft_strlen(line));
+	if (value != NULL && value[0] == '\0')
+		value = NULL;
 	return (value);
 }
 
@@ -58,7 +60,6 @@ int	export_binding(t_inf *info, t_command *cmd)
 {
 	char	*name;
 	char	*value;
-	int		equals;
 	int 	i;
 
 	i = 0;
@@ -70,42 +71,13 @@ int	export_binding(t_inf *info, t_command *cmd)
 		value = get_value_var_line(name, cmd->args[i]);
 		if (exist_var(info, name) == 1)
 		{
-			//if (value != NULL)
-				//
-			//else
-				//
-		}
-		else
-		{
-			add_var(info, name, value);
-		}
-
-
-
-
-		/*
-		if (ft_strcontains(cmd->args[i], '=') == 0)
-			add_var(info, cmd->args[i], NULL);
-		else
-		{
-			if (ft_strcontains(cmd->args[i], '=') == 0)//No tiene =
-			{
-				name = ft_strdup(cmd->args[i]);
-				if (get_var(info, name) == NULL)
-					add_var(info, name, value);
-				return (0);
-			}
-			equals = ft_find(cmd->args[i], '=');
-			name = ft_substr(cmd->args[i], 0, equals);
-			equals++;
-			getchar();
-			value = ft_substr(cmd->args[i], equals, (ft_strlen(cmd->args[i]) - equals));
-			if (get_var(info, name) == NULL)
-				add_var(info, name, value);
-			else
+			if (value != NULL)
 				change_var_env(info, name, value);
-			
-		}*/
+			else if (value == NULL && ft_strcontains(cmd->args[i], '=') == 1)
+				change_var_env(info, name, value);
+		}
+		else
+			add_var(info, name, value);
 		if (name)
 			free(name);
 		if (value)

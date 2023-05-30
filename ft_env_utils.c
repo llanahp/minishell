@@ -128,7 +128,10 @@ void	change_var_env(t_inf *info, char *var, char *value)
 		return ;
 	str = ft_strjoin(var, "=");
 	free(info->env[i]);
-	new = ft_strjoin(str, value);
+	if (value == NULL)
+		new = ft_strdup(str);
+	else
+		new = ft_strjoin(str, value);
 	free(str);
 	info->env[i] = ft_strdup(new);
 	free(new);
@@ -140,11 +143,11 @@ int	exist_var(t_inf *info, char *name)
 
 	i = 0;
 	if (name == NULL)
-		return (NULL);
+		return (0);
 	while ((*info).env[i] != NULL && (*info).env[i][0] != '\0'
-		&& ft_strcmp((*info).env[i], name) != 0)
+		&& ft_strncmp((*info).env[i], name, ft_strlen(name)) != 0)
 		i++;
-	if ((*info).env[i] == NULL || ft_strcmp((*info).env[i], name) != 0)
+	if ((*info).env[i] == NULL || ft_strncmp((*info).env[i], name, ft_strlen(name)) != 0)
 		return (0);
 	else
 		return (1);
@@ -215,10 +218,8 @@ void	add_var(t_inf *info, char *var, char *value)
 	else
 		new = ft_strjoin(str, value);
 	info->env[i] = ft_strdup(new);
-	if (value == NULL)
+	if (str == NULL)
 		free(str);
-	if (value != NULL)
-		free(new);
 	if (new != NULL)
 		free(new);
 	i++;
