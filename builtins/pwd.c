@@ -21,6 +21,7 @@ int	pwd(t_inf *info, t_command *cmd)
 	fd_write = 1;
 	if (cmd->output != -2)
 		fd_write = cmd->output;
+	
 	if (cmd->args != NULL && cmd->args[0] != NULL)
 	{
 		if (cmd->args != NULL && cmd->args[0] != NULL && cmd->args[0][0] == '-')

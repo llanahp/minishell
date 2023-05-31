@@ -53,6 +53,8 @@ int	get_enviroment(t_inf *info, char **env)
 
 	i = 0;
 	store_env(info, env);
+	if (info->env == NULL)
+		return (-1);
 	while (info->env[i] != NULL && info->env[i][0] != '\0'
 		&& ft_strncmp(info->env[i], "PATH=", 5) != 0)
 		i++;
@@ -77,6 +79,8 @@ int	get_pwd(t_inf *info)
 		free(info->pwd);
 		info->pwd = NULL;
 	}
+	if (info->env == NULL)
+		return (1);
 	while ((*info).env[i] != NULL && (*info).env[i][0] != '\0'
 		&& ft_strncmp((*info).env[i], "PWD=", 4) != 0)
 		i++;
@@ -144,6 +148,8 @@ int	exist_var(t_inf *info, char *name)
 	i = 0;
 	if (name == NULL)
 		return (0);
+	if (info->env == NULL)
+		return (0);
 	while ((*info).env[i] != NULL && (*info).env[i][0] != '\0'
 		&& ft_strncmp((*info).env[i], name, ft_strlen(name)) != 0)
 		i++;
@@ -159,6 +165,8 @@ char	*get_var(t_inf *info, char *var)
 
 	i = 0;
 	if (var == NULL)
+		return (NULL);
+	if (info->env == NULL)
 		return (NULL);
 	while ((*info).env[i] != NULL && (*info).env[i][0] != '\0'
 		&& ft_strncmp((*info).env[i], var, ft_strlen(var)) != 0)

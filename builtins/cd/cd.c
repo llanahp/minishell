@@ -79,6 +79,8 @@ int	cd(t_inf *info, t_command *cmd)
 
 	is_abs = 0;
 	get_pwd(info);
+	if (info->env == NULL)
+		return (0);
 	if (!cmd->args[0])
 		handle_no_arg_cd(cmd, &to_location);
 	else

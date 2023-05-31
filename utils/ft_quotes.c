@@ -119,7 +119,7 @@ char	*replace_string(char *string, char stop, char *new)
 	result = (char *)malloc(sizeof(char) * (ft_strlen(string) + ft_strlen(new) + 1));
 	if (result == NULL)
 		return (NULL);
-	while (string[i] != '\0' && string[i] != stop)
+	while (string != NULL && string[i] != '\0' && string[i] != stop)
 	{
 		result[j] = string[i];
 		j++;
@@ -128,7 +128,7 @@ char	*replace_string(char *string, char stop, char *new)
 	if (string[i] == stop)
 		i++;
 	k = 0;
-	while (new[k])
+	while (new != NULL && new[k])
 	{
 		result[j] = new[k];
 		j++;
