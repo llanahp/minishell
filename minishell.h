@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 09:47:00 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/05/29 19:02:40 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/05/29 20:24:59 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ char		*cd_handler(int abs, char *loc, t_command *cmd, t_inf *info);
 void		handling_cd(char *to_location, t_command *cmd,
 				t_inf *info, int is_abs);
 void		handle_chdir_error(char *to_loc, char *free_var);
+int			check_on_root(t_inf *info);
 
 /** echo.c */
 int			echo(t_command *cmd);
@@ -107,6 +108,7 @@ int			unset(t_inf *info, t_command *cmd);
 
 /** exit.c */
 void	ft_exit(t_command *cmd, t_inf *info);
+int			ft_atoi_exit(const char *str);
 
 /** free_split.c */
 void		ft_free_split(char **split);
