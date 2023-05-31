@@ -26,6 +26,7 @@ void	replace_for_var(char **str, char *value, int index)
 	char	*new;
 	int		i;
 	int		j;
+	int		k;
 
 	i = 0;
 	j = 0;
@@ -35,12 +36,16 @@ void	replace_for_var(char **str, char *value, int index)
 		return ;
 	while ((*str)[i])
 	{
+		k = 0;
 		if ((*str)[i] == '$' && i == index)
 		{
+			if ((*str)[i] == '$' && (*str)[i + 1] == '$')
+				k = 1;
 			copy_value(value, new, &j);
-			i = i + len_var((*str) + index) + 1;
+			i = i + len_var((*str) + index) + 1 + k;
 			if ((*str)[i] == '\0')
 				break ;
+			
 		}
 		new[j++] = (*str)[i++];
 	}

@@ -34,6 +34,7 @@ void	display_prompt(t_inf *info)
 
 	line = NULL;
 	info->commands = NULL;
+	
 	set_signals_interactive();
 	line = readline("minishell>");
 	set_signals_noninteractive();
@@ -54,6 +55,26 @@ void	salida(void)
 	system("leaks -q minishell");
 }
 
+void	find_pid(t_inf *info)
+{
+	int		status;
+	pid_t	pid;
+	
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork");
+		return ;
+	}
+	else if (pid == 0)
+	{
+		exit(0);
+	}
+	else
+		info->minishell_pid = (int)getpid();
+	waitpid(-1, &status, 0);
+}
+
 int	main(int argc, char *argv[], char **env)
 {
 	//atexit(salida);
@@ -66,6 +87,7 @@ int	main(int argc, char *argv[], char **env)
 	g_info.last_code = 0;
 	g_info.env = NULL;
 	g_info.exit = 0;
+	find_pid(&g_info);
 	get_enviroment(&g_info, env);
 	while (g_info.exit == 0)
 		display_prompt(&g_info);

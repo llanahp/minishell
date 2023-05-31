@@ -44,6 +44,16 @@ int	between_quotes(char *str, int i)
 	return (0);
 }
 
+void	simple_extend_var(char **str, int *i, t_inf *info)
+{
+	if ((*str)[(*i)] == '$' && (*str)[(*i) + 1] == '$')
+	{
+		replace_for_var(str, ft_itoa(info->minishell_pid), (*i));
+	}
+	if ((*str)[(*i)] == '$' && (*str)[(*i) + 1] == '?')
+		replace_for_var(str, ft_itoa(info->last_code), (*i));
+}
+
 void	extend_var(char **str, t_inf *info)
 {
 	int	i;
@@ -54,8 +64,7 @@ void	extend_var(char **str, t_inf *info)
 	while ((*str)[i])
 	{
 		update_status(str, i, &status);
-		if ((*str)[i] == '$' && (*str)[i + 1] == '?')
-			replace_for_var(str, ft_itoa(info->last_code), i);
+		simple_extend_var(str, &i, info);
 		if ((*str)[i] == '$' && (status == 0 || status == DOUBLE_QUOTE)
 			&& is_separator((*str)[i + 1]) == 0
 			&& between_quotes((*str), i) == 0
