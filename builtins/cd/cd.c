@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:36:33 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/05/29 19:10:14 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/05/29 21:12:35 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ int	cd(t_inf *info, t_command *cmd)
 
 	is_abs = 0;
 	get_pwd(info);
+	if (info->env == NULL)
+		return (0);
 	if (!cmd->args[0])
 		handle_no_arg_cd(cmd, &to_location);
 	else

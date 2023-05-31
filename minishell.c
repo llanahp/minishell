@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:41:20 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/05/29 19:07:14 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/05/29 22:11:09 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	display_prompt(t_inf *info)
 
 	line = NULL;
 	info->commands = NULL;
+	
 	set_signals_interactive();
 	line = readline("minishell>");
 	set_signals_noninteractive();
@@ -45,8 +46,6 @@ void	display_prompt(t_inf *info)
 	}
 	if (ft_strcmp(line, "") == 0)
 		return ;
-	// if (ft_strcmp(line, "exit") == 0)
-	// 	ft_exit(0);
 	add_history(line);
 	prepare_line(info, line);
 }
@@ -56,9 +55,29 @@ void	salida(void)
 	system("leaks -q minishell");
 }
 
+void	find_pid(t_inf *info)
+{
+	int		status;
+	pid_t	pid;
+	
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork");
+		return ;
+	}
+	else if (pid == 0)
+	{
+		exit(0);
+	}
+	else
+		info->minishell_pid = (int)getpid();
+	waitpid(-1, &status, 0);
+}
+
 int	main(int argc, char *argv[], char **env)
 {
-//	atexit(salida);
+	//atexit(salida);
 	(void)argc;
 	(void)argv;
 	g_info.tokens = NULL;
@@ -68,10 +87,10 @@ int	main(int argc, char *argv[], char **env)
 	g_info.last_code = 0;
 	g_info.env = NULL;
 	g_info.exit = 0;
+	find_pid(&g_info);
 	get_enviroment(&g_info, env);
 	while (g_info.exit == 0)
 		display_prompt(&g_info);
 	end_shell(&g_info);
 	return (0);
 }
-

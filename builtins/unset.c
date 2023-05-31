@@ -14,14 +14,23 @@
 
 int	unset(t_inf *info, t_command *cmd)
 {
-	int		i;
-	int		code;
+	int	i;
+	int	code;
+	int	screen;
 
 	i = 0;
 	code = 0;
+	screen = 0;
 	while (cmd != NULL && cmd->args[i])
 	{
-		if (delete_var(info, cmd->args[i]) == 1 && code == 0)
+		if (ft_strcontains(cmd->args[i],'=') && screen == 0)
+		{
+			ft_putstr_fd("unset: ", 2);
+			ft_putstr_fd(cmd->args[i], 2);
+			ft_putstr_fd(": invalid parameter name\n", 2);
+			code = 1;
+			screen = 1;
+		} else if (delete_var(info, cmd->args[i]) == 1)
 			code = 1;
 		i++;
 	}

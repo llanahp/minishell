@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 18:07:00 by mpizzolo          #+#    #+#             */
-/*   Updated: 2023/05/29 19:04:26 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/05/29 21:03:36 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,18 @@ void	handle_chdir_error(char *to_loc, char *free_var)
 	free(tmp);
 	if (free_var != NULL)
 		free(free_var);
+}
+
+int	check_on_root(t_inf *info)
+{
+	char	*tmp;
+	char	*tmp_free;
+
+	tmp_free = get_var(info, "PWD");
+	tmp = ft_strrchr(tmp_free, '/') + 1;
+	free(tmp_free);
+	tmp_free = get_var(info, "USER");
+	if (!ft_strcmp(tmp, tmp_free))
+		return (free(tmp_free), 1);
+	return (free(tmp_free), 0);
 }
