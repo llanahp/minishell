@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 19:28:03 by mpizzolo          #+#    #+#             */
-/*   Updated: 2023/05/29 19:59:57 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/05/31 19:14:53 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,5 @@ int	ft_atoi_exit(const char *str)
 	}
 	num = look_max(sig, num);
 	res = handle_correct_exit_code(sig, num);
-	printf("res: %i\n", res);
 	return (res);
 }
