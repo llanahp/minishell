@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:41:20 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/05/29 20:01:56 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/05/31 19:14:27 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,9 @@ int	check_exit(t_command *cmd)
 
 int	get_exit_error(t_command *cmd)
 {
-	int res;
+	int	res;
 
-	res = 0;
-	cmd->args = cmd->args;
-	// ft_atoi_exit
+	res = ft_atoi_exit(cmd->args[0]);
 	return (res);
 }
 
@@ -53,7 +51,7 @@ void	ft_exit(t_command *cmd, t_inf *info)
 {
 	int	numerror;
 
-	
+
 	if (!cmd->args[0])
 		exit(0);
 	if (cmd->args[1] != NULL)
