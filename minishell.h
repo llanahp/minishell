@@ -73,6 +73,7 @@ typedef struct s_inf
 	t_list		*tokens;
 	t_command	*commands;
 	int			pid;
+	int			minishell_pid;
 	int			last_code;
 	int			exit;
 }			t_inf;
@@ -106,7 +107,7 @@ int			export_binding(t_inf *info, t_command *cmd);
 int			unset(t_inf *info, t_command *cmd);
 
 /** exit.c */
-void		ft_exit(t_command *cmd);
+void	ft_exit(t_command *cmd, t_inf *info);
 int			ft_atoi_exit(const char *str);
 
 /** free_split.c */
@@ -120,6 +121,7 @@ void		change_var_env(t_inf *info, char *var, char *value);
 char		*get_var(t_inf *info, char *var);
 void		add_var(t_inf *info, char *var, char *value);
 int			delete_var(t_inf *info, char *var);
+int			exist_var(t_inf *info, char *name);
 
 /** sigaction.c */
 void		set_signals_interactive(void);
@@ -136,7 +138,7 @@ int			is_quote(char c);
 /** check_vars.c */
 int			check_vars(t_inf *info);
 int			delete_quotes(t_inf *info);
-void		replace_var(char **str, int i, t_inf *info);
+int			replace_var(char **str, int i, t_inf *info);
 void		replace_for_var(char **str, char *value, int index);
 void		replace_for_null(char **str, int index);
 
@@ -171,7 +173,9 @@ t_list		*save_pipe(t_inf *info, t_list *tmp, int pipe);
 
 /** ft_error.c */
 int			msg(char *str1, char *str2, char *str3, int code);
+int			msg_error(char *str1, char *str2, char *str3, int code);
 void		end_shell(t_inf *info);
+void		free_memory(t_inf *info);
 
 /** execution.c */
 int			execute_commands(t_inf *info);
@@ -180,9 +184,12 @@ int			execute_commands(t_inf *info);
 int			prepare_execution(t_inf *info);
 int			prepare_pipes(t_inf *info);
 int			wait_childs(t_inf *info);
+void	fds_pipes(int in, int out);
 
 /** redir.c */
 void		redir(t_command *cmd, t_inf *info);
+void		close_files(t_command *cmd);
+void		redir_files(t_command *cmd);
 
 /** utils */
 int			ft_strichr(char *str, char c);
@@ -196,4 +203,6 @@ char		*replace_quotes(char *string, char quote);
 int			ft_are_double_quotes(char *line);
 char		*replace_d_quotes(char *line, char quote);
 char		*ft_replace_double_quotes(char *line);
+
+char	*replace_string(char *string, char stop, char *new);
 #endif

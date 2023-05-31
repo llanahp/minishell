@@ -44,6 +44,16 @@ int	between_quotes(char *str, int i)
 	return (0);
 }
 
+void	simple_extend_var(char **str, int *i, t_inf *info)
+{
+	if ((*str)[(*i)] == '$' && (*str)[(*i) + 1] == '$')
+	{
+		replace_for_var(str, ft_itoa(info->minishell_pid), (*i));
+	}
+	if ((*str)[(*i)] == '$' && (*str)[(*i) + 1] == '?')
+		replace_for_var(str, ft_itoa(info->last_code), (*i));
+}
+
 void	extend_var(char **str, t_inf *info)
 {
 	int	i;
@@ -54,18 +64,32 @@ void	extend_var(char **str, t_inf *info)
 	while ((*str)[i])
 	{
 		update_status(str, i, &status);
-		if ((*str)[i] == '$' && (*str)[i + 1] == '?')
-			replace_for_var(str, ft_itoa(info->last_code), i);
+		simple_extend_var(str, &i, info);
 		if ((*str)[i] == '$' && (status == 0 || status == DOUBLE_QUOTE)
 			&& is_separator((*str)[i + 1]) == 0
 			&& between_quotes((*str), i) == 0
 			&& (*str)[i + 1] != '"')
 		{
-			replace_var(str, i, info);
+			if (replace_var(str, i, info) == -1)
+				i++;
 		}
 		else
 			i++;
 	}
+}
+
+int	expand_pox(t_list *tmp)
+{
+	int	i;
+
+	i = 0;
+	if (tmp == NULL || tmp->content == NULL)
+		return (0);
+	while (tmp->content[i] != '~')
+		i++;
+	if (tmp->content[i + 1] == '/' || tmp->content[i + 1] == '\0')
+		return (1);
+	return (0);
 }
 
 int	check_vars(t_inf *info)
@@ -74,7 +98,7 @@ int	check_vars(t_inf *info)
 	char	*var;
 
 	tmp = info->tokens;
-	while (tmp)
+	while (tmp != NULL)
 	{
 		if (!ft_are_double_quotes(tmp->content))
 		{
@@ -87,9 +111,11 @@ int	check_vars(t_inf *info)
 			&& ft_check_char_before(tmp->content, '\'', '~')
 			&& ft_check_char_before(tmp->content, '"', '~'))
 		{
-			var = get_var(info, "USER_ZDOTDIR");
-			tmp->content = replace(tmp->content, "~", var);
-			tmp->content = replace_quotes(tmp->content, '~');
+			if (expand_pox(tmp) == 1)
+			{
+				var = get_var(info, "USER_ZDOTDIR");
+				tmp->content = replace_string(tmp->content, '~', var);
+			}
 		}	
 		tmp = tmp->next;
 	}

@@ -54,6 +54,11 @@ char	*get_name(char *tmp)
 	}
 	len = len_var(tmp);
 	res = ft_substr(tmp, start, len);
+	if (res != NULL && res[0] == '\0')
+	{
+		free(res);
+		res = NULL;
+	}
 	return (res);
 }
 

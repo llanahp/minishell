@@ -15,11 +15,15 @@
 int	env(t_inf *info)
 {
 	int	i;
+	int	fd_write;
 
 	i = -1;
+	fd_write = 1;
+	if (info->commands->output != -2)
+		fd_write = info->commands->output;
 	if (info->env == NULL)
 		return (1);
 	while (info->env[++i])
-		printf("%s\n", info->env[i]);
+		ft_putendl_fd(info->env[i], fd_write);
 	return (0);
 }
