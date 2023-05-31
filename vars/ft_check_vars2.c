@@ -80,12 +80,14 @@ void	replace_for_null(char **str, int index)
 	(*str) = new;
 }
 
-void	replace_var(char **str, int i, t_inf *info)
+int	replace_var(char **str, int i, t_inf *info)
 {
 	char	*var;
 	char	*value;
 
 	var = get_name(*str + i);
+	if (var == NULL)
+		return (-1);
 	value = get_var(info, var);
 	if (value != NULL)
 		replace_for_var(str, value, i);
@@ -95,4 +97,5 @@ void	replace_var(char **str, int i, t_inf *info)
 		free(var);
 	if (value != NULL)
 		free(value);
+	return (0);
 }

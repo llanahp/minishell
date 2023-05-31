@@ -136,7 +136,7 @@ int			is_quote(char c);
 /** check_vars.c */
 int			check_vars(t_inf *info);
 int			delete_quotes(t_inf *info);
-void		replace_var(char **str, int i, t_inf *info);
+int			replace_var(char **str, int i, t_inf *info);
 void		replace_for_var(char **str, char *value, int index);
 void		replace_for_null(char **str, int index);
 

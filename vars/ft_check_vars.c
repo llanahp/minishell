@@ -70,7 +70,8 @@ void	extend_var(char **str, t_inf *info)
 			&& between_quotes((*str), i) == 0
 			&& (*str)[i + 1] != '"')
 		{
-			replace_var(str, i, info);
+			if (replace_var(str, i, info) == -1)
+				i++;
 		}
 		else
 			i++;
