@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 09:47:00 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/05/29 20:24:59 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/05/31 19:02:58 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,5 +204,7 @@ int			ft_are_double_quotes(char *line);
 char		*replace_d_quotes(char *line, char quote);
 char		*ft_replace_double_quotes(char *line);
 
-char	*replace_string(char *string, char stop, char *new);
+char		*replace_string(char *string, char stop, char *new);
+
+char		*ft_replace_quotes_2(char *str);
 #endif

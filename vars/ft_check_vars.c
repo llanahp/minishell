@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 14:08:25 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/05/25 12:32:10 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/05/31 19:02:04 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,22 +131,9 @@ int	delete_quotes(t_inf *info)
 	temp = NULL;
 	while (tmp)
 	{
-		if (ft_strcontains(tmp->content, '"')
-			&& ft_check_char_before(tmp->content, '\'', '"')
-			&& temp != tmp->content)
-		{
-			tmp->content = replace_quotes(tmp->content, '\"');
-			temp = tmp->content;
-			tmp = info->tokens;
-		}
-		else if (ft_strcontains(tmp->content, '\'') && temp != tmp->content)
-		{	
-			tmp->content = replace_quotes(tmp->content, '\'');
-			temp = tmp->content;
-			tmp = info->tokens;
-		}
-		else
-			tmp = tmp->next;
+		tmp->content = ft_replace_quotes_2(tmp->content);
+		tmp = tmp->next;
 	}
 	return (0);
 }
+
