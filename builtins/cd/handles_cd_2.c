@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 18:07:00 by mpizzolo          #+#    #+#             */
-/*   Updated: 2023/06/01 14:41:38 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/01 15:32:57 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,14 @@ int	check_on_root(t_inf *info)
 {
 	char	*tmp;
 	char	*tmp_free;
+	char	*usr;
+	int		res;
 
 	tmp_free = get_var(info, "PWD");
 	tmp = ft_strrchr(tmp_free, '/') + 1;
+	usr = get_var(info, "USER");
+	res = !ft_strcmp(tmp, usr);
 	free(tmp_free);
-	tmp_free = get_var(info, "USER");
-	if (!ft_strcmp(tmp, tmp_free))
-		return (free(tmp_free), 1);
-	return (free(tmp_free), 0);
+	free(usr);
+	return (res);
 }
