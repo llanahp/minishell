@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_quotes.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ralopez- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:58:33 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/05/26 19:58:34 by ralopez-         ###   ########.fr       */
+/*   Updated: 2023/06/01 16:04:44 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,11 @@ char	*replace_d_quotes(char *line, char quote)
 		if (len > (i + 1) && line[i] == quote && line[i + 1] == quote)
 			i += 2;
 		if (line[i] != '\0')
+		{	
 			result[j] = line[i];
+			j++;
+		}
 		i++;
-		j++;
 	}
 	result[j] = '\0';
 	if (line != NULL)
