@@ -72,17 +72,25 @@ int	export_binding(t_inf *info, t_command *cmd)
 
 	i = 0;
 	if (cmd->args[0] == NULL)
-			return (env(info));
+			return (env_export(info));
 	while (cmd->args!= NULL && cmd->args[i] != NULL)
 	{
 		name = get_name_var_line(cmd->args[i]);
 		value = get_value_var_line(name, cmd->args[i]);
-		if (name == NULL)
+		if (name == NULL || ft_isdigit(name[0]) == 1 || ft_strcontains(name, '+') == 1)
 		{
 			ft_putstr_fd("minishell: export: `", 2);
 			ft_putstr_fd(cmd->args[i], 2);
 			ft_putstr_fd("': not a valid identifier\n", 2);
+			if (name)
+				free(name);
+			if (value)
+				free(value);
 			return (1);
+		}
+		else if(value == NULL)
+		{
+
 		}
 		else if (exist_var(info, name) == 1)
 		{

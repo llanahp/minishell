@@ -105,7 +105,7 @@ int	delete_var(t_inf *info, char *var)
 	if (info->env[i] == NULL || ft_strncmp(info->env[i], name, ft_strlen(name)) != 0)
 	{
 		free(name);
-		return (1);
+		return (0);
 	}
 	else
 		free(info->env[i]);

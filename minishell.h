@@ -99,6 +99,7 @@ int			pwd(t_inf *info, t_command *cmd);
 
 /** env.c */
 int			env(t_inf *info);
+int			env_export(t_inf *info);
 
 /** export.c */
 int			export_binding(t_inf *info, t_command *cmd);

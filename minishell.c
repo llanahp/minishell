@@ -314,8 +314,8 @@ int	main(int argc, char *argv[], char **env)
 	find_pid(&g_info);
 	get_enviroment(&g_info, env);
 	while (g_info.exit == 0){
-		display_prompt(&g_info);
-		//prompt_tester(&g_info);
+		//display_prompt(&g_info);
+		prompt_tester(&g_info);
 	}
 	end_shell(&g_info);
 	return (0);
