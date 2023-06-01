@@ -40,6 +40,11 @@ char	*get_name_var_line(char *line)
 		equals = ft_find(line, '=');
 		name = ft_substr(line, 0, equals);
 	}
+	if (name != NULL && name[0] == '\0')
+	{
+		free(name);
+		name = NULL;
+	}
 	return (name);
 }
 
@@ -72,7 +77,14 @@ int	export_binding(t_inf *info, t_command *cmd)
 	{
 		name = get_name_var_line(cmd->args[i]);
 		value = get_value_var_line(name, cmd->args[i]);
-		if (exist_var(info, name) == 1)
+		if (name == NULL)
+		{
+			ft_putstr_fd("minishell: export: `", 2);
+			ft_putstr_fd(cmd->args[i], 2);
+			ft_putstr_fd("': not a valid identifier\n", 2);
+			return (1);
+		}
+		else if (exist_var(info, name) == 1)
 		{
 			if (value != NULL)
 				change_var_env(info, name, value);
