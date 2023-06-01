@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:36:33 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/05/29 21:12:35 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/01 14:46:13 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ char	*cd_handler(int abs, char *loc, t_command *cmd, t_inf *info)
 {
 	if (abs == 1)
 		loc = handle_absolute_path(loc);
+	else if (!(cmd->args[0]))
+		loc = handle_cd_to_usr(info);
 	else if (!ft_strcmp(cmd->args[0], "..") || !ft_strcmp(loc, "-"))
 		loc = handle_back_cd(info->pwd);
 	else if (!ft_strcmp(cmd->args[0], "."))

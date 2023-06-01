@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/31 19:02:16 by mpizzolo          #+#    #+#             */
-/*   Updated: 2023/05/31 19:02:33 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/01 15:05:54 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*ft_replace_quotes_2(char *str)
 	int		j;
 	int		x;
 
-	res = malloc(sizeof(char) * (ft_strlen(str) + 1));
+	res = ft_calloc((ft_strlen(str) + 1), sizeof(char));
 	i = starting_quote_from(str, &res, 0);
 	if (i == -1)
 		return (str);
@@ -74,5 +74,6 @@ char	*ft_replace_quotes_2(char *str)
 		}
 	}
 	res[j] = '\0';
+	free(str);
 	return (res);
 }
