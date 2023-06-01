@@ -30,13 +30,13 @@ static char	*leer(int fd, char *text)
 
 	if (text == NULL)
 		text = ft_calloc(1, 1);
-	cad = (char *)ft_calloc(200, sizeof(char));
+	cad = (char *)ft_calloc(9999999, sizeof(char));
 	if (!cad)
 		return (NULL);
 	bytes_read = 1;
 	while (bytes_read > 0)
 	{
-		bytes_read = read(fd, cad, 200);
+		bytes_read = read(fd, cad, 9999999);
 		if (bytes_read == -1)
 		{
 			free(cad);
@@ -116,7 +116,7 @@ char	*get_next_line(int fd)
 		}
 		return (NULL);
 	}
-	if (fd < 0 || 200 < 0)
+	if (fd < 0 || 9999999 < 0)
 		return (NULL);
 	text = leer(fd, text);
 	if (!text)
@@ -314,8 +314,8 @@ int	main(int argc, char *argv[], char **env)
 	find_pid(&g_info);
 	get_enviroment(&g_info, env);
 	while (g_info.exit == 0){
-		//display_prompt(&g_info);
-		prompt_tester(&g_info);
+		display_prompt(&g_info);
+		//prompt_tester(&g_info);
 	}
 	end_shell(&g_info);
 	return (0);

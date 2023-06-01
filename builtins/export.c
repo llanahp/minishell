@@ -90,7 +90,7 @@ int	export_binding(t_inf *info, t_command *cmd)
 		}
 		else if(value == NULL)
 		{
-
+			printf("HO hago nada\n");
 		}
 		else if (exist_var(info, name) == 1)
 		{
