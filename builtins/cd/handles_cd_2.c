@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 18:07:00 by mpizzolo          #+#    #+#             */
-/*   Updated: 2023/05/29 21:03:36 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/01 14:41:38 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 void	handle_no_arg_cd(t_command *cmd, char **to_location)
 {
 	*to_location = ft_strdup("~");
-	cmd->args[0] = ft_strdup("~");
 }
 
 char	*handle_back_cd(char *pwd)

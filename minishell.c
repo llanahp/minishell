@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:41:20 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/05/29 22:11:09 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/01 15:07:37 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	display_prompt(t_inf *info)
 
 	line = NULL;
 	info->commands = NULL;
-	
+
 	set_signals_interactive();
 	line = readline("minishell>");
 	set_signals_noninteractive();
@@ -59,7 +59,7 @@ void	find_pid(t_inf *info)
 {
 	int		status;
 	pid_t	pid;
-	
+
 	pid = fork();
 	if (pid == -1)
 	{

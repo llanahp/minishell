@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 14:08:25 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/05/31 19:02:04 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/01 15:05:09 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,8 @@ int	delete_quotes(t_inf *info)
 	temp = NULL;
 	while (tmp)
 	{
+		if (ft_strcontains(tmp->content, '\'')
+			|| ft_strcontains(tmp->content, '"'))
 		tmp->content = ft_replace_quotes_2(tmp->content);
 		tmp = tmp->next;
 	}
