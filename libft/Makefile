@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ralopez- <ralopez-@student.42madrid.com>   +#+  +:+       +#+         #
+#    By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/13 15:39:30 by ralopez-          #+#    #+#              #
-#    Updated: 2022/09/24 15:58:17 by ralopez-         ###   ########.fr        #
+#    Updated: 2023/06/01 12:53:59 by mpizzolo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ SRCS = ft_isalpha.c ft_isalnum.c ft_isascii.c ft_isprint.c \
 
 CC = gcc
 RM = rm -rf
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g  -fsanitize=address
 OBJS = ${SRCS:.c=.o}
 AR = ar -rcs
 NAME_B = .file_shadow

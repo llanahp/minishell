@@ -6,7 +6,7 @@
 #    By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/27 12:35:10 by ralopez-          #+#    #+#              #
-#    Updated: 2023/05/31 19:03:23 by mpizzolo         ###   ########.fr        #
+#    Updated: 2023/06/01 12:55:56 by mpizzolo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@
 
 NAME = minishell
 CC = gcc
-CFLAGS = -Wall -Wextra -g -I libft/  #-Werror
+CFLAGS = -Wall -Wextra -g -fsanitize=address -I libft/  #-Werror 
 
 UNAME := $(shell uname -s)
 
@@ -72,7 +72,7 @@ OBJ = $(SRC:.c=.o)
 
 $(NAME): $(OBJ) libft
 	@echo $(BLUE) Done!!! $(COLRESET)
-	@$(CC) -o $@ $(OBJ) -Llibft -lft $(LDFLAGS) $(CPPFLAGS) -lreadline
+	@$(CC) -o $@ $(OBJ) $(CFLAGS) -Llibft -lft $(LDFLAGS) $(CPPFLAGS) -lreadline
 
 libft:
 	@make -C libft 
