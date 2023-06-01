@@ -14,6 +14,119 @@
 
 /* GNL */
 
+char	*exchange(char *text, char *cad)
+{
+	char	*text_aux;
+
+	text_aux = ft_strjoin(text, cad);
+	free(text);
+	return (text_aux);
+}
+
+static char	*leer(int fd, char *text)
+{
+	int		bytes_read;
+	char	*cad;
+
+	if (text == NULL)
+		text = ft_calloc(1, 1);
+	cad = (char *)ft_calloc(200, sizeof(char));
+	if (!cad)
+		return (NULL);
+	bytes_read = 1;
+	while (bytes_read > 0)
+	{
+		bytes_read = read(fd, cad, 200);
+		if (bytes_read == -1)
+		{
+			free(cad);
+			return (NULL);
+		}
+		cad[bytes_read] = 0;
+		text = exchange(text, cad);
+		if (ft_strchr(text, '\n'))
+			break ;
+	}
+	free(cad);
+	return (text);
+}
+
+char	*obtain_line(char *text)
+{
+	char	*res;
+	int		i;
+
+	i = 0;
+	if (!text[i])
+		return (NULL);
+	while (text[i] && text[i] != '\n')
+		i++;
+	res = NULL;
+	res = (char *)ft_calloc(i + 2, sizeof(char));
+	i = 0;
+	while (text[i] && text[i] != '\n')
+	{
+		res[i] = text[i];
+		i++;
+	}
+	if (text[i] && text[i] == '\n')
+		res[i] = '\n';
+	return (res);
+}
+
+char	*clean_text(char *text)
+{
+	char	*aux;
+	int		i;
+	int		a;
+
+	i = 0;
+	while (text[i] && text[i] != '\n')
+		i++;
+	if (!text[i])
+	{
+		free(text);
+		return (NULL);
+	}
+	aux = NULL;
+	if (text[i] == '\n')
+		i++;
+	aux = (char *)ft_calloc((ft_strlen(text) - i) + 1, sizeof(char));
+	if (!aux)
+		return (NULL);
+	a = 0;
+	while (text[i])
+		aux[a++] = text[i++];
+	free(text);
+	return (aux);
+}
+
+char	*get_next_line(int fd)
+{
+	static char	*text;
+	char		*line;
+
+	line = NULL;
+	if (read(fd, 0, 0) < 0)
+	{
+		if (text != NULL)
+		{
+			free(text);
+			text = NULL;
+		}
+		return (NULL);
+	}
+	if (fd < 0 || 200 < 0)
+		return (NULL);
+	text = leer(fd, text);
+	if (!text)
+		return (NULL);
+	line = obtain_line(text);
+	text = clean_text(text);
+	return (line);
+}
+
+/*-----------*/
 char	*ft_strjoin_asco_free(char *s1, char *s2)
 {
 	char	*str;
@@ -87,34 +200,6 @@ char	*ft_rest_str(char *str)
 	return (tmp);
 }
 
-char	*get_next_line(int fd)
-{
-	static char	*str;
-	char		*line;
-	char		tmp[10];
-	int			nb;
-	int			i;
-
-	nb = 1;
-	i = 0;
-	while (nb != 0)
-	{
-		nb = read(fd, tmp, 9);
-		if (nb == -1)
-			free(str);
-		if (nb == -1)
-			return (str = NULL);
-		tmp[nb] = '\0';
-		str = ft_strjoin_asco_free(str, tmp);
-		while (tmp[i] != '\n' && tmp[i] != '\0')
-			i++;
-		if (tmp[i] == '\n')
-			break ;
-	}
-	line = ft_line_cut(str);
-	str = ft_rest_str(str);
-	return (line);
-}
 
 void	ft_delete_char(char *str)
 {
@@ -153,12 +238,9 @@ void	prompt_tester(t_inf *info)
 	line = NULL;
 	info->commands = NULL;
 
-	// set_signals_interactive();
-	// line = readline("minishell>");
 	line = get_next_line(STDIN_FILENO);
 	if (ft_strchr(line, '\n') > 0)
 		ft_delete_char(ft_strchr(line, '\n'));
-	// set_signals_noninteractive();
 	if (line == NULL)
 	{
 		info->exit = 1;
@@ -177,7 +259,6 @@ void	display_prompt(t_inf *info)
 
 	line = NULL;
 	info->commands = NULL;
-
 	set_signals_interactive();
 	line = readline("minishell>");
 	set_signals_noninteractive();
@@ -232,8 +313,10 @@ int	main(int argc, char *argv[], char **env)
 	g_info.exit = 0;
 	find_pid(&g_info);
 	get_enviroment(&g_info, env);
-	while (g_info.exit == 0)
+	while (g_info.exit == 0){
 		display_prompt(&g_info);
+		//prompt_tester(&g_info);
+	}
 	end_shell(&g_info);
 	return (0);
 }

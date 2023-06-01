@@ -87,7 +87,7 @@ void	execute_cmd(t_command *cmd, t_inf *info)
 		cmd->cmd = get_path(cmd->cmd, info);
 		if (cmd->cmd == NULL)
 		{
-			info->last_code = msg("command not found", ": ", cmd_original, 127);
+			info->last_code = msg(cmd_original, ": command not found","", 127);
 			exit(info->last_code);
 		}
 		else if (execve(cmd->cmd, cmd->args, info->env) == -1)
