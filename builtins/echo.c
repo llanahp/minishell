@@ -16,13 +16,16 @@ int	ft_str_contains_n(char *str)
 {
 	int		res;
 	int		i;
+	size_t	len;
 
 	res = 1;
 	i = -1;
-	while (str[++i] && res)
+	len = ft_strlen(str);
+	while (i > -1 && str != NULL && (i + 1) < (int)len && str[i] && res)
 	{
-		if (str[i] == '-' && str[i + 1] == 'n')
+		if ((i + 1) < (int)len && str[i] == '-' && str[i + 1] == 'n')
 			res = 0;
+		i++;
 	}
 	return (res);
 }
@@ -43,7 +46,7 @@ int	echo(t_command *cmd)
 		ft_putstr_fd("\n", fd_write);
 		return (0);
 	}
-	if (!ft_str_contains_n(cmd->args[i]))
+	if (cmd->args != NULL && !ft_str_contains_n(cmd->args[i]))
 	{
 		is_n = 1;
 		i++;

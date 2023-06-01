@@ -69,18 +69,22 @@ char	*replace_d_quotes(char *line, char quote)
 
 	i = 0;
 	j = 0;
-	len = strlen(line);
-	result = malloc(len + 1);
-	while (line[i])
+	len = (int)ft_strlen(line);
+	result = malloc(sizeof(char) * (len + 2));
+	if (!result)
+		return (NULL);
+	while (line != NULL && line[i] && i < len)
 	{
-		if (line[i] == quote && line[i + 1] == quote)
+		if (len > (i + 1) && line[i] == quote && line[i + 1] == quote)
 			i += 2;
-		result[j] = line[i];
+		if (line[i] != '\0')
+			result[j] = line[i];
 		i++;
 		j++;
 	}
 	result[j] = '\0';
-	free(line);
+	if (line != NULL)
+		free(line);
 	return (result);
 }
 

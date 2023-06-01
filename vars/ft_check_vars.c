@@ -78,24 +78,46 @@ void	extend_var(char **str, t_inf *info)
 	}
 }
 
-int	expand_pox(t_list *tmp)
+int	expand_pox(char *str)
 {
 	int	i;
 
 	i = 0;
-	if (tmp == NULL || tmp->content == NULL)
+	if (str == NULL)
 		return (0);
-	while (tmp->content[i] != '~')
+	while (str[i] != '~')
 		i++;
-	if (tmp->content[i + 1] == '/' || tmp->content[i + 1] == '\0')
+	if (str[i + 1] == '/' || str[i + 1] == '\0')
 		return (1);
 	return (0);
+}
+
+char	*check_var_replace(char *str, t_inf *info)
+{
+	char	*var;
+	char	*temp;
+
+	if (ft_strcontains(str, '$'))
+		extend_var(&str, info);
+	else if (ft_strcontains(str, '~')
+		&& ft_check_char_before(str, '\'', '~')
+		&& ft_check_char_before(str, '"', '~'))
+	{
+		if (expand_pox(str) == 1)
+		{
+			var = get_var(info, "USER_ZDOTDIR");
+			str = replace_string(str, '~', var);
+		}
+	}
+	temp = ft_strdup(str);
+	if (str != NULL)
+		free(str);
+	return (temp);
 }
 
 int	check_vars(t_inf *info)
 {
 	t_list	*tmp;
-	char	*var;
 
 	tmp = info->tokens;
 	while (tmp != NULL)
@@ -105,18 +127,7 @@ int	check_vars(t_inf *info)
 			tmp->content = ft_replace_double_quotes(tmp->content);
 			tmp = info->tokens;
 		}
-		if (ft_strcontains(tmp->content, '$'))
-			extend_var(&tmp->content, info);
-		else if (ft_strcontains(tmp->content, '~')
-			&& ft_check_char_before(tmp->content, '\'', '~')
-			&& ft_check_char_before(tmp->content, '"', '~'))
-		{
-			if (expand_pox(tmp) == 1)
-			{
-				var = get_var(info, "USER_ZDOTDIR");
-				tmp->content = replace_string(tmp->content, '~', var);
-			}
-		}	
+		tmp->content = check_var_replace(tmp->content, info);	
 		tmp = tmp->next;
 	}
 	return (0);
@@ -135,6 +146,7 @@ int	delete_quotes(t_inf *info)
 			|| ft_strcontains(tmp->content, '"'))
 		tmp->content = ft_replace_quotes_2(tmp->content);
 		tmp = tmp->next;
+		
 	}
 	return (0);
 }
