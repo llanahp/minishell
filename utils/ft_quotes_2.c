@@ -34,11 +34,11 @@ char	*ft_replace_quotes_2(char *str)
 
 	res = malloc(sizeof(char) * (ft_strlen(str) + 1));
 	i = starting_quote_from(str, &res, 0);
+	
 	if (i == -1)
 		return (str);
 	x = is_quote(str[i]);
-	i++;
-	j = 0;
+	j = i;
 	while (str[i])
 	{
 		if (!is_quote(str[i]))

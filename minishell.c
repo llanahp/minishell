@@ -157,7 +157,7 @@ void	prompt_tester(t_inf *info)
 	// line = readline("minishell>");
 	line = get_next_line(STDIN_FILENO);
 	if (ft_strchr(line, '\n') > 0)
-           ft_delete_char(ft_strchr(line, '\n'));
+		ft_delete_char(ft_strchr(line, '\n'));
 	// set_signals_noninteractive();
 	if (line == NULL)
 	{

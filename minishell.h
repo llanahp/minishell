@@ -205,6 +205,8 @@ char		*replace_d_quotes(char *line, char quote);
 char		*ft_replace_double_quotes(char *line);
 
 char		*replace_string(char *string, char stop, char *new);
-
+char	*get_next_line(int fd);
 char		*ft_replace_quotes_2(char *str);
+void	ft_delete_char(char *str);
+char	*check_var_replace(char *str, t_inf *info);
 #endif

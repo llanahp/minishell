@@ -53,7 +53,7 @@ char	*define_delimiter(t_list **tmp)
 		return (NULL);
 }
 
-int	read_heredoc( char *name, char *delimiter)
+int	read_heredoc(char *name, char *delimiter, t_inf *info)
 {
 	char	*buf;
 	int		fd;
@@ -67,9 +67,22 @@ int	read_heredoc( char *name, char *delimiter)
 		set_signals_interactive();
 		buf = readline("heredoc>");
 		set_signals_noninteractive();
+		/*buf = get_next_line(STDIN_FILENO);
+		if (ft_strchr(buf, '\n') > 0)
+			ft_delete_char(ft_strchr(buf, '\n'));
+
+			*/
 		if (buf == NULL)
 			return (msg("Error reading", ": ", strerror(errno), -1));
 		buf[ft_strlen(buf)] = '\0';
+		buf = check_var_replace(buf, info);
+		/*
+			check_vars
+		*/
+		buf = ft_replace_quotes_2(buf);
+
+		printf("buf = %s\n", buf);
+		printf("delimiter = %s\n", delimiter);
 		if (ft_strcmp(buf, delimiter) == 0)
 		{
 			free(buf);
@@ -82,7 +95,7 @@ int	read_heredoc( char *name, char *delimiter)
 	return (0);
 }
 
-t_list	*set_name_heredoc(t_list *tmp, t_command *command)
+t_list	*set_name_heredoc(t_list *tmp, t_command *command, t_inf *info)
 {
 	char	*name;
 	char	*delimiter;
@@ -94,7 +107,7 @@ t_list	*set_name_heredoc(t_list *tmp, t_command *command)
 	name = ft_strjoin("/tmp/heredoc_", ft_itoa(i));
 	tmp = tmp->next;
 	delimiter = define_delimiter(&tmp);
-	if (read_heredoc(name, delimiter) == -1)
+	if (read_heredoc(name, delimiter, info) == -1)
 		return (NULL);
 	command->input_name = ft_strdup(name);
 	free(name);
@@ -111,6 +124,6 @@ t_list	*save_heredoc(t_inf *info, t_list *tmp)
 
 	command = get_last_cmd(info);
 	close_prev_redir(command);
-	tmp = set_name_heredoc(tmp, command);
+	tmp = set_name_heredoc(tmp, command, info);
 	return (tmp);
 }
