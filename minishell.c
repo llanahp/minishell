@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:41:20 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/06/01 12:57:07 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/02 13:25:24 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -315,7 +315,7 @@ int	main(int argc, char *argv[], char **env)
 	get_enviroment(&g_info, env);
 	while (g_info.exit == 0){
 		display_prompt(&g_info);
-		//prompt_tester(&g_info);
+		// prompt_tester(&g_info);
 	}
 	end_shell(&g_info);
 	return (0);
