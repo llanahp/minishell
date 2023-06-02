@@ -6,7 +6,7 @@
 /*   By: ralopez- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 10:41:40 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/03/31 10:41:42 by ralopez-         ###   ########.fr       */
+/*   Updated: 2023/06/02 12:41:50 by ralopez-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,22 @@ int	store_word(t_inf *info, char *line, int i)
 		j++;
 	while (line[j] && ((type > 1 && is_quote(line[j]) != type)
 			|| (type == 0 && !is_space(line[j]) && !is_delimiter(line[j]))))
+
+		{
+			if (is_quote(line[j]) > 0)
+				type = is_quote(line[j]);
+			j++;
+		}
+	if (line[j] && type == 0 && is_quote(line[j]) > 0)
+	{
+		type = is_quote(line[j]);
 		j++;
+		while (line[j] && is_quote(line[j]) != type)
+			j++;
+		if (is_quote(line[j]) == type)
+			type = 0;
+		j++;
+	}
 	if (line[j] && type > 0 && !is_space(line[j]))
 		type = 0 ;
 	while (line[j] && !is_space(line[j]) && !is_delimiter(line[j]))
