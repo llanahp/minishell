@@ -58,15 +58,18 @@ void	extend_var(char **str, t_inf *info)
 {
 	int	i;
 	int	status;
+	int	len;
 
 	i = 0;
 	status = 0;
-	while ((*str)[i])
+	len = ft_strlen(*str);
+	while (i < len && str != NULL && (*str) != NULL && (*str)[i])
 	{
+		len = ft_strlen(*str);
 		update_status(str, i, &status);
 		if (between_simple_quotes(*str, i) == 0)
 			simple_extend_var(str, &i, info);
-		if ((*str)[i] == '$' && (status == 0 || status == DOUBLE_QUOTE)
+		if ((i + 1) < len && (*str)[i] == '$' && (status == 0 || status == DOUBLE_QUOTE)
 			&& is_separator((*str)[i + 1]) == 0
 			&& between_quotes((*str), i) == 0
 			&& (*str)[i + 1] != '"')
@@ -74,7 +77,7 @@ void	extend_var(char **str, t_inf *info)
 			if (replace_var(str, i, info) == -1)
 				i++;
 		}
-		else if ((*str)[i] == '$' && !ft_isalpha((*str)[i + 1]) && !is_inside_quotes(str, i))
+		else if ((i + 1) < len && (*str)[i] == '$' && !ft_isalpha((*str)[i + 1]) && !is_inside_quotes(str, i))
 		{
 			remove_separator(str, i);
 			i++;
