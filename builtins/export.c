@@ -64,11 +64,43 @@ char	*get_value_var_line(char *name, char *line)
 	return (value);
 }
 
+int	something_in_value(char *str)
+{
+	int	i;
+
+	i = 0;
+	printf("str: %s\n", str);
+	while (str != NULL && str[i] != '=')
+		i++;
+	if (str[i] == '\0')
+		return (0);
+	if (str[i] == '=')
+		i++;
+	printf("str: %s\n", str);
+	if (str[i] != '\0')
+		return (1);
+	else
+		return (0);
+}
+
+void	do_export(t_inf *info, char *str, char *name, char *value)
+{
+	if (exist_var(info, name) == 1)
+	{
+		if (value != NULL)
+			change_var_env(info, name, value);
+		else if (value == NULL && ft_strcontains(str, '=') == 1)
+			change_var_env(info, name, value);
+	}
+	else
+		add_var(info, name, value);
+}
+
 int	export_binding(t_inf *info, t_command *cmd)
 {
 	char	*name;
 	char	*value;
-	int 	i;
+	int		i;
 
 	i = 0;
 	if (cmd->args[0] == NULL)
@@ -88,24 +120,12 @@ int	export_binding(t_inf *info, t_command *cmd)
 				free(value);
 			return (1);
 		}
-		else if(value == NULL)
-		{
-			printf("HO hago nada\n");
-		}
-		else if (exist_var(info, name) == 1)
-		{
-			if (value != NULL)
-				change_var_env(info, name, value);
-			else if (value == NULL && ft_strcontains(cmd->args[i], '=') == 1)
-				change_var_env(info, name, value);
-		}
 		else
-			add_var(info, name, value);
+			do_export(info, cmd->args[i], name, value);
 		if (name)
 			free(name);
 		if (value)
 			free(value);
-			
 		i++;
 	}
 	return (0);

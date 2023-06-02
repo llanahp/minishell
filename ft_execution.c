@@ -27,7 +27,7 @@ int	execute_builtin(t_command *cmd, t_inf *info, int exi)
 		code = export_binding(info, cmd);
 	else if (!ft_strcmp(cmd->cmd, "unset"))
 		code = unset(info, cmd);
-	else if (!ft_strcmp(cmd->cmd, "env"))
+	else if (!ft_strcmp(cmd->cmd, "env") || !ft_strcmp(cmd->cmd, "/usr/bin/env"))
 		code = env(info);
 	else if (!ft_strcmp(cmd->cmd, "exit"))
 		ft_exit(cmd, info);
@@ -123,10 +123,7 @@ int	execute_single_cmd(t_inf *info)
 	t_command	*tmp;
 
 	tmp = info->commands;
-	//redir_files(tmp);
 	execute_builtin(tmp, info, 0);
-	//close_files(tmp);
-	//fds_pipes(0, 1);
 	return (info->last_code);
 }
 
@@ -155,6 +152,6 @@ int	execute_commands(t_inf *info)
 	if (num_cmds(info) == 1 && is_builtin(info->commands->cmd))
 		code = execute_single_cmd(info);
 	else
-		code = create_childs(info);
+		code = create_childs(info);//TODO env con ruta absoluta
 	return (code);
 }
