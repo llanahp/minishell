@@ -17,7 +17,8 @@ t_list	*save_pipe(t_inf *info, t_list *tmp, int pipe)
 	t_command	*command;
 
 	command = get_last_cmd(info);
-	if (command->previous == NULL)
+	if (command->previous == NULL
+		|| (command->previous != NULL && command->pipe_out == 1 && command->cmd == NULL))
 	{
 		info->must_continue = 0;
 		ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
