@@ -73,6 +73,7 @@ typedef struct s_inf
 	t_list		*tokens;
 	t_command	*commands;
 	int			pid;
+	int			must_continue;
 	int			minishell_pid;
 	int			last_code;
 	int			exit;
@@ -99,6 +100,7 @@ int			pwd(t_inf *info, t_command *cmd);
 
 /** env.c */
 int			env(t_inf *info);
+int			env_export(t_inf *info);
 
 /** export.c */
 int			export_binding(t_inf *info, t_command *cmd);
@@ -107,7 +109,7 @@ int			export_binding(t_inf *info, t_command *cmd);
 int			unset(t_inf *info, t_command *cmd);
 
 /** exit.c */
-void	ft_exit(t_command *cmd, t_inf *info);
+int			ft_exit(t_command *cmd, t_inf *info);
 int			ft_atoi_exit(const char *str);
 
 /** free_split.c */

@@ -17,10 +17,10 @@ t_list	*save_word(t_inf *info, t_list *tmp)
 	t_command	*command;
 
 	command = get_last_cmd(info);
-	if (command->cmd != NULL)
+	/*if (command->cmd != NULL)
 	{
 		printf("cmd : %s\n", command->cmd);
-	}
+	}*/
 	if (command->cmd == NULL)
 	{
 		command->cmd = ft_strdup(tmp->content);

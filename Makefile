@@ -14,7 +14,7 @@
 
 NAME = minishell
 CC = gcc
-CFLAGS = -Wall -Wextra -g -fsanitize=address -I libft/  #-Werror 
+CFLAGS = -Wall -Wextra -g  -I libft/  #-Werror 
 
 UNAME := $(shell uname -s)
 

@@ -112,7 +112,11 @@ t_list	*set_name_heredoc(t_list *tmp, t_command *command, t_inf *info)
 	free(delimiter);
 	command->input = open(command->input_name, O_RDONLY);
 	if (command->input == -1)
-		perror("Error al abrir el archivo de entrada");
+	{
+		msg(command->input_name, ": ", strerror(errno), 0);
+		info->last_code = 1;
+		info->must_continue = 0;
+	}
 	return (tmp);
 }
 
