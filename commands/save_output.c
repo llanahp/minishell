@@ -27,13 +27,11 @@ t_list	*save_output(t_inf *info, t_list *tmp, int type)
 	if (tmp != NULL && tmp->type == WORD)
 	{
 		command->output_name = ft_strdup(tmp->content);
-		if (command->output_name == NULL)
-			printf("salida no valida");
-		else
+		command->output = open(command->output_name,  O_WRONLY | O_CREAT | type, 0664);
+		if (command->output == -1)
 		{
-			command->output = open(command->output_name,  O_WRONLY | O_CREAT | type, 0664);
-			if (command->output == -1)
-				perror("Error al abrir el archivo de salida");
+			msg(command->output_name,": No such file or directory","",1);
+			info->last_code = 1;
 		}
 		tmp = tmp->next;
 	}
