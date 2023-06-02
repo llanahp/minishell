@@ -96,6 +96,17 @@ void	do_export(t_inf *info, char *str, char *name, char *value)
 		add_var(info, name, value);
 }
 
+int	name_export_invalid(char *name)
+{
+	if (name == NULL || name[0] == '\0')
+		return (1);
+	if (ft_strcontains(name, '=') == 1 || ft_strcontains(name, '~') == 1
+			|| ft_strcontains(name, '!') == 1 || ft_strcontains(name, '$') == 1
+			|| ft_strcontains(name, '^') == 1)
+		return (1);
+	return (0);
+}
+
 int	export_binding(t_inf *info, t_command *cmd)
 {
 	char	*name;
@@ -109,7 +120,7 @@ int	export_binding(t_inf *info, t_command *cmd)
 	{
 		name = get_name_var_line(cmd->args[i]);
 		value = get_value_var_line(name, cmd->args[i]);
-		if (name == NULL || ft_isdigit(name[0]) == 1 || ft_strcontains(name, '+') == 1)
+		if (name == NULL || name_export_invalid(name) == 1 || ft_isdigit(name[0]) == 1 || ft_strcontains(name, '+') == 1)
 		{
 			ft_putstr_fd("minishell: export: `", 2);
 			ft_putstr_fd(cmd->args[i], 2);
