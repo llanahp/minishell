@@ -36,23 +36,14 @@ void	store_env(t_inf *info, char **env)
 	info->env[i] = NULL;
 }
 
-/** get_enviroment:
- * This function is called after verify that enviroment exist
- * Iterates all enviroment string to since find the string "PATH=" 
- * or reach the end
- * 
- * Returns 1 if string "PATH=" is find and store the rest of the string 
- * in info.paths splited by character ':'.
- * 
- * Returns -1 enviroment dosen´t containst "PATH=".
- */
-int	get_enviroment(t_inf *info, char **env)
+
+int store_paths(t_inf *info)
 {
 	int		i;
 	char	*temp;
 
 	i = 0;
-	store_env(info, env);
+	info->paths = NULL;
 	if (info->env == NULL)
 		return (-1);
 	while (info->env[i] != NULL && info->env[i][0] != '\0'
@@ -67,6 +58,22 @@ int	get_enviroment(t_inf *info, char **env)
 		free(temp);
 		return (1);
 	}
+}
+
+/** get_enviroment:
+ * This function is called after verify that enviroment exist
+ * Iterates all enviroment string to since find the string "PATH=" 
+ * or reach the end
+ * 
+ * Returns 1 if string "PATH=" is find and store the rest of the string 
+ * in info.paths splited by character ':'.
+ * 
+ * Returns -1 enviroment dosen´t containst "PATH=".
+ */
+int	get_enviroment(t_inf *info, char **env)
+{
+	store_env(info, env);
+	return (store_paths(info));
 }
 
 int	get_pwd(t_inf *info)
