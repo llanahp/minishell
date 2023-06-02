@@ -40,6 +40,11 @@ char	*get_name_var_line(char *line)
 		equals = ft_find(line, '=');
 		name = ft_substr(line, 0, equals);
 	}
+	if (name != NULL && name[0] == '\0')
+	{
+		free(name);
+		name = NULL;
+	}
 	return (name);
 }
 
@@ -59,33 +64,101 @@ char	*get_value_var_line(char *name, char *line)
 	return (value);
 }
 
+int	something_in_value(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str != NULL && str[i] != '=')
+		i++;
+	if (str[i] == '\0')
+		return (0);
+	if (str[i] == '=')
+		i++;
+	if (str[i] != '\0')
+		return (1);
+	else
+		return (0);
+}
+
+void	do_export(t_inf *info, char *str, char *name, char *value)
+{
+	if (exist_var(info, name) == 1)
+	{
+		if (value != NULL)
+			change_var_env(info, name, value);
+		else if (value == NULL && ft_strcontains(str, '=') == 1)
+			change_var_env(info, name, value);
+	}
+	else
+		add_var(info, name, value);
+}
+
+int	ft_n_aparitions(char *str, char c)
+{
+	int	i;
+	int	n;
+
+	i = 0;
+	n = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == c)
+			n++;
+		i++;
+	}
+	return (n);
+}
+
+int	name_export_invalid(char *name)
+{
+	int	len;
+
+	if (name == NULL || name[0] == '\0')
+		return (1);
+	if (ft_strcontains(name, '=') == 1 || ft_strcontains(name, '~') == 1
+			|| ft_strcontains(name, '!') == 1 || ft_strcontains(name, '$') == 1
+			|| ft_strcontains(name, '@') == 1 || ft_strcontains(name, '#') == 1
+			|| ft_strcontains(name, '{') == 1 || ft_strcontains(name, '}') == 1
+			|| ft_strcontains(name, '-') == 1 || ft_strcontains(name, '.') == 1
+			|| ft_strcontains(name, '^') == 1 || ft_strcontains(name, '*') == 1)
+		return (1);
+	len = ft_strlen(name);
+	if (ft_n_aparitions(name, '+') > 1 || (ft_strcontains(name, '+') == 1 && len > 1 && name[len - 1] != '+'))
+		return (1);
+	return (0);
+}
+
 int	export_binding(t_inf *info, t_command *cmd)
 {
 	char	*name;
 	char	*value;
-	int 	i;
+	int		i;
 
 	i = 0;
 	if (cmd->args[0] == NULL)
-			return (env(info));
+			return (env_export(info));
 	while (cmd->args!= NULL && cmd->args[i] != NULL)
 	{
 		name = get_name_var_line(cmd->args[i]);
 		value = get_value_var_line(name, cmd->args[i]);
-		if (exist_var(info, name) == 1)
+		if (name == NULL || name_export_invalid(name) == 1 || ft_isdigit(name[0]) == 1)
 		{
-			if (value != NULL)
-				change_var_env(info, name, value);
-			else if (value == NULL && ft_strcontains(cmd->args[i], '=') == 1)
-				change_var_env(info, name, value);
+			ft_putstr_fd("minishell: export: `", 2);
+			ft_putstr_fd(cmd->args[i], 2);
+			ft_putstr_fd("': not a valid identifier\n", 2);
+			if (name)
+				free(name);
+			if (value)
+				free(value);
+			return (1);
 		}
 		else
-			add_var(info, name, value);
+			do_export(info, cmd->args[i], name, value);
 		if (name)
 			free(name);
 		if (value)
 			free(value);
-			
 		i++;
 	}
 	return (0);

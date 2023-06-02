@@ -23,7 +23,15 @@ int	unset(t_inf *info, t_command *cmd)
 	screen = 0;
 	while (cmd != NULL && cmd->args[i])
 	{
-		if (ft_strcontains(cmd->args[i],'=') && screen == 0)
+		if (((cmd->args[i] != NULL && cmd->args[i][0] == '\0')
+			|| ft_strcontains(cmd->args[i],'=') || ft_strcontains(cmd->args[i],'?')
+			|| ft_strcontains(cmd->args[i],'$') || ft_strcontains(cmd->args[i],';')
+			|| ft_strcontains(cmd->args[i],'.') || ft_strcontains(cmd->args[i],'+')
+			|| ft_strcontains(cmd->args[i],'{') || ft_strcontains(cmd->args[i],'}')
+			|| ft_strcontains(cmd->args[i],'-') || ft_strcontains(cmd->args[i],'@')
+			|| ft_strcontains(cmd->args[i],'#') || ft_strcontains(cmd->args[i],'*')
+			|| ft_strcontains(cmd->args[i],'^') || ft_strcontains(cmd->args[i],'~')
+			|| ft_strcontains(cmd->args[i],'!') )&& screen == 0)
 		{
 			ft_putstr_fd("unset: ", 2);
 			ft_putstr_fd(cmd->args[i], 2);

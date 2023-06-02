@@ -35,7 +35,7 @@ int	create_commands(t_inf *info)
 	if (info->tokens == NULL)
 		return (0);
 	tmp = info->tokens;
-	while (tmp)
+	while (tmp && info->must_continue)
 	{
 		if (tmp != NULL && tmp->type == WORD)
 			tmp = save_word(info, tmp);
