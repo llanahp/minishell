@@ -75,7 +75,7 @@ char	*replace_d_quotes(char *line, char quote)
 		j++;
 		i++;
 	}
-	while (result[j - 1] == quote && result[j - 2] == quote)
+	while ((j - 2) > 0 && result[j - 1] == quote && result[j - 2] == quote)
 		j -= 2;
 	result[j] = '\0';
 	if (line != NULL)

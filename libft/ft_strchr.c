@@ -15,20 +15,24 @@
 char	*ft_strchr(const char *s, int c)
 {
 	char	*p;
+	int		i;
+	int		len;
 
 	p = NULL;
+	i = 0;
+	len = ft_strlen(s);
 	while (c > 127)
 		c = c - 128;
-	while (*s)
+	while (s != NULL && s[i])
 	{
-		if (*s == c)
+		if (s[i] == c)
 		{
-			p = (char *)s;
+			p = ft_strdup((char *)s + i);
 			break ;
 		}
-		s++;
+		i++;
 	}
-	if (*s == c)
-		p = (char *)s;
+	if (i < len && s[i] == c)
+		p = ft_strdup((char *)s + i);
 	return (p);
 }
