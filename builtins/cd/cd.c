@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:36:33 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/05/29 19:10:14 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/01 15:48:45 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ char	*to_check_chdir(t_command *cmd, int *is_absolute)
 	char	*to_location;
 	char	*tmp;
 
+	if (!ft_strcmp(cmd->args[0], "~"))
+		return (ft_strdup("~"));
 	tmp = ft_substr(cmd->args[0], 0, 2);
 	to_location = NULL;
 	if (!ft_strcmp(tmp, "./") || !ft_strcmp(tmp, "."))
@@ -58,6 +60,8 @@ char	*cd_handler(int abs, char *loc, t_command *cmd, t_inf *info)
 {
 	if (abs == 1)
 		loc = handle_absolute_path(loc);
+	else if (!(cmd->args[0]) || !ft_strcmp(cmd->args[0], ""))
+		loc = handle_cd_to_usr(info);
 	else if (!ft_strcmp(cmd->args[0], "..") || !ft_strcmp(loc, "-"))
 		loc = handle_back_cd(info->pwd);
 	else if (!ft_strcmp(cmd->args[0], "."))
@@ -79,7 +83,9 @@ int	cd(t_inf *info, t_command *cmd)
 
 	is_abs = 0;
 	get_pwd(info);
-	if (!cmd->args[0])
+	if (info->env == NULL)
+		return (0);
+	if (!cmd->args[0] || !ft_strcmp(cmd->args[0], ""))
 		handle_no_arg_cd(cmd, &to_location);
 	else
 		to_location = to_check_chdir(cmd, &is_abs);

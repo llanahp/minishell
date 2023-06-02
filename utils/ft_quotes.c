@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_quotes.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ralopez- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:58:33 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/05/26 19:58:34 by ralopez-         ###   ########.fr       */
+/*   Updated: 2023/06/01 16:04:44 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,18 +69,24 @@ char	*replace_d_quotes(char *line, char quote)
 
 	i = 0;
 	j = 0;
-	len = strlen(line);
-	result = malloc(len + 1);
-	while (line[i])
+	len = (int)ft_strlen(line);
+	result = malloc(sizeof(char) * (len + 2));
+	if (!result)
+		return (NULL);
+	while (line != NULL && line[i] && i < len)
 	{
-		if (line[i] == quote && line[i + 1] == quote)
+		if (len > (i + 1) && line[i] == quote && line[i + 1] == quote)
 			i += 2;
-		result[j] = line[i];
+		if (line[i] != '\0')
+		{	
+			result[j] = line[i];
+			j++;
+		}
 		i++;
-		j++;
 	}
 	result[j] = '\0';
-	free(line);
+	if (line != NULL)
+		free(line);
 	return (result);
 }
 
@@ -104,5 +110,43 @@ char	*ft_replace_double_quotes(char *line)
 			result = replace_d_quotes(result, '"');
 		i++;
 	}
+	return (result);
+}
+
+char	*replace_string(char *string, char stop, char *new)
+{
+	char	*result;
+	int		i;
+	int		j;
+	int		k;
+
+	i = 0;
+	j = 0;
+	result = (char *)malloc(sizeof(char) * (ft_strlen(string) + ft_strlen(new) + 1));
+	if (result == NULL)
+		return (NULL);
+	while (string != NULL && string[i] != '\0' && string[i] != stop)
+	{
+		result[j] = string[i];
+		j++;
+		i++;
+	}
+	if (string[i] == stop)
+		i++;
+	k = 0;
+	while (new != NULL && new[k])
+	{
+		result[j] = new[k];
+		j++;
+		k++;
+	}
+	while (string[i] != '\0')
+	{
+		result[j] = string[i];
+		j++;
+		i++;
+	}
+	result[j] = '\0';
+	free(string);
 	return (result);
 }

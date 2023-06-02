@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 15:57:41 by mpizzolo          #+#    #+#             */
-/*   Updated: 2023/05/29 19:05:52 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/05/29 21:13:42 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ char	*handle_cd_to_usr(t_inf *info)
 	tmp = get_var(info, "USER");
 	usr = ft_strjoin("/", tmp);
 	free(tmp);
+	if (check_on_root(info) == 1)
+		return (free(usr), NULL);
 	to_location = handle_back_cd(info->pwd);
 	if (chdir(to_location) == -1)
 		return (handle_chdir_error(to_location, usr), NULL);

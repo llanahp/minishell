@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	execute_builtin(t_command *cmd, t_inf *info, int exi)
+int	execute_builtin(t_command *cmd, t_inf *info, int exi)
 {
 	int	code;
 
@@ -30,10 +30,11 @@ void	execute_builtin(t_command *cmd, t_inf *info, int exi)
 	else if (!ft_strcmp(cmd->cmd, "env"))
 		code = env(info);
 	else if (!ft_strcmp(cmd->cmd, "exit"))
-		ft_exit(cmd);
+		ft_exit(cmd, info);
 	info->last_code = code;
 	if (exi)
 		exit(info->last_code);
+	return (code);
 }
 
 /** create_cmd:
@@ -86,7 +87,7 @@ void	execute_cmd(t_command *cmd, t_inf *info)
 		cmd->cmd = get_path(cmd->cmd, info);
 		if (cmd->cmd == NULL)
 		{
-			info->last_code = msg("command not found", ": ", cmd_original, 127);
+			info->last_code = msg(cmd_original, ": command not found","", 127);
 			exit(info->last_code);
 		}
 		else if (execve(cmd->cmd, cmd->args, info->env) == -1)
@@ -122,8 +123,10 @@ int	execute_single_cmd(t_inf *info)
 	t_command	*tmp;
 
 	tmp = info->commands;
+	//redir_files(tmp);
 	execute_builtin(tmp, info, 0);
-	info->last_code = 0;
+	//close_files(tmp);
+	//fds_pipes(0, 1);
 	return (info->last_code);
 }
 

@@ -14,17 +14,17 @@
 
 int	file_exists(char *name)
 {
-	if(access(name, F_OK) == 0)
-        return (1);
+	if (access(name, F_OK) == 0)
+		return (1);
 	else
-        return (0);
+		return (0);
 }
 
 char	*define_delimiter(t_list **tmp)
 {
 	char	*delimiter;
 	int		quote;
-	
+
 	if (!(*tmp))
 		return (NULL);
 	if ((*tmp)->type == WORD)
@@ -53,10 +53,10 @@ char	*define_delimiter(t_list **tmp)
 		return (NULL);
 }
 
-int	read_heredoc( char *name, char *delimiter)
+int	read_heredoc(char *name, char *delimiter, t_inf *info)
 {
 	char	*buf;
-	int 	fd;
+	int		fd;
 
 	fd = open(name, O_CREAT | O_WRONLY | O_TRUNC, 0000644);
 	if (fd < 0)
@@ -64,26 +64,36 @@ int	read_heredoc( char *name, char *delimiter)
 	while (1 == 1)
 	{
 		buf = NULL;
-		set_signals_interactive();
+		/*set_signals_interactive();
 		buf = readline("heredoc>");
 		set_signals_noninteractive();
+		*/
+	
+		buf = get_next_line(STDIN_FILENO);
+		if (ft_strchr(buf, '\n') > 0)
+			ft_delete_char(ft_strchr(buf, '\n'));
+
+			
 		if (buf == NULL)
 			return (msg("Error reading", ": ", strerror(errno), -1));
 		buf[ft_strlen(buf)] = '\0';
+		
+		buf = check_var_replace(buf, info);
+		buf = ft_replace_quotes_2(buf);
+		
 		if (ft_strcmp(buf, delimiter) == 0)
 		{
 			free(buf);
 			break ;
 		}
-		ft_putstr_fd(buf, fd);
-		ft_putstr_fd("\n", fd);
+		ft_putendl_fd(buf, fd);
 		free(buf);
 	}
 	close (fd);
 	return (0);
 }
 
-t_list	*set_name_heredoc(t_list *tmp, t_command *command)
+t_list	*set_name_heredoc(t_list *tmp, t_command *command, t_inf *info)
 {
 	char	*name;
 	char	*delimiter;
@@ -95,7 +105,7 @@ t_list	*set_name_heredoc(t_list *tmp, t_command *command)
 	name = ft_strjoin("/tmp/heredoc_", ft_itoa(i));
 	tmp = tmp->next;
 	delimiter = define_delimiter(&tmp);
-	if (read_heredoc( name, delimiter) == -1)
+	if (read_heredoc(name, delimiter, info) == -1)
 		return (NULL);
 	command->input_name = ft_strdup(name);
 	free(name);
@@ -112,6 +122,6 @@ t_list	*save_heredoc(t_inf *info, t_list *tmp)
 
 	command = get_last_cmd(info);
 	close_prev_redir(command);
-	tmp = set_name_heredoc( tmp, command);
+	tmp = set_name_heredoc(tmp, command, info);
 	return (tmp);
 }

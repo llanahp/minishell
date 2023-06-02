@@ -53,6 +53,8 @@ int	get_enviroment(t_inf *info, char **env)
 
 	i = 0;
 	store_env(info, env);
+	if (info->env == NULL)
+		return (-1);
 	while (info->env[i] != NULL && info->env[i][0] != '\0'
 		&& ft_strncmp(info->env[i], "PATH=", 5) != 0)
 		i++;
@@ -77,6 +79,8 @@ int	get_pwd(t_inf *info)
 		free(info->pwd);
 		info->pwd = NULL;
 	}
+	if (info->env == NULL)
+		return (1);
 	while ((*info).env[i] != NULL && (*info).env[i][0] != '\0'
 		&& ft_strncmp((*info).env[i], "PWD=", 4) != 0)
 		i++;
@@ -128,18 +132,41 @@ void	change_var_env(t_inf *info, char *var, char *value)
 		return ;
 	str = ft_strjoin(var, "=");
 	free(info->env[i]);
-	new = ft_strjoin(str, value);
+	if (value == NULL)
+		new = ft_strdup(str);
+	else
+		new = ft_strjoin(str, value);
 	free(str);
 	info->env[i] = ft_strdup(new);
 	free(new);
 }
 
+int	exist_var(t_inf *info, char *name)
+{
+	int	i;
+
+	i = 0;
+	if (name == NULL)
+		return (0);
+	if (info->env == NULL)
+		return (0);
+	while ((*info).env[i] != NULL && (*info).env[i][0] != '\0'
+		&& ft_strncmp((*info).env[i], name, ft_strlen(name)) != 0)
+		i++;
+	if ((*info).env[i] == NULL || ft_strncmp((*info).env[i], name, ft_strlen(name)) != 0)
+		return (0);
+	else
+		return (1);
+}
+
 char	*get_var(t_inf *info, char *var)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	if (var == NULL)
+		return (NULL);
+	if (info->env == NULL)
 		return (NULL);
 	while ((*info).env[i] != NULL && (*info).env[i][0] != '\0'
 		&& ft_strncmp((*info).env[i], var, ft_strlen(var)) != 0)
@@ -174,7 +201,7 @@ void	malloc_new_env(t_inf *info)
 	i = 0;
 	while (info->env && info->env[i])
 		i++;
-	aux = (char **)malloc(sizeof(char *) * (i + 1));
+	aux = (char **)malloc(sizeof(char *) * (i + 2));
 	if (!aux)
 		return ;
 	copy_env(aux, info->env);
@@ -187,9 +214,12 @@ void	add_var(t_inf *info, char *var, char *value)
 {
 	int		i;
 	char	*str;
+	char 	*aux;
 	char	*new;
 
 	i = 0;
+	aux= NULL;
+	new = NULL;
 	malloc_new_env(info);
 	while (info->env[i] != NULL)
 		i++;
@@ -199,10 +229,8 @@ void	add_var(t_inf *info, char *var, char *value)
 	else
 		new = ft_strjoin(str, value);
 	info->env[i] = ft_strdup(new);
-	if (value == NULL)
+	if (str != NULL)
 		free(str);
-	if (value != NULL)
-		free(new);
 	if (new != NULL)
 		free(new);
 	i++;

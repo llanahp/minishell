@@ -77,9 +77,11 @@ void	store_delimiter(t_inf *info, char *line, int *i)
 int	tokenize(t_inf *info, char *line)
 {
 	int	i;
+	int	len;
 
 	i = 0;
-	while (line[i])
+	len = ft_strlen(line);
+	while (i < len && i >= 0 && line != NULL &&line[i])
 	{
 		if (is_space(line[i]))
 			i++;

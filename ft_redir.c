@@ -71,3 +71,17 @@ void	redir(t_command *cmd, t_inf *info)
 		dup2(cmd->fds[1], STDOUT_FILENO);
 	close_pipe_fds(info->commands, cmd);
 }
+
+void	close_files(t_command *cmd)
+{
+	if (cmd->input != -2)
+	{
+		close(cmd->input);
+		cmd->input = -2;
+	}
+	if (cmd->output != -2)
+	{
+		close(cmd->output);
+		cmd->output = -2;
+	}
+}

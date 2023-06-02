@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 18:07:00 by mpizzolo          #+#    #+#             */
-/*   Updated: 2023/05/29 19:04:26 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/01 15:32:57 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 void	handle_no_arg_cd(t_command *cmd, char **to_location)
 {
 	*to_location = ft_strdup("~");
-	cmd->args[0] = ft_strdup("~");
 }
 
 char	*handle_back_cd(char *pwd)
@@ -40,4 +39,20 @@ void	handle_chdir_error(char *to_loc, char *free_var)
 	free(tmp);
 	if (free_var != NULL)
 		free(free_var);
+}
+
+int	check_on_root(t_inf *info)
+{
+	char	*tmp;
+	char	*tmp_free;
+	char	*usr;
+	int		res;
+
+	tmp_free = get_var(info, "PWD");
+	tmp = ft_strrchr(tmp_free, '/') + 1;
+	usr = get_var(info, "USER");
+	res = !ft_strcmp(tmp, usr);
+	free(tmp_free);
+	free(usr);
+	return (res);
 }
