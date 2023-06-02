@@ -17,20 +17,7 @@ t_list	*save_output(t_inf *info, t_list *tmp, int type)
 	t_command	*command;
 
 	command = get_last_cmd(info);
-	if (command->previous == NULL ||(command->previous->output != -2))
-	{
-		info->must_continue = 0;
-		if (command->previous == NULL)
-			ft_putstr_fd("minishell: syntax error near unexpected token `newline'\n", 2);
-		else if (command->previous->output != -2 && type == O_TRUNC)
-			ft_putstr_fd("minishell: syntax error near unexpected token `>'\n", 2);
-		else if (command->previous->output != -2 && type == O_APPEND)
-			ft_putstr_fd("minishell: syntax error near unexpected token `>>'\n", 2);
-		else
-			ft_putstr_fd("minishell: syntax error \n", 2);
-		info->last_code = 258;
-		return (tmp->next);
-	}
+
 	tmp = tmp->next;
 	if (command->output_name != NULL)
 	{
