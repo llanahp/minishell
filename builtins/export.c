@@ -96,13 +96,37 @@ void	do_export(t_inf *info, char *str, char *name, char *value)
 		add_var(info, name, value);
 }
 
+int	ft_n_aparitions(char *str, char c)
+{
+	int	i;
+	int	n;
+
+	i = 0;
+	n = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == c)
+			n++;
+		i++;
+	}
+	return (n);
+}
+
 int	name_export_invalid(char *name)
 {
+	int	len;
+
 	if (name == NULL || name[0] == '\0')
 		return (1);
 	if (ft_strcontains(name, '=') == 1 || ft_strcontains(name, '~') == 1
 			|| ft_strcontains(name, '!') == 1 || ft_strcontains(name, '$') == 1
-			|| ft_strcontains(name, '^') == 1)
+			|| ft_strcontains(name, '@') == 1 || ft_strcontains(name, '#') == 1
+			|| ft_strcontains(name, '{') == 1 || ft_strcontains(name, '}') == 1
+			|| ft_strcontains(name, '-') == 1 || ft_strcontains(name, '.') == 1
+			|| ft_strcontains(name, '^') == 1 || ft_strcontains(name, '*') == 1)
+		return (1);
+	len = ft_strlen(name);
+	if (ft_n_aparitions(name, '+') > 1 || (ft_strcontains(name, '+') == 1 && len > 1 && name[len - 1] != '+'))
 		return (1);
 	return (0);
 }
@@ -119,8 +143,9 @@ int	export_binding(t_inf *info, t_command *cmd)
 	while (cmd->args!= NULL && cmd->args[i] != NULL)
 	{
 		name = get_name_var_line(cmd->args[i]);
+		printf("name: %s\n", name);
 		value = get_value_var_line(name, cmd->args[i]);
-		if (name == NULL || name_export_invalid(name) == 1 || ft_isdigit(name[0]) == 1 || ft_strcontains(name, '+') == 1)
+		if (name == NULL || name_export_invalid(name) == 1 || ft_isdigit(name[0]) == 1)
 		{
 			ft_putstr_fd("minishell: export: `", 2);
 			ft_putstr_fd(cmd->args[i], 2);
