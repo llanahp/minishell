@@ -73,6 +73,7 @@ typedef struct s_inf
 	t_list		*tokens;
 	t_command	*commands;
 	int			pid;
+	int			must_continue;
 	int			minishell_pid;
 	int			last_code;
 	int			exit;

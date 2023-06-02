@@ -37,6 +37,7 @@ t_list	*save_input(t_inf *info, t_list *tmp)
 		{
 			msg(command->input_name,": No such file or directory","",1);
 			info->last_code = 1;
+			info->must_continue = 0;
 		}
 		tmp = tmp->next;
 	}

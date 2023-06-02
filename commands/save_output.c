@@ -32,6 +32,7 @@ t_list	*save_output(t_inf *info, t_list *tmp, int type)
 		{
 			msg(command->output_name,": No such file or directory","",1);
 			info->last_code = 1;
+			info->must_continue = 0;
 		}
 		tmp = tmp->next;
 	}

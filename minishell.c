@@ -221,7 +221,8 @@ void	prepare_line(t_inf *info, char *line)
 		return ;
 	if (create_commands(info) == -1)
 		return ;
-	info->last_code = execute_commands(info);
+	if (info->must_continue == 1)
+		info->last_code = execute_commands(info);
 	free(line);
 	ft_lstclear_cmds(info);
 	ft_clear_tokens(info);
@@ -233,7 +234,7 @@ void	prompt_tester(t_inf *info)
 
 	line = NULL;
 	info->commands = NULL;
-
+	info->must_continue = 1;
 	line = get_next_line(STDIN_FILENO);
 	if (ft_strchr(line, '\n') > 0)
 		ft_delete_char(ft_strchr(line, '\n'));
@@ -255,6 +256,7 @@ void	display_prompt(t_inf *info)
 
 	line = NULL;
 	info->commands = NULL;
+	info->must_continue = 1;
 	set_signals_interactive();
 	line = readline("minishell>");
 	set_signals_noninteractive();
