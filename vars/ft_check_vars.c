@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 14:08:25 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/06/01 15:58:48 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/02 13:21:50 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,8 @@ void	extend_var(char **str, t_inf *info)
 	while ((*str)[i])
 	{
 		update_status(str, i, &status);
-		simple_extend_var(str, &i, info);
+		if (between_simple_quotes(*str, i) == 0)
+			simple_extend_var(str, &i, info);
 		if ((*str)[i] == '$' && (status == 0 || status == DOUBLE_QUOTE)
 			&& is_separator((*str)[i + 1]) == 0
 			&& between_quotes((*str), i) == 0
@@ -72,6 +73,11 @@ void	extend_var(char **str, t_inf *info)
 		{
 			if (replace_var(str, i, info) == -1)
 				i++;
+		}
+		else if ((*str)[i] == '$' && !ft_isalpha((*str)[i + 1]) && !is_inside_quotes(str, i))
+		{
+			remove_separator(str, i);
+			i++;
 		}
 		else
 			i++;
@@ -97,7 +103,7 @@ char	*check_var_replace(char *str, t_inf *info)
 	char	*var;
 	char	*temp;
 
-	if (ft_strcontains(str, '$'))
+	if (ft_strcontains(str, '$') && !between_simple_quotes(str, ft_strichr(str, '$')))
 		extend_var(&str, info);
 	else if (ft_strcontains(str, '~')
 		&& ft_check_char_before(str, '\'', '~')
