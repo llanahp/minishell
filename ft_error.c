@@ -47,5 +47,5 @@ void	free_memory(t_inf *info)
 void	end_shell(t_inf *info)
 {
 	free_memory(info);
-	exit(0);
+	exit(info->last_code);
 }
