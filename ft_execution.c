@@ -57,6 +57,8 @@ char	*get_path(char *cmd, t_inf *info)
 	char	*cmd_ret;
 	int		i;
 
+	if (cmd == NULL || cmd[0] == '\0')
+		return (NULL);
 	if (access(cmd, F_OK | X_OK) == 0)
 	{
 		return (cmd);
@@ -100,6 +102,10 @@ void	execute_cmd(t_command *cmd)
 			free(cmd->cmd);
 	}
 }
+/*
+export T=">>"
+$T lol
+*/
 
 int	create_childs(t_inf *info)
 {
@@ -152,6 +158,6 @@ int	execute_commands(t_inf *info)
 	if (num_cmds(info) == 1 && is_builtin(info->commands->cmd))
 		code = execute_single_cmd(info);
 	else
-		code = create_childs(info);//TODO env con ruta absoluta
+		code = create_childs(info);
 	return (code);
 }

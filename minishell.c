@@ -211,10 +211,6 @@ void	ft_delete_char(char *str)
 }
 
 /* GNL */
-
-
-
-
 void	prepare_line(t_inf *info, char *line)
 {
 	if (tokenize(info, line) == -1)
