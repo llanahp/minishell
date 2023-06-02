@@ -30,7 +30,7 @@ int	execute_builtin(t_command *cmd, t_inf *info, int exi)
 	else if (!ft_strcmp(cmd->cmd, "env") || !ft_strcmp(cmd->cmd, "/usr/bin/env"))
 		code = env(info);
 	else if (!ft_strcmp(cmd->cmd, "exit"))
-		ft_exit(cmd, info);
+		code = ft_exit(cmd, info);
 	info->last_code = code;
 	if (exi)
 		exit(info->last_code);

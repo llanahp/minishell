@@ -108,7 +108,7 @@ int			export_binding(t_inf *info, t_command *cmd);
 int			unset(t_inf *info, t_command *cmd);
 
 /** exit.c */
-void	ft_exit(t_command *cmd, t_inf *info);
+int			ft_exit(t_command *cmd, t_inf *info);
 int			ft_atoi_exit(const char *str);
 
 /** free_split.c */
