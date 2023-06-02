@@ -69,14 +69,12 @@ int	something_in_value(char *str)
 	int	i;
 
 	i = 0;
-	printf("str: %s\n", str);
 	while (str != NULL && str[i] != '=')
 		i++;
 	if (str[i] == '\0')
 		return (0);
 	if (str[i] == '=')
 		i++;
-	printf("str: %s\n", str);
 	if (str[i] != '\0')
 		return (1);
 	else
