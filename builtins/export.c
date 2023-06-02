@@ -143,7 +143,6 @@ int	export_binding(t_inf *info, t_command *cmd)
 	while (cmd->args!= NULL && cmd->args[i] != NULL)
 	{
 		name = get_name_var_line(cmd->args[i]);
-		printf("name: %s\n", name);
 		value = get_value_var_line(name, cmd->args[i]);
 		if (name == NULL || name_export_invalid(name) == 1 || ft_isdigit(name[0]) == 1)
 		{
