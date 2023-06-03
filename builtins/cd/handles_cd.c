@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 15:57:41 by mpizzolo          #+#    #+#             */
-/*   Updated: 2023/06/03 14:28:18 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/03 15:44:48 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,8 @@ char	*handle_cd_to_usr(t_inf *info)
 	char	*tmp;
 	char	*tmp_free;
 
-	if (!exist_var(info, "HOME"))
-	{
-		printf("minishell: cd: HOME not set");
-		info->last_code = 1;
+	if (!check_home_cd(info))
 		return (NULL);
-	}
 	tmp = get_var(info, "HOME");
 	tmp_free = tmp;
 	tmp = ft_strrchr(tmp, '/');
@@ -81,19 +77,7 @@ char	*handle_cd_to_usr(t_inf *info)
 	usr = ft_strjoin("/", tmp);
 	if (check_on_root(info) == 1)
 		return (free(usr), ft_strdup(info->pwd));
-	to_location = handle_back_cd(info->pwd);
-	if (chdir(to_location) == -1)
-		return (handle_chdir_error(to_location, usr), NULL);
-	tmp = ft_strrchr(to_location, '/');
-	while (ft_strcmp(tmp, usr))
-	{
-		tmp_free = to_location;
-		to_location = handle_back_cd(to_location);
-		free(tmp_free);
-		if (chdir(to_location) == -1)
-			return (handle_chdir_error(to_location, usr), NULL);
-		tmp = ft_strrchr(to_location, '/');
-	}
+	to_location = checking_for_home(tmp, usr, info);
 	free(usr);
 	return (to_location);
 }

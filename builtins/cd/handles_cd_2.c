@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 18:07:00 by mpizzolo          #+#    #+#             */
-/*   Updated: 2023/06/03 14:28:24 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/03 15:34:06 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,10 @@ int	check_on_root(t_inf *info)
 	return (res);
 }
 
-char *handle_to_oldpwd(t_inf *info)
+char	*handle_to_oldpwd(t_inf *info)
 {
-	char *res;
-	
+	char	*res;
+
 	if (exist_var(info, "OLDPWD") == 1)
 	{
 		res = get_var(info, "OLDPWD");

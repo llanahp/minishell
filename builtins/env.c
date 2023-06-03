@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 15:43:46 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/06/03 13:02:29 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/03 16:05:38 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ int	env(t_inf *info)
 
 	i = -1;
 	fd_write = 1;
-	//if (ft_strcmp(info->commands->cmd, "/usr/bin/env") == 0)
 	if (ft_strcmp(info->commands->cmd, "env") == 0 && info->env[0] == NULL)
 	{
 		ft_putstr_fd("env: ", 2);

@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 09:47:00 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/06/03 13:57:10 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/03 16:16:15 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,9 @@ void		handling_cd(char *to_location, t_command *cmd,
 				t_inf *info, int is_abs);
 void		handle_chdir_error(char *to_loc, char *free_var);
 int			check_on_root(t_inf *info);
-char 		*handle_to_oldpwd(t_inf *info);
+char		*handle_to_oldpwd(t_inf *info);
+int			check_home_cd(t_inf *info);
+char		*checking_for_home(char *tmp, char *usr, t_inf *info);
 
 /** echo.c */
 int			echo(t_command *cmd);
@@ -103,6 +105,10 @@ int			pwd(t_inf *info, t_command *cmd);
 /** env.c */
 int			env(t_inf *info);
 int			env_export(t_inf *info);
+void		export_binding_err(char *name, char *value, t_command *cmd, int i);
+char		*get_value_var_line(char *name, char *line);
+int			ft_n_aparitions(char *str, char c);
+void		do_export(t_inf *info, char *str, char *name, char *value);
 
 /** export.c */
 int			export_binding(t_inf *info, t_command *cmd);

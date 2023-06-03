@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:36:33 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/06/03 14:32:07 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/03 15:34:51 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,7 @@ char	*to_check_chdir(t_command *cmd, int *is_absolute)
 		to_location = ft_strjoin("./", cmd->args[0]);
 	else
 		to_location = ft_strdup(cmd->args[0]);
-	free(tmp);
-	return (to_location);
+	return (free(tmp), to_location);
 }
 
 int	chdir_exeptions(char *str)
