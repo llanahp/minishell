@@ -68,6 +68,3 @@ void	set_signals_noninteractive(void)
 	sigaction(SIGINT, &act, NULL);
 	sigaction(SIGQUIT, &act, NULL);
 }
-
-//SIGINT = Ctrl + C
-//SIGQUIT = Ctrl + \ = Ctrl + Shift + 7

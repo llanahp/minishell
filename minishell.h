@@ -140,7 +140,9 @@ int			exist_var(t_inf *info, char *name);
 
 /** sigaction.c */
 void		set_signals_interactive(void);
+void		set_signals_interactive_here(void);
 void		set_signals_noninteractive(void);
+void		ignore_sigquit(void);
 
 /** tokenize.c */
 int			tokenize(t_inf *info, char *line);
@@ -199,7 +201,7 @@ int			execute_commands(t_inf *info);
 int			prepare_execution(t_inf *info);
 int			prepare_pipes(t_inf *info);
 int			wait_childs(t_inf *info);
-void	fds_pipes(int in, int out);
+void		fds_pipes(int in, int out);
 
 /** redir.c */
 void		redir(t_command *cmd, t_inf *info);
@@ -239,4 +241,7 @@ char		*create_cmd(t_inf *info, int i, char *cmd);
 char		*get_path(char *cmd, t_inf *info);
 void		clear_command(t_command *cmd);
 int			display_error_path(char *cmd_original);
+void		store_when_env_null(t_inf *info);
+char		*define_delimiter_aux(char **delimiter, t_list **tmp);
+char		*define_delimiter(t_list **tmp);
 #endif
