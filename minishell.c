@@ -221,11 +221,13 @@ void	prepare_line(t_inf *info, char *line)
 		return ;
 	if (create_commands(info) == -1)
 		return ;
+	free(line);
 	if (info->must_continue == 1)
 		info->last_code = execute_commands(info);
-	free(line);
 	ft_lstclear_cmds(info);
 	ft_clear_tokens(info);
+	if (info->paths != NULL)
+		ft_free_split(info->paths);
 }
 
 void	prompt_tester(t_inf *info)
@@ -235,6 +237,7 @@ void	prompt_tester(t_inf *info)
 	line = NULL;
 	info->commands = NULL;
 	info->must_continue = 1;
+	store_paths(info);
 	line = get_next_line(STDIN_FILENO);
 	if (ft_strchr(line, '\n') > 0)
 		ft_delete_char(ft_strchr(line, '\n'));
@@ -257,6 +260,7 @@ void	display_prompt(t_inf *info)
 	line = NULL;
 	info->commands = NULL;
 	info->must_continue = 1;
+	store_paths(info);
 	set_signals_interactive();
 	line = readline("minishell>");
 	set_signals_noninteractive();
@@ -277,28 +281,9 @@ void	salida(void)
 	system("leaks -q minishell");
 }
 
-void	find_pid(t_inf *info)
-{
-	int		status;
-	pid_t	pid;
-
-	pid = fork();
-	if (pid == -1)
-	{
-		perror("fork");
-		return ;
-	}
-	else if (pid == 0)
-	{
-		exit(0);
-	}
-	else
-		info->minishell_pid = (int)getpid();
-	waitpid(-1, &status, 0);
-}
-
 int	main(int argc, char *argv[], char **env)
-{
+{	
+
 	//atexit(salida);
 	(void)argc;
 	(void)argv;
@@ -309,8 +294,8 @@ int	main(int argc, char *argv[], char **env)
 	g_info.last_code = 0;
 	g_info.env = NULL;
 	g_info.exit = 0;
-	find_pid(&g_info);
-	get_enviroment(&g_info, env);
+	store_env(&g_info, env);
+	//store_paths(&g_info);
 	while (g_info.exit == 0){
 		display_prompt(&g_info);
 		//prompt_tester(&g_info);

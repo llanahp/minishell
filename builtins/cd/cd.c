@@ -88,7 +88,7 @@ int	cd(t_inf *info, t_command *cmd)
 	if (info->env == NULL)
 		return (0);
 	if (!cmd->args[0] || !ft_strcmp(cmd->args[0], ""))
-		handle_no_arg_cd(cmd, &to_location);
+		handle_no_arg_cd(&to_location);
 	else
 		to_location = to_check_chdir(cmd, &is_abs);
 	chdir_exeption = chdir_exeptions(to_location);

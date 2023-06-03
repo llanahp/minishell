@@ -58,6 +58,27 @@ void	ft_lstadd_back_command(t_command **lst, t_command *new)
 		lst = &new;
 }
 
+void	clear_command2(t_command *cmd)
+{
+	int	i;
+
+	i = 0;
+	if (cmd->fds != NULL)
+	{
+		free(cmd->fds);
+		cmd->fds = NULL;
+	}
+	if (cmd->redir != NULL)
+	{
+		while (cmd->redir[i])
+		{
+			close(cmd->redir[i]);
+			i++;
+		}
+		free(cmd->redir);
+	}
+}
+
 void	clear_command(t_command *cmd)
 {
 	if (cmd != NULL)
@@ -78,85 +99,7 @@ void	clear_command(t_command *cmd)
 			free(cmd->output_name);
 			close(cmd->output);
 		}
-		if (cmd->fds != NULL)
-		{
-			free(cmd->fds);
-			cmd->fds = NULL;
-		}
-		if (cmd->redir != NULL)
-		{
-			int i = 0;
-			while (cmd->redir[i])
-			{
-				close(cmd->redir[i]);
-				i++;
-			}
-			free(cmd->redir);
-		}
-	}
-}
-
-void	ft_lstclear_cmds(t_inf *info)
-{
-	t_command	*aux;
-	t_command	*aux2;
-
-	if (info->commands != NULL)
-	{
-		aux = info->commands;
-		if (aux != NULL)
-		{
-			aux2 = aux;
-			while (aux2 != NULL && aux2->next != NULL)
-			{
-				aux = aux2;
-				clear_command(aux2);
-				aux2 = aux2->next;
-				aux->next = NULL;
-				free(aux);
-				aux = NULL;
-			}
-			aux = aux2;
-			clear_command(aux2);
-			aux2 = aux2->next;
-			aux->next = NULL;
-			free(aux);
-			aux = NULL;
-		}
-		info->commands = NULL;
-	}
-}
-
-void	ft_clear_tokens(t_inf *info)
-{
-	t_list	*aux;
-	t_list	*aux2;
-
-	if (info->tokens != NULL)
-	{	
-		aux = info->tokens;
-		if (aux != NULL)
-		{
-			aux2 = aux;
-			while (aux2 != NULL && aux2->next != NULL)
-			{
-				aux = aux2;
-				if (aux2->content != NULL)
-					free(aux2->content);
-				aux2 = aux2->next;
-				aux->next = NULL;
-				free(aux);
-				aux = NULL;
-			}
-			aux = aux2;
-			if (aux2->content != NULL)
-				free(aux2->content);
-			aux2 = aux2->next;
-			aux->next = NULL;
-			free(aux);
-			aux = NULL;
-		}
-		info->tokens = NULL;
+		clear_command2(cmd);
 	}
 }
 

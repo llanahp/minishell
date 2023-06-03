@@ -90,22 +90,22 @@ char	*ft_replace_double_quotes(char *line)
 
 	i = 0;
 	result = ft_strdup(line);
-	if (line[i] == '\'' && line[i + 1] == '\'')	
+	if (line[i] == '\'' && line[i + 1] == '\'')
 	{
 		while (line[i] && line[i + 1] && line[i] == line[i + 1])
-    	{
-        	result = replace_d_quotes(result, line[i]);
-        	i++;
-    	}
+		{
+			result = replace_d_quotes(result, line[i]);
+			i++;
+		}
 	}
 	i = 0;
-	if (line[i] == '"' && line[i + 1] == '"')	
+	if (line[i] == '"' && line[i + 1] == '"')
 	{
 		while (line[i] && line[i + 1] && line[i] == line[i + 1])
-    	{
-        	result = replace_d_quotes(result, line[i]);
-        	i++;
-    	}
+		{
+			result = replace_d_quotes(result, line[i]);
+			i++;
+		}
 	}
 	return (result);
 }
@@ -119,30 +119,19 @@ char	*replace_string(char *string, char stop, char *new)
 
 	i = 0;
 	j = 0;
-	result = (char *)malloc(sizeof(char) * (ft_strlen(string) + ft_strlen(new) + 1));
+	result = (char *)malloc(sizeof(char)
+			* (ft_strlen(string) + ft_strlen(new) + 1));
 	if (result == NULL)
 		return (NULL);
 	while (string != NULL && string[i] != '\0' && string[i] != stop)
-	{
-		result[j] = string[i];
-		j++;
-		i++;
-	}
+		result[j++] = string[i++];
 	if (string[i] == stop)
 		i++;
 	k = 0;
 	while (new != NULL && new[k])
-	{
-		result[j] = new[k];
-		j++;
-		k++;
-	}
+		result[j++] = new[k++];
 	while (string[i] != '\0')
-	{
-		result[j] = string[i];
-		j++;
-		i++;
-	}
+		result[j++] = string[i++];
 	result[j] = '\0';
 	free(string);
 	return (result);
