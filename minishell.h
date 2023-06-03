@@ -132,6 +132,7 @@ int			exist_var(t_inf *info, char *name);
 void		set_signals_interactive(void);
 void		set_signals_interactive_here(void);
 void		set_signals_noninteractive(void);
+void		ignore_sigquit(void);
 
 /** tokenize.c */
 int			tokenize(t_inf *info, char *line);
