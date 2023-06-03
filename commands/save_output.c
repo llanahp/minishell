@@ -17,7 +17,6 @@ t_list	*save_output(t_inf *info, t_list *tmp, int type)
 	t_command	*command;
 
 	command = get_last_cmd(info);
-
 	tmp = tmp->next;
 	if (command->output_name != NULL)
 	{
@@ -28,10 +27,10 @@ t_list	*save_output(t_inf *info, t_list *tmp, int type)
 	if (tmp != NULL && tmp->type == WORD)
 	{
 		command->output_name = ft_strdup(tmp->content);
-		command->output = open(command->output_name,  O_WRONLY | O_CREAT | type, 0664);
+		command->output = open(command->output_name, O_WRONLY | O_CREAT | type, 0664);
 		if (command->output == -1)
 		{
-			msg(command->output_name,": No such file or directory","",1);
+			msg(command->output_name, ": No such file or directory", "", 1);
 			info->last_code = 1;
 			info->must_continue = 0;
 		}

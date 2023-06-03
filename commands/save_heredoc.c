@@ -64,23 +64,17 @@ int	read_heredoc(char *name, char *delimiter, t_inf *info)
 	while (1 == 1)
 	{
 		buf = NULL;
-		/*set_signals_interactive();
+		set_signals_interactive();
 		buf = readline("heredoc>");
 		set_signals_noninteractive();
-		*/
-	
 		buf = get_next_line(STDIN_FILENO);
 		if (ft_strchr(buf, '\n') > 0)
 			ft_delete_char(ft_strchr(buf, '\n'));
-
-			
 		if (buf == NULL)
 			return (msg("Error reading", ": ", strerror(errno), -1));
 		buf[ft_strlen(buf)] = '\0';
-		
 		buf = check_var_replace(buf, info);
 		buf = ft_replace_quotes_2(buf);
-		
 		if (ft_strcmp(buf, delimiter) == 0)
 		{
 			free(buf);

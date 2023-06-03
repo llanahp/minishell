@@ -90,22 +90,22 @@ char	*ft_replace_double_quotes(char *line)
 
 	i = 0;
 	result = ft_strdup(line);
-	if (line[i] == '\'' && line[i + 1] == '\'')	
+	if (line[i] == '\'' && line[i + 1] == '\'')
 	{
 		while (line[i] && line[i + 1] && line[i] == line[i + 1])
-    	{
-        	result = replace_d_quotes(result, line[i]);
-        	i++;
-    	}
+		{
+			result = replace_d_quotes(result, line[i]);
+			i++;
+		}
 	}
 	i = 0;
-	if (line[i] == '"' && line[i + 1] == '"')	
+	if (line[i] == '"' && line[i + 1] == '"')
 	{
 		while (line[i] && line[i + 1] && line[i] == line[i + 1])
-    	{
-        	result = replace_d_quotes(result, line[i]);
-        	i++;
-    	}
+		{
+			result = replace_d_quotes(result, line[i]);
+			i++;
+		}
 	}
 	return (result);
 }

@@ -12,12 +12,10 @@
 
 #include "../minishell.h"
 
-
-
 int	between_simple_quotes(char *str, int index)
 {
 	int		x;
-	int 	i;
+	int		i;
 	char	quote;
 
 	quote = '\'';
@@ -54,11 +52,10 @@ int	between_simple_quotes(char *str, int index)
 		return (0);
 }
 
-
 int	is_inside_quotes(char **str, int separator)
 {
 	int		x;
-	int 	i;
+	int		i;
 	char	quote;
 
 	i = separator;
@@ -90,11 +87,11 @@ int	is_inside_quotes(char **str, int separator)
 
 void	remove_separator(char **str, int sep)
 {
-	char *res;
-	int	i;
-	int	j;
-	char *tmp;
-	
+	char	*res;
+	int		i;
+	int		j;
+	char	*tmp;
+
 	res = (char *)malloc(ft_strlen(*str) * sizeof(char));
 	i = -1;
 	j = 0;
@@ -134,7 +131,6 @@ char	*ft_replace_quotes_2(char *str)
 
 	res = ft_calloc((ft_strlen(str) + 1), sizeof(char));
 	i = starting_quote_from(str, &res, 0);
-	
 	if (i == -1)
 		return (str);
 	x = is_quote(str[i]);

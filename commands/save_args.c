@@ -29,7 +29,6 @@ t_list	*save_args(t_list *tmp, t_command *command)
 	}
 	tmp2[i] = NULL;
 	command->args = join_arguments(command->args, tmp2);
-	
 	return (tmp);
 }
 
