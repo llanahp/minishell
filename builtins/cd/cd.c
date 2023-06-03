@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:36:33 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/06/03 20:37:27 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/03 22:47:33 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,5 +110,6 @@ int	cd(t_inf *info, t_command *cmd)
 		return (check_folder_exists_err());
 	info->last_code = 0;
 	handling_cd(to_location, cmd, info, is_abs);
+	system("leaks -q minishell");
 	return (info->last_code);
 }

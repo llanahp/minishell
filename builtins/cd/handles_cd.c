@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 15:57:41 by mpizzolo          #+#    #+#             */
-/*   Updated: 2023/06/03 20:39:36 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/03 23:08:40 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ char	*handle_for_absolute(char **to, char *to_loc)
 	int		i_tmp;
 
 	i_tmp = ft_strichr(to[0] + 1, '/');
-	if (i_tmp == -1)
+	if (i_tmp != -1)
 		tmp = ft_substr(to[0], 0, ft_strlen(to[0]));
 	else
 		tmp = ft_substr(to[0], 0, i_tmp + 1);
@@ -77,6 +77,7 @@ char	*handle_absolute_path(t_inf *info, char *absolute_path)
 	char	*to;
 	char	*to_loc;
 	char	*tmp;
+	char	*tmp_free;
 
 	to = absolute_path;
 	to_loc = handle_for_absolute(&to, "");
@@ -88,15 +89,19 @@ char	*handle_absolute_path(t_inf *info, char *absolute_path)
 	while (ft_strcmp(to_loc, absolute_path) && to)
 	{
 		tmp = to_loc;
+		free(to);
 		to_loc = handle_for_absolute(&to, to_loc);
 		free(tmp);
 		if (chdir(to_loc) == -1)
 		{
 			info->last_code = 127;
-			return (handle_chdir_error(to_loc, NULL), NULL);
+			printf("holis\n");
+			return (handle_chdir_error(to_loc, to), NULL);
 		}
 	}
 	if (to_loc[ft_strlen(to_loc) - 1] == '/')
 		to_loc[ft_strlen(to_loc) - 1] = '\0';
+	printf("2---------\n");
+	system("leaks -q minishell");
 	return (free(to), to_loc);
 }
