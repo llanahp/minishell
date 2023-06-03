@@ -18,7 +18,7 @@ int	read_heredoc_aux(char **buf, char *delimiter, int fd)
 		(*buf)[ft_strlen((*buf))] = '\0';
 	if ((*buf) == NULL)
 		(*buf) = ft_strdup(delimiter);
-	(*buf) = ft_replace_quotes_2((*buf));
+	(*buf) = ft_replace_quotes_2(buf);
 	if (ft_strcmp((*buf), delimiter) == 0)
 	{
 		if ((*buf) != NULL)
@@ -54,8 +54,7 @@ int	read_heredoc(char *name, char *delimiter, t_inf *info)
 				free(buf);
 			break ;
 		}
-		if (buf != NULL)
-			free(buf);
+		free(buf);
 	}
 	close (fd);
 	return (0);
