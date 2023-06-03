@@ -12,14 +12,6 @@
 
 #include "../minishell.h"
 
-int	file_exists(char *name)
-{
-	if (access(name, F_OK) == 0)
-		return (1);
-	else
-		return (0);
-}
-
 int	read_heredoc_aux(char **buf, char *delimiter, int fd)
 {
 	if ((*buf) != NULL)
@@ -69,28 +61,20 @@ int	read_heredoc(char *name, char *delimiter, t_inf *info)
 	return (0);
 }
 
-char	*find_name(void)
+void	name_hd2(t_command *command, char *name, char *delimiter, t_inf *info)
 {
-	float	i;
-	char	*name;
-	char	*n;
-
-	i = 0;
-	n = ft_itoa(i);
-	name = ft_strjoin("/tmp/heredoc_", n);
-	while (file_exists(name))
+	command->input_name = ft_strdup(name);
+	if (name != NULL)
+		free(name);
+	if (delimiter != NULL)
+		free(delimiter);
+	command->input = open(command->input_name, O_RDONLY);
+	if (command->input == -1)
 	{
-		if (name != NULL)
-			free(name);
-		if (n != NULL)
-			free(n);
-		n = ft_itoa(i);
-		name = ft_strjoin("/tmp/heredoc_", n);
-		i++;
+		msg(command->input_name, ": ", strerror(errno), 0);
+		info->last_code = 1;
+		info->must_continue = 0;
 	}
-	if (n != NULL)
-		free(n);
-	return (name);
 }
 
 t_list	*set_name_heredoc(t_list *tmp, t_command *command, t_inf *info)
@@ -112,18 +96,7 @@ t_list	*set_name_heredoc(t_list *tmp, t_command *command, t_inf *info)
 	}
 	if (read_heredoc(name, delimiter, info) == -1)
 		return (NULL);
-	command->input_name = ft_strdup(name);
-	if (name != NULL)
-		free(name);
-	if (delimiter != NULL)
-		free(delimiter);
-	command->input = open(command->input_name, O_RDONLY);
-	if (command->input == -1)
-	{
-		msg(command->input_name, ": ", strerror(errno), 0);
-		info->last_code = 1;
-		info->must_continue = 0;
-	}
+	name_hd2(command, name, delimiter, info);
 	return (tmp);
 }
 

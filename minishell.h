@@ -243,4 +243,6 @@ void		store_when_env_null(t_inf *info);
 char		*define_delimiter_aux(char **delimiter, t_list **tmp);
 char		*define_delimiter(t_list **tmp);
 int			ft_error_syntax(t_list *tmp, t_inf *info);
+char		*find_name(void);
+int			file_exists(char *name);
 #endif
