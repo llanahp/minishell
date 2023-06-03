@@ -20,13 +20,13 @@ int	file_exists(char *name)
 		return (0);
 }
 
-int	read_heredoc_aux(char **buf, char *delimiter, t_inf *info, int fd)
+int	read_heredoc_aux(char **buf, char *delimiter, int fd)
 {
 	if ((*buf) != NULL)
 		(*buf)[ft_strlen((*buf))] = '\0';
 	if ((*buf) == NULL)
 		(*buf) = ft_strdup(delimiter);
-	(*buf) = check_var_replace((*buf), info);
+	//(*buf) = check_var_replace((*buf), info);
 	(*buf) = ft_replace_quotes_2((*buf));
 	if (ft_strcmp((*buf), delimiter) == 0)
 	{
@@ -57,7 +57,7 @@ int	read_heredoc(char *name, char *delimiter, t_inf *info)
 		buf = readline("heredoc>");
 		set_signals_noninteractive();
 		if (info->must_continue == 0
-			|| read_heredoc_aux(&buf, delimiter, info, fd) == 1)
+			|| read_heredoc_aux(&buf, delimiter, fd) == 1)
 		{
 			if (buf != NULL)
 				free(buf);
@@ -82,15 +82,18 @@ t_list	*set_name_heredoc(t_list *tmp, t_command *command, t_inf *info)
 	delimiter = define_delimiter(&tmp);
 	if (delimiter == NULL)
 	{
-		free(name);
+		if (name != NULL)
+			free(name);
 		info->last_code = msg("heredoc", ": ", "syntax error", 258);
 		return (NULL);
 	}
 	if (read_heredoc(name, delimiter, info) == -1)
 		return (NULL);
 	command->input_name = ft_strdup(name);
-	free(name);
-	free(delimiter);
+	if (name != NULL)
+		free(name);
+	if (delimiter != NULL)
+		free(delimiter);
 	command->input = open(command->input_name, O_RDONLY);
 	if (command->input == -1)
 	{

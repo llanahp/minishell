@@ -33,8 +33,12 @@ void	store_env(t_inf *info, char **env)
 	while (env[++i])
 	{
 		if (ft_strncmp(env[i], "SHLVL=", 6) == 0)
-			info->env[j++]
-				= ft_strjoin("SHLVL=", ft_itoa(ft_atoi(env[i] + 6) + 1));
+		{
+			if (ft_atoi(env[i] + 6) < 0)
+				info->env[j++] = ft_strdup("SHLVL=0");
+			else
+				info->env[j++] = ft_strjoin("SHLVL=", ft_itoa(ft_atoi(env[i] + 6) + 1));
+		}
 		else if (ft_strncmp(env[i], "OLDPWD=", 7))
 			info->env[j++] = ft_strdup(env[i]);
 	}
