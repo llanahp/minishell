@@ -36,10 +36,37 @@ void	signal_reset_prompt(int signal)
 		SIG_IGN ;
 }
 
+
+void	signal_reset_prompt_here(int signal)
+{
+	if (signal == SIGINT)
+	{
+		(void)signal;
+		g_info.must_continue = 0;
+		g_info.last_code = 1;
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
+	else if (signal == SIGQUIT)
+		SIG_IGN ;
+}
+
 void	signal_print_newline(int signal)
 {
 	(void)signal;
 	rl_on_new_line();
+}
+
+void	set_signals_interactive_here(void)
+{
+	struct sigaction	act;
+
+	ignore_sigquit();
+	ft_memset(&act, 0, sizeof(act));
+	act.sa_handler = &signal_reset_prompt_here;
+	sigaction(SIGINT, &act, NULL);
 }
 
 void	set_signals_interactive(void)
