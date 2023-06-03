@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:41:20 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/06/03 16:18:27 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/03 17:04:50 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	unset(t_inf *info, t_command *cmd)
 	screen = 0;
 	while (cmd != NULL && cmd->args[i])
 	{
-		if (is_invalid_argument == 1)
+		if (is_invalid_argument(cmd->args[i], screen) == 1)
 		{
 			ft_putstr_fd("unset: ", 2);
 			ft_putstr_fd(cmd->args[i], 2);
