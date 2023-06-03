@@ -6,34 +6,49 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 13:33:40 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/05/19 16:56:30 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/03 13:51:21 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+void	store_when_env_null(t_inf *info)
+{
+	info->env = (char **)malloc(sizeof(char *) * (3));
+	info->env[0] = ft_strjoin("PWD=", getcwd(info->pwd, 100));
+	info->env[1] = ft_strdup("SHLVL=1");
+	info->env[2] = ft_strdup("_=");
+}
+
 void	store_env(t_inf *info, char **env)
 {
 	int	i;
+	int	j;
 
 	i = 0;
-	if (env == NULL)
+	if (env[0] == NULL)
 	{
-		info->env = NULL;
+		store_when_env_null(info);
 		return ;
 	}
 	while (env[i])
 		i++;
-	info->env = (char **)malloc(sizeof(char *) * (i + 1));
+	j = i - 1;
+	info->env = (char **)malloc(sizeof(char *) * (j + 1));
 	if (! info->env)
 		return ;
 	i = 0;
+	j = 0;
 	while (env[i])
 	{
-		info->env[i] = ft_strdup(env[i]);
+		if (ft_strncmp(env[i], "OLDPWD=", 7))
+		{
+			info->env[j] = ft_strdup(env[i]);
+			j++;
+		}
 		i++;
 	}
-	info->env[i] = NULL;
+	info->env[j] = NULL;
 }
 
 /** get_enviroment:
@@ -84,11 +99,14 @@ int	get_pwd(t_inf *info)
 	while ((*info).env[i] != NULL && (*info).env[i][0] != '\0'
 		&& ft_strncmp((*info).env[i], "PWD=", 4) != 0)
 		i++;
-	if (ft_strncmp((*info).env[i], "PWD=", 4) != 0)
+	if ((*info).env[i] != NULL && ft_strncmp((*info).env[i], "PWD=", 4) != 0)
 		return (1);
 	else
 	{
-		info->pwd = ft_substr((*info).env[i], 4, ft_strlen((*info).env[i]));
+		if ((*info).env[i] == NULL)
+			info->pwd = getcwd(info->pwd, 100);
+		else
+			info->pwd = ft_substr((*info).env[i], 4, ft_strlen((*info).env[i]));
 		return (0);
 	}
 }

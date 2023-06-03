@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 15:57:41 by mpizzolo          #+#    #+#             */
-/*   Updated: 2023/05/29 21:13:42 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/03 14:28:18 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,14 @@ void	handling_cd(char *to_location, t_command *cmd, t_inf *info, int is_abs)
 	free(tmp);
 	if (to_location == NULL)
 		return ;
-	change_var_env(info, "OLDPWD", info->pwd);
-	change_var_env(info, "PWD", to_location);
+	if (exist_var(info, "OLDPWD") == 0 && info->pwd)
+		add_var(info, "OLDPWD", info->pwd);
+	else
+		change_var_env(info, "OLDPWD", info->pwd);
+	if (exist_var(info, "PWD") == 0 && to_location)
+		add_var(info, "PWD", to_location);
+	else
+		change_var_env(info, "PWD", to_location);
 	free(to_location);
 }
 
@@ -61,11 +67,20 @@ char	*handle_cd_to_usr(t_inf *info)
 	char	*tmp;
 	char	*tmp_free;
 
-	tmp = get_var(info, "USER");
+	if (!exist_var(info, "HOME"))
+	{
+		printf("minishell: cd: HOME not set");
+		info->last_code = 1;
+		return (NULL);
+	}
+	tmp = get_var(info, "HOME");
+	tmp_free = tmp;
+	tmp = ft_strrchr(tmp, '/');
+	free(tmp_free);
+	tmp = ft_substr(tmp, 1, ft_strlen(tmp));
 	usr = ft_strjoin("/", tmp);
-	free(tmp);
 	if (check_on_root(info) == 1)
-		return (free(usr), NULL);
+		return (free(usr), ft_strdup(info->pwd));
 	to_location = handle_back_cd(info->pwd);
 	if (chdir(to_location) == -1)
 		return (handle_chdir_error(to_location, usr), NULL);
