@@ -64,6 +64,13 @@ char	*get_path(char *cmd, t_inf *info)
 		return (cmd);
 	}
 	i = -1;
+	if (info->paths == NULL)
+	{
+		if (access(cmd, F_OK | X_OK) == 0)
+			return (cmd);
+		free(cmd);
+		return (NULL);
+	}
 	while (info->paths[++i] != NULL)
 	{
 		cmd_ret = create_cmd(info, i, cmd);
@@ -73,6 +80,7 @@ char	*get_path(char *cmd, t_inf *info)
 		cmd_ret = NULL;
 	}
 	free(cmd);
+
 	return (cmd_ret);
 }
 
@@ -89,7 +97,10 @@ void	execute_cmd(t_command *cmd)
 		cmd->cmd = get_path(cmd->cmd, &g_info);
 		if (cmd->cmd == NULL)
 		{
-			g_info.last_code = msg(cmd_original, ": command not found","", 127);
+			if (g_info.paths == NULL)
+				g_info.last_code = msg(cmd_original, ": No such file or directory", "", 127);
+			else
+				g_info.last_code = msg(cmd_original, ": command not found","", 127);
 			exit(g_info.last_code);
 		}
 		else if (execve(cmd->cmd, cmd->args, g_info.env) == -1)
@@ -102,10 +113,6 @@ void	execute_cmd(t_command *cmd)
 			free(cmd->cmd);
 	}
 }
-/*
-export T=">>"
-$T lol
-*/
 
 int	create_childs(t_inf *info)
 {

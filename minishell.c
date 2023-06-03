@@ -281,30 +281,10 @@ void	salida(void)
 	system("leaks -q minishell");
 }
 
-void	find_pid(t_inf *info)
-{
-	int		status;
-	pid_t	pid;
-
-	pid = fork();
-	if (pid == -1)
-	{
-		perror("fork");
-		return ;
-	}
-	else if (pid == 0)
-	{
-		exit(0);
-	}
-	else
-		info->minishell_pid = (int)getpid();
-	waitpid(-1, &status, 0);
-}
-
 int	main(int argc, char *argv[], char **env)
 {	
 
-	atexit(salida);
+	//atexit(salida);
 	(void)argc;
 	(void)argv;
 	g_info.tokens = NULL;
@@ -314,7 +294,6 @@ int	main(int argc, char *argv[], char **env)
 	g_info.last_code = 0;
 	g_info.env = NULL;
 	g_info.exit = 0;
-	//find_pid(&g_info);
 	store_env(&g_info, env);
 	//store_paths(&g_info);
 	while (g_info.exit == 0){

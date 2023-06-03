@@ -30,7 +30,6 @@ int	check_exit(t_command *cmd)
 	{
 		if (!ft_isdigit(cmd->args[0][i]) + 0)
 		{
-			printf("exit\n");
 			ft_putstr_fd("bash: exit: ", 2);
 			ft_putstr_fd(cmd->args[0], 2);
 			ft_putstr_fd(": numeric argument required\n", 2);
