@@ -24,12 +24,11 @@ int	store_word(t_inf *info, char *line, int i)
 		j++;
 	while (line[j] && ((type > 1 && is_quote(line[j]) != type)
 			|| (type == 0 && !is_space(line[j]) && !is_delimiter(line[j]))))
-
-		{
-			if (is_quote(line[j]) > 0)
-				type = is_quote(line[j]);
-			j++;
-		}
+	{
+		if (is_quote(line[j]) > 0)
+			type = is_quote(line[j]);
+		j++;
+	}
 	if (line[j] && type == 0 && is_quote(line[j]) > 0)
 	{
 		type = is_quote(line[j]);
@@ -96,7 +95,7 @@ int	tokenize(t_inf *info, char *line)
 
 	i = 0;
 	len = ft_strlen(line);
-	while (i < len && i >= 0 && line != NULL &&line[i])
+	while (i < len && i >= 0 && line != NULL && line[i])
 	{
 		if (is_space(line[i]))
 			i++;

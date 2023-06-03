@@ -6,13 +6,13 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 18:07:00 by mpizzolo          #+#    #+#             */
-/*   Updated: 2023/06/01 15:32:57 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/03 14:28:24 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	handle_no_arg_cd(t_command *cmd, char **to_location)
+void	handle_no_arg_cd(char **to_location)
 {
 	*to_location = ft_strdup("~");
 }
@@ -50,9 +50,29 @@ int	check_on_root(t_inf *info)
 
 	tmp_free = get_var(info, "PWD");
 	tmp = ft_strrchr(tmp_free, '/') + 1;
-	usr = get_var(info, "USER");
+	free(tmp_free);
+	tmp_free = get_var(info, "HOME");
+	usr = tmp_free;
+	while (usr[0] == '/')
+		usr = ft_strrchr(usr, '/') + 1;
 	res = !ft_strcmp(tmp, usr);
 	free(tmp_free);
-	free(usr);
 	return (res);
+}
+
+char *handle_to_oldpwd(t_inf *info)
+{
+	char *res;
+	
+	if (exist_var(info, "OLDPWD") == 1)
+	{
+		res = get_var(info, "OLDPWD");
+		if (chdir(res) == -1)
+			return (handle_chdir_error(res, res), NULL);
+		printf("%s\n", res);
+		return (res);
+	}
+	printf("minishell: cd: OLDPWD not set\n");
+	info->last_code = 1;
+	return (NULL);
 }

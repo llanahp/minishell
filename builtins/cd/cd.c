@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:36:33 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/06/01 15:48:45 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/03 14:32:07 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,14 @@ char	*cd_handler(int abs, char *loc, t_command *cmd, t_inf *info)
 		loc = handle_absolute_path(loc);
 	else if (!(cmd->args[0]) || !ft_strcmp(cmd->args[0], ""))
 		loc = handle_cd_to_usr(info);
-	else if (!ft_strcmp(cmd->args[0], "..") || !ft_strcmp(loc, "-"))
+	else if (!ft_strcmp(cmd->args[0], ".."))
 		loc = handle_back_cd(info->pwd);
 	else if (!ft_strcmp(cmd->args[0], "."))
 		loc = ft_strdup(info->pwd);
 	else if (!ft_strcmp(cmd->args[0], "--") || !ft_strcmp(cmd->args[0], "~"))
 		loc = handle_cd_to_usr(info);
+	else if (!ft_strcmp(cmd->args[0], "-"))
+		loc = handle_to_oldpwd(info);
 	else
 		loc = handle_cmd_for_change_env_cd(cmd->args[0], info->pwd);
 	if (loc == NULL)
@@ -86,7 +88,7 @@ int	cd(t_inf *info, t_command *cmd)
 	if (info->env == NULL)
 		return (0);
 	if (!cmd->args[0] || !ft_strcmp(cmd->args[0], ""))
-		handle_no_arg_cd(cmd, &to_location);
+		handle_no_arg_cd(&to_location);
 	else
 		to_location = to_check_chdir(cmd, &is_abs);
 	chdir_exeption = chdir_exeptions(to_location);
