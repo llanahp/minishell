@@ -61,7 +61,7 @@ SRC = builtins/echo.c builtins/cd/cd.c builtins/cd/handles_cd.c builtins/cd/hand
 	vars/ft_check_vars.c vars/ft_var_utils.c vars/ft_var_utils2.c vars/ft_check_vars2.c vars/ft_check_vars3.c\
 	commands/save_args.c commands/save_heredoc.c  commands/save_input.c commands/save_output.c commands/save_pipe.c commands/save_word.c\
 	ft_error.c ft_execution.c ft_redir.c ft_pipes.c ft_free_split.c ft_env_utils.c ft_sigaction.c ft_create_cmds.c ft_command_utils.c \
-	ft_execution2.c ft_env_utils2.c minishell.c
+	ft_execution2.c ft_env_utils2.c ft_command_utils2.c minishell.c
 
 OBJ = $(SRC:.c=.o)
 
