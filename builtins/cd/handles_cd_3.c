@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 15:35:58 by mpizzolo          #+#    #+#             */
-/*   Updated: 2023/06/03 17:19:34 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/03 18:13:59 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,26 @@ char	*checking_for_home(char *tmp, char *usr, t_inf *info)
 		tmp = ft_strrchr(to_location, '/');
 	}
 	return (to_location);
+}
+
+int	check_folder_exists(void)
+{
+	char	buf[PATH_MAX];
+
+	if (getcwd(buf, sizeof(buf)) == NULL)
+		return (127);
+	return (0);
+}
+
+int	check_folder_exists_err(void)
+{
+	char	buf[PATH_MAX];
+
+	if (getcwd(buf, sizeof(buf)) == NULL)
+	{
+		printf("cd: error retrieving current directory: ");
+		printf("getcwd: No such file or directory\n");
+		return (127);
+	}
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:36:33 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/06/03 17:19:54 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/03 18:13:20 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,9 +95,10 @@ int	cd(t_inf *info, t_command *cmd)
 	{
 		printf("cd: no such file or directory: %s\n", to_location);
 		free(to_location);
-		return (0);
+		return (127);
 	}
-	else
-		handling_cd(to_location, cmd, info, is_abs);
+	if (check_folder_exists() > 0)
+		return (check_folder_exists_err());
+	handling_cd(to_location, cmd, info, is_abs);
 	return (0);
 }
