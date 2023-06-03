@@ -32,13 +32,12 @@ t_list	*save_input(t_inf *info, t_list *tmp)
 	if (tmp != NULL && tmp->type == WORD)
 	{
 		command->input_name = ft_strdup(tmp->content);
-		if (command->input_name == NULL)
-			printf("Entrada no valida");
-		else
+		command->input = open(command->input_name, O_RDONLY);
+		if (command->input == -1)
 		{
-			command->input = open(command->input_name, O_RDONLY);
-			if (command->input == -1)
-				perror("Error al abrir el archivo de entrada");
+			msg(command->input_name,": No such file or directory","",1);
+			info->last_code = 1;
+			info->must_continue = 0;
 		}
 		tmp = tmp->next;
 	}

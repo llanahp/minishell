@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 09:47:00 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/05/31 19:02:58 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/02 12:03:19 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ typedef struct s_inf
 	t_list		*tokens;
 	t_command	*commands;
 	int			pid;
+	int			must_continue;
 	int			minishell_pid;
 	int			last_code;
 	int			exit;
@@ -99,6 +100,7 @@ int			pwd(t_inf *info, t_command *cmd);
 
 /** env.c */
 int			env(t_inf *info);
+int			env_export(t_inf *info);
 
 /** export.c */
 int			export_binding(t_inf *info, t_command *cmd);
@@ -107,7 +109,7 @@ int			export_binding(t_inf *info, t_command *cmd);
 int			unset(t_inf *info, t_command *cmd);
 
 /** exit.c */
-void	ft_exit(t_command *cmd, t_inf *info);
+int			ft_exit(t_command *cmd, t_inf *info);
 int			ft_atoi_exit(const char *str);
 
 /** free_split.c */
@@ -209,4 +211,8 @@ char	*get_next_line(int fd);
 char		*ft_replace_quotes_2(char *str);
 void	ft_delete_char(char *str);
 char	*check_var_replace(char *str, t_inf *info);
+void	remove_separator(char **str, int sep);
+int		is_inside_quotes(char **str, int separator);
+int		between_simple_quotes(char *str, int separator);
+
 #endif

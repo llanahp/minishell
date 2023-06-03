@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:41:20 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/06/01 12:57:07 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/02 13:25:24 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@ static char	*leer(int fd, char *text)
 
 	if (text == NULL)
 		text = ft_calloc(1, 1);
-	cad = (char *)ft_calloc(200, sizeof(char));
+	cad = (char *)ft_calloc(9999999, sizeof(char));
 	if (!cad)
 		return (NULL);
 	bytes_read = 1;
 	while (bytes_read > 0)
 	{
-		bytes_read = read(fd, cad, 200);
+		bytes_read = read(fd, cad, 9999999);
 		if (bytes_read == -1)
 		{
 			free(cad);
@@ -116,7 +116,7 @@ char	*get_next_line(int fd)
 		}
 		return (NULL);
 	}
-	if (fd < 0 || 200 < 0)
+	if (fd < 0 || 9999999 < 0)
 		return (NULL);
 	text = leer(fd, text);
 	if (!text)
@@ -211,10 +211,6 @@ void	ft_delete_char(char *str)
 }
 
 /* GNL */
-
-
-
-
 void	prepare_line(t_inf *info, char *line)
 {
 	if (tokenize(info, line) == -1)
@@ -225,7 +221,8 @@ void	prepare_line(t_inf *info, char *line)
 		return ;
 	if (create_commands(info) == -1)
 		return ;
-	info->last_code = execute_commands(info);
+	if (info->must_continue == 1)
+		info->last_code = execute_commands(info);
 	free(line);
 	ft_lstclear_cmds(info);
 	ft_clear_tokens(info);
@@ -237,7 +234,7 @@ void	prompt_tester(t_inf *info)
 
 	line = NULL;
 	info->commands = NULL;
-
+	info->must_continue = 1;
 	line = get_next_line(STDIN_FILENO);
 	if (ft_strchr(line, '\n') > 0)
 		ft_delete_char(ft_strchr(line, '\n'));
@@ -259,6 +256,7 @@ void	display_prompt(t_inf *info)
 
 	line = NULL;
 	info->commands = NULL;
+	info->must_continue = 1;
 	set_signals_interactive();
 	line = readline("minishell>");
 	set_signals_noninteractive();

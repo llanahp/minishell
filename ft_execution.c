@@ -27,10 +27,10 @@ int	execute_builtin(t_command *cmd, t_inf *info, int exi)
 		code = export_binding(info, cmd);
 	else if (!ft_strcmp(cmd->cmd, "unset"))
 		code = unset(info, cmd);
-	else if (!ft_strcmp(cmd->cmd, "env"))
+	else if (!ft_strcmp(cmd->cmd, "env") || !ft_strcmp(cmd->cmd, "/usr/bin/env"))
 		code = env(info);
 	else if (!ft_strcmp(cmd->cmd, "exit"))
-		ft_exit(cmd, info);
+		code = ft_exit(cmd, info);
 	info->last_code = code;
 	if (exi)
 		exit(info->last_code);
@@ -57,6 +57,8 @@ char	*get_path(char *cmd, t_inf *info)
 	char	*cmd_ret;
 	int		i;
 
+	if (cmd == NULL || cmd[0] == '\0')
+		return (NULL);
 	if (access(cmd, F_OK | X_OK) == 0)
 	{
 		return (cmd);
@@ -74,32 +76,36 @@ char	*get_path(char *cmd, t_inf *info)
 	return (cmd_ret);
 }
 
-void	execute_cmd(t_command *cmd, t_inf *info)
+void	execute_cmd(t_command *cmd)
 {
 	char	*cmd_original;
 
 	cmd_original = ft_strdup(cmd->cmd);
-	redir(cmd, info);
+	redir(cmd, &g_info);
 	if (cmd != NULL && is_builtin(cmd->cmd))
-		execute_builtin(cmd, info, 1);
+		execute_builtin(cmd, &g_info, 1);
 	else
 	{
-		cmd->cmd = get_path(cmd->cmd, info);
+		cmd->cmd = get_path(cmd->cmd, &g_info);
 		if (cmd->cmd == NULL)
 		{
-			info->last_code = msg(cmd_original, ": command not found","", 127);
-			exit(info->last_code);
+			g_info.last_code = msg(cmd_original, ": command not found","", 127);
+			exit(g_info.last_code);
 		}
-		else if (execve(cmd->cmd, cmd->args, info->env) == -1)
+		else if (execve(cmd->cmd, cmd->args, g_info.env) == -1)
 		{
-			info->last_code = msg("Execve", ": ", strerror(errno), errno);
-			exit(info->last_code);
+			g_info.last_code = msg("Execve", ": ", strerror(errno), errno);
+			exit(g_info.last_code);
 		}
-		info->last_code = 0;
+		g_info.last_code = 0;
 		if (cmd->cmd != NULL)
 			free(cmd->cmd);
 	}
 }
+/*
+export T=">>"
+$T lol
+*/
 
 int	create_childs(t_inf *info)
 {
@@ -112,8 +118,8 @@ int	create_childs(t_inf *info)
 		if (info->pid == -1)
 			info->last_code = msg("fork", ": ", strerror(errno), EXIT_FAILURE);
 		else if (info->pid == 0)
-			execute_cmd(tmp, info);
-		tmp = tmp->next;
+			execute_cmd(tmp);
+			tmp = tmp->next;
 	}
 	return (wait_childs(info));
 }
@@ -123,10 +129,7 @@ int	execute_single_cmd(t_inf *info)
 	t_command	*tmp;
 
 	tmp = info->commands;
-	//redir_files(tmp);
 	execute_builtin(tmp, info, 0);
-	//close_files(tmp);
-	//fds_pipes(0, 1);
 	return (info->last_code);
 }
 

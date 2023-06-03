@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:58:33 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/06/01 16:04:44 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/02 10:38:51 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,19 +44,13 @@ int	ft_are_double_quotes(char *line)
 
 	i = 0;
 	is_quote = 1;
-	while (line[i])
-	{	
-		if (line[i] == '\'' && line[i + 1] == '\'')
-			is_quote = 0;
-		i++;
-	}
+	if (line[i] == '\'' && line[i + 1] == '\'')
+		is_quote = 0;
+	i++;
 	i = 0;
-	while (line[i])
-	{	
-		if (line[i] == '"' && line[i + 1] == '"')
-			is_quote = 0;
-		i++;
-	}
+	if (line[i] == '"' && line[i + 1] == '"')
+		is_quote = 0;
+	i++;
 	return (is_quote);
 }
 
@@ -73,17 +67,16 @@ char	*replace_d_quotes(char *line, char quote)
 	result = malloc(sizeof(char) * (len + 2));
 	if (!result)
 		return (NULL);
-	while (line != NULL && line[i] && i < len)
-	{
-		if (len > (i + 1) && line[i] == quote && line[i + 1] == quote)
-			i += 2;
-		if (line[i] != '\0')
-		{	
-			result[j] = line[i];
-			j++;
-		}
+	while (line[i] == quote && line[i + 1] == quote)
+		i += 2;
+	while (line[i] != '\0')
+	{	
+		result[j] = line[i];
+		j++;
 		i++;
 	}
+	while ((j - 2) > 0 && result[j - 1] == quote && result[j - 2] == quote)
+		j -= 2;
 	result[j] = '\0';
 	if (line != NULL)
 		free(line);
@@ -97,18 +90,22 @@ char	*ft_replace_double_quotes(char *line)
 
 	i = 0;
 	result = ft_strdup(line);
-	while (line[i])
-	{	
-		if (line[i] == '\'' && line[i + 1] == '\'')
-			result = replace_d_quotes(result, '\'');
-		i++;
+	if (line[i] == '\'' && line[i + 1] == '\'')	
+	{
+		while (line[i] && line[i + 1] && line[i] == line[i + 1])
+    	{
+        	result = replace_d_quotes(result, line[i]);
+        	i++;
+    	}
 	}
 	i = 0;
-	while (line[i])
-	{	
-		if (line[i] == '"' && line[i + 1] == '"')
-			result = replace_d_quotes(result, '"');
-		i++;
+	if (line[i] == '"' && line[i + 1] == '"')	
+	{
+		while (line[i] && line[i + 1] && line[i] == line[i + 1])
+    	{
+        	result = replace_d_quotes(result, line[i]);
+        	i++;
+    	}
 	}
 	return (result);
 }

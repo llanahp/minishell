@@ -49,19 +49,34 @@ int	get_exit_error(t_command *cmd)
 	return (res);
 }
 
-void	ft_exit(t_command *cmd, t_inf *info)
+int	ft_exit(t_command *cmd, t_inf *info)
 {
 	int	numerror;
+	int	len;
 
 	if (!cmd->args[0])
 		exit(info->last_code);
+	len = ft_strlen(cmd->args[0]);
+	/*if (len > 2 && (cmd->args[0][0] == '-' || cmd->args[0][0] == '+')
+		&& (cmd->args[0][1] == '-' || cmd->args[0][1] == '+'))
+	{
+
+	}*/
+	if (ft_isdigit(cmd->args[0][0]) == 0 && !(cmd->args[0][0] == '-' || cmd->args[0][0] == '+'))
+	{
+		ft_putstr_fd("exit\nbash: exit: ", 2);
+		ft_putstr_fd(cmd->args[0], 2);
+		ft_putstr_fd(": numeric argument required\n", 2);
+		exiting(255, info);
+	}
 	if (cmd->args[1] != NULL)
 	{
 		ft_putstr_fd("exit\nbash: exit: too many arguments\n", 2);
-		return ;
+		return 1;
 	}
 	if (check_exit(cmd) == 1)
 		exit(-1);
 	numerror = get_exit_error(cmd);
 	exiting(numerror, info);
+	return (numerror);
 }

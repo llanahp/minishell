@@ -23,7 +23,7 @@ SRCS = ft_isalpha.c ft_isalnum.c ft_isascii.c ft_isprint.c \
 
 CC = gcc
 RM = rm -rf
-CFLAGS = -Wall -Wextra -Werror -g  -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g  
 OBJS = ${SRCS:.c=.o}
 AR = ar -rcs
 NAME_B = .file_shadow
