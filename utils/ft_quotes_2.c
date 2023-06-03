@@ -57,13 +57,13 @@ int	between_simple_quotes(char *str, int index)
 		return (0);
 }
 
-void	is_inside_quotes_aux(char **str, int *x, char quote)
+void	is_inside_quotes_aux(char **str, int *x, char *quote)
 {
 	while ((*x) >= 0)
 	{
 		if ((*str)[(*x)] == '"' || (*str)[(*x)] == '\'')
 		{
-			quote = (*str)[(*x)];
+			(*quote) = (*str)[(*x)];
 			(*x) = -3;
 			break ;
 		}
@@ -79,7 +79,7 @@ int	is_inside_quotes(char **str, int separator)
 
 	i = separator;
 	x = separator - 1;
-	is_inside_quotes_aux(str, &x, quote);
+	is_inside_quotes_aux(str, &x, &quote);
 	while ((*str)[i])
 	{
 		if ((*str)[i] && (*str)[i] == quote)
