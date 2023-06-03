@@ -27,7 +27,8 @@ int	execute_builtin(t_command *cmd, t_inf *info, int exi)
 		code = export_binding(info, cmd);
 	else if (!ft_strcmp(cmd->cmd, "unset"))
 		code = unset(info, cmd);
-	else if (!ft_strcmp(cmd->cmd, "env") || !ft_strcmp(cmd->cmd, "/usr/bin/env"))
+	else if (!ft_strcmp(cmd->cmd, "env")
+		|| !ft_strcmp(cmd->cmd, "/usr/bin/env"))
 		code = env(info);
 	else if (!ft_strcmp(cmd->cmd, "exit"))
 		code = ft_exit(cmd, info);
@@ -35,45 +36,6 @@ int	execute_builtin(t_command *cmd, t_inf *info, int exi)
 	if (exi)
 		exit(info->last_code);
 	return (code);
-}
-
-/** create_cmd:
- * This function create the string with the command to execute
- * Desalocates the memory that dont use.
- */
-char	*create_cmd(t_inf *info, int i, char *cmd)
-{
-	char	*cmd2;
-	char	*res;
-
-	cmd2 = ft_strjoin(info->paths[i], "/");
-	res = ft_strjoin(cmd2, cmd);
-	free(cmd2);
-	return (res);
-}
-
-char	*get_path(char *cmd, t_inf *info)
-{
-	char	*cmd_ret;
-	int		i;
-
-	if (cmd == NULL || cmd[0] == '\0')
-		return (NULL);
-	if (access(cmd, F_OK | X_OK) == 0)
-	{
-		return (cmd);
-	}
-	i = -1;
-	while (info->paths[++i] != NULL)
-	{
-		cmd_ret = create_cmd(info, i, cmd);
-		if (access(cmd_ret, F_OK | X_OK) == 0)
-			break ;
-		free(cmd_ret);
-		cmd_ret = NULL;
-	}
-	free(cmd);
-	return (cmd_ret);
 }
 
 void	execute_cmd(t_command *cmd)
@@ -89,7 +51,7 @@ void	execute_cmd(t_command *cmd)
 		cmd->cmd = get_path(cmd->cmd, &g_info);
 		if (cmd->cmd == NULL)
 		{
-			g_info.last_code = msg(cmd_original, ": command not found","", 127);
+			g_info.last_code = display_error_path(cmd_original);
 			exit(g_info.last_code);
 		}
 		else if (execve(cmd->cmd, cmd->args, g_info.env) == -1)
@@ -102,10 +64,6 @@ void	execute_cmd(t_command *cmd)
 			free(cmd->cmd);
 	}
 }
-/*
-export T=">>"
-$T lol
-*/
 
 int	create_childs(t_inf *info)
 {
@@ -131,21 +89,6 @@ int	execute_single_cmd(t_inf *info)
 	tmp = info->commands;
 	execute_builtin(tmp, info, 0);
 	return (info->last_code);
-}
-
-int	num_cmds(t_inf *info)
-{
-	int			i;
-	t_command	*aux;
-
-	i = 0;
-	aux = info->commands;
-	while (aux)
-	{
-		i++;
-		aux = aux->next;
-	}
-	return (i);
 }
 
 int	execute_commands(t_inf *info)

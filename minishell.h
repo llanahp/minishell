@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 09:47:00 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/06/02 12:03:19 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/03 13:57:10 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@
 # define END 9
 # define SIMPLE_QUOTE 10
 # define DOUBLE_QUOTE 11
+# define NOFILE ": No such file or directory"
+# define NOCMD ": command not found"
 
 typedef struct s_command	t_command;
 typedef struct s_inf		t_inf;
@@ -74,7 +76,6 @@ typedef struct s_inf
 	t_command	*commands;
 	int			pid;
 	int			must_continue;
-	int			minishell_pid;
 	int			last_code;
 	int			exit;
 }			t_inf;
@@ -85,12 +86,13 @@ char		*handle_back_cd(char *pwd);
 char		*handle_cmd_for_change_env_cd(char *arg, char *pwd);
 char		*handle_cd_to_usr(t_inf *info);
 char		*handle_absolute_path(char *absolute_path);
-void		handle_no_arg_cd(t_command *cmd, char **to_location);
+void		handle_no_arg_cd(char **to_location);
 char		*cd_handler(int abs, char *loc, t_command *cmd, t_inf *info);
 void		handling_cd(char *to_location, t_command *cmd,
 				t_inf *info, int is_abs);
 void		handle_chdir_error(char *to_loc, char *free_var);
 int			check_on_root(t_inf *info);
+char 		*handle_to_oldpwd(t_inf *info);
 
 /** echo.c */
 int			echo(t_command *cmd);
@@ -117,7 +119,8 @@ void		ft_free_split(char **split);
 void		ft_free_split2(char ***split);
 
 /** env_utils.c */
-int			get_enviroment(t_inf *info, char **env);
+void		store_env(t_inf *info, char **env);
+int			store_paths(t_inf *info);
 int			get_pwd(t_inf *info);
 void		change_var_env(t_inf *info, char *var, char *value);
 char		*get_var(t_inf *info, char *var);
@@ -207,12 +210,23 @@ char		*replace_d_quotes(char *line, char quote);
 char		*ft_replace_double_quotes(char *line);
 
 char		*replace_string(char *string, char stop, char *new);
-char	*get_next_line(int fd);
+char		*get_next_line(int fd);
 char		*ft_replace_quotes_2(char *str);
-void	ft_delete_char(char *str);
-char	*check_var_replace(char *str, t_inf *info);
-void	remove_separator(char **str, int sep);
-int		is_inside_quotes(char **str, int separator);
-int		between_simple_quotes(char *str, int separator);
-
+void		ft_delete_char(char *str);
+char		*check_var_replace(char *str, t_inf *info);
+void		remove_separator(char **str, int sep);
+int			is_inside_quotes(char **str, int separator);
+int			between_simple_quotes(char *str, int separator);
+int			delete_quotes(t_inf *info);
+int			check_vars(t_inf *info);
+char		*check_var_replace(char *str, t_inf *info);
+void		rl_replace_line(const char *text, int clear_undo);
+void		extend_var(char **str, t_inf *info);
+int			ft_check_char_before(char *line, char c, char z);
+int			expand_pox(char *str);
+int			num_cmds(t_inf *info);
+char		*create_cmd(t_inf *info, int i, char *cmd);
+char		*get_path(char *cmd, t_inf *info);
+void		clear_command(t_command *cmd);
+int			display_error_path(char *cmd_original);
 #endif

@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:41:20 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/06/01 12:28:45 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/03 14:33:10 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ int	check_exit(t_command *cmd)
 	{
 		if (!ft_isdigit(cmd->args[0][i]) + 0)
 		{
-			printf("exit\n");
 			ft_putstr_fd("bash: exit: ", 2);
 			ft_putstr_fd(cmd->args[0], 2);
 			ft_putstr_fd(": numeric argument required\n", 2);

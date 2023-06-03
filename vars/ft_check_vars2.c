@@ -45,7 +45,6 @@ void	replace_for_var(char **str, char *value, int index)
 			i = i + len_var((*str) + index) + 1 + k;
 			if ((*str)[i] == '\0')
 				break ;
-			
 		}
 		new[j++] = (*str)[i++];
 	}
