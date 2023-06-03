@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:33:39 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/05/26 15:56:57 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/03 16:05:13 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,30 @@ int	ft_str_contains_n(char *str)
 	size_t	len;
 
 	res = 1;
-	i = -1;
+	i = 0;
 	len = ft_strlen(str);
-	while (i > -1 && str != NULL && (i + 1) < (int)len && str[i] && res)
+	while (i < (int)len - 1 && str != NULL && res)
 	{
-		if ((i + 1) < (int)len && str[i] == '-' && str[i + 1] == 'n')
+		if (str[i] == '-' && str[i + 1] == 'n')
 			res = 0;
 		i++;
 	}
 	return (res);
+}
+
+int	checking_flag_n(char **str, int *i)
+{
+	int	is_n;
+
+	is_n = 0;
+	if (str != NULL && !ft_str_contains_n(str[*i]))
+	{
+		is_n = 1;
+		(*i)++;
+		while (str != NULL && !ft_str_contains_n(str[*i]))
+			(*i)++;
+	}
+	return (is_n);
 }
 
 int	echo(t_command *cmd)
@@ -46,13 +61,7 @@ int	echo(t_command *cmd)
 		ft_putstr_fd("\n", fd_write);
 		return (0);
 	}
-	if (cmd->args != NULL && !ft_str_contains_n(cmd->args[i]))
-	{
-		is_n = 1;
-		i++;
-		while (cmd->args != NULL && !ft_str_contains_n(cmd->args[i]))
-			i++;
-	}
+	is_n = checking_flag_n(cmd->args, &i);
 	while (cmd != NULL && cmd->args[i] != NULL && cmd->args && cmd->args[i])
 	{
 		ft_putstr_fd(cmd->args[i], fd_write);

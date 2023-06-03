@@ -90,17 +90,3 @@ void	extend_var(char **str, t_inf *info)
 			extend_var_aux(&i, len, str);
 	}
 }
-
-int	expand_pox(char *str)
-{
-	int	i;
-
-	i = 0;
-	if (str == NULL)
-		return (0);
-	while (str[i] != '~')
-		i++;
-	if (str[i + 1] == '/' || str[i + 1] == '\0')
-		return (1);
-	return (0);
-}
