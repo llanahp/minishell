@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:41:20 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/06/02 13:25:24 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/03 15:19:11 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,7 +240,7 @@ void	prompt_tester(t_inf *info)
 	store_paths(info);
 	line = get_next_line(STDIN_FILENO);
 	if (ft_strchr(line, '\n') > 0)
-		ft_delete_char(ft_strchr(line, '\n'));
+		line[ft_strlen(line) - 1] = '\0';
 	if (line == NULL)
 	{
 		info->exit = 1;
@@ -298,7 +298,7 @@ int	main(int argc, char *argv[], char **env)
 	//store_paths(&g_info);
 	while (g_info.exit == 0){
 		display_prompt(&g_info);
-		//prompt_tester(&g_info);
+		// prompt_tester(&g_info);
 	}
 	end_shell(&g_info);
 	return (0);
