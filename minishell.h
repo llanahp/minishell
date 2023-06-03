@@ -116,7 +116,6 @@ void		ft_free_split(char **split);
 void		ft_free_split2(char ***split);
 
 /** env_utils.c */
-int			get_enviroment(t_inf *info, char **env);
 void		store_env(t_inf *info, char **env);
 int			store_paths(t_inf *info);
 int			get_pwd(t_inf *info);
