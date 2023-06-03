@@ -12,23 +12,12 @@
 
 #include "minishell.h"
 
-void	store_env(t_inf *info, char **env)
+void	store_env_aux(t_inf *info, char **env)
 {
-	char	*tmp;
 	int		i;
 	int		j;
+	char	*tmp;
 
-	i = 0;
-	if (env[0] == NULL)
-	{
-		store_when_env_null(info);
-		return ;
-	}
-	while (env[i])
-		i++;
-	info->env = (char **)malloc(sizeof(char *) * (i));
-	if (! info->env)
-		return ;
 	i = -1;
 	j = 0;
 	while (env[++i])
@@ -49,4 +38,22 @@ void	store_env(t_inf *info, char **env)
 			info->env[j++] = ft_strdup(env[i]);
 	}
 	info->env[j] = NULL;
+}
+
+void	store_env(t_inf *info, char **env)
+{
+	int		i;
+
+	i = 0;
+	if (env[0] == NULL)
+	{
+		store_when_env_null(info);
+		return ;
+	}
+	while (env[i])
+		i++;
+	info->env = (char **)malloc(sizeof(char *) * (i));
+	if (! info->env)
+		return ;
+	store_env_aux(info, env);
 }
