@@ -12,6 +12,28 @@
 
 #include "../minishell.h"
 
+void	store_word_aux(char *line, int *j, int *type)
+{
+	while (line[(*j)] && (((*type) > 1 && is_quote(line[(*j)]) != (*type))
+			|| ((*type) == 0 && !is_space(line[(*j)])
+				&& !is_delimiter(line[(*j)]))))
+	{
+		if (is_quote(line[(*j)]) > 0)
+			(*type) = is_quote(line[(*j)]);
+		(*j)++;
+	}
+	if (line[(*j)] && (*type) == 0 && is_quote(line[(*j)]) > 0)
+	{
+		(*type) = is_quote(line[(*j)]);
+		(*j)++;
+		while (line[(*j)] && is_quote(line[(*j)]) != (*type))
+			(*j)++;
+		if (is_quote(line[(*j)]) == (*type))
+			(*type) = 0;
+		(*j)++;
+	}
+}
+
 int	store_word(t_inf *info, char *line, int i)
 {
 	int		j;
@@ -22,23 +44,7 @@ int	store_word(t_inf *info, char *line, int i)
 	type = is_quote(line[j]);
 	if (type)
 		j++;
-	while (line[j] && ((type > 1 && is_quote(line[j]) != type)
-			|| (type == 0 && !is_space(line[j]) && !is_delimiter(line[j]))))
-	{
-		if (is_quote(line[j]) > 0)
-			type = is_quote(line[j]);
-		j++;
-	}
-	if (line[j] && type == 0 && is_quote(line[j]) > 0)
-	{
-		type = is_quote(line[j]);
-		j++;
-		while (line[j] && is_quote(line[j]) != type)
-			j++;
-		if (is_quote(line[j]) == type)
-			type = 0;
-		j++;
-	}
+	store_word_aux(line, &j, &type);
 	if (line[j] && type > 0 && !is_space(line[j]))
 		type = 0 ;
 	while (line[j] && !is_space(line[j]) && !is_delimiter(line[j]))
