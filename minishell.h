@@ -231,4 +231,6 @@ char		*get_path(char *cmd, t_inf *info);
 void		clear_command(t_command *cmd);
 int			display_error_path(char *cmd_original);
 void		store_when_env_null(t_inf *info);
+char		*define_delimiter_aux(char **delimiter, t_list **tmp);
+char		*define_delimiter(t_list **tmp);
 #endif
