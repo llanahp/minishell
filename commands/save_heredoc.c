@@ -26,7 +26,6 @@ int	read_heredoc_aux(char **buf, char *delimiter, int fd)
 		(*buf)[ft_strlen((*buf))] = '\0';
 	if ((*buf) == NULL)
 		(*buf) = ft_strdup(delimiter);
-	//(*buf) = check_var_replace((*buf), info);
 	(*buf) = ft_replace_quotes_2((*buf));
 	if (ft_strcmp((*buf), delimiter) == 0)
 	{
@@ -62,10 +61,36 @@ int	read_heredoc(char *name, char *delimiter, t_inf *info)
 			if (buf != NULL)
 				free(buf);
 			break ;
-		}		
+		}
+		if (buf != NULL)
+			free(buf);	
 	}
 	close (fd);
 	return (0);
+}
+
+char *find_name()
+{
+	float	i;
+	char	*name;
+	char 	*n;
+
+	i = 0;
+	n = ft_itoa(i);
+	name = ft_strjoin("/tmp/heredoc_", n);
+	while (file_exists(name))
+	{
+		if (name != NULL)
+			free(name);
+		if (n != NULL)
+			free(n);
+		n = ft_itoa(i);
+		name = ft_strjoin("/tmp/heredoc_", n);
+		i++;
+	}
+	if (n != NULL)
+		free(n);
+	return (name);
 }
 
 t_list	*set_name_heredoc(t_list *tmp, t_command *command, t_inf *info)
@@ -75,9 +100,7 @@ t_list	*set_name_heredoc(t_list *tmp, t_command *command, t_inf *info)
 	int		i;
 
 	i = 0;
-	while (file_exists(ft_strjoin("/tmp/heredoc_", ft_itoa(i))))
-		i++;
-	name = ft_strjoin("/tmp/heredoc_", ft_itoa(i));
+	name = find_name();
 	tmp = tmp->next;
 	delimiter = define_delimiter(&tmp);
 	if (delimiter == NULL)

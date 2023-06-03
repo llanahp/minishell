@@ -14,8 +14,9 @@
 
 void	store_env(t_inf *info, char **env)
 {
-	int	i;
-	int	j;
+	char	*tmp;
+	int		i;
+	int		j;
 
 	i = 0;
 	if (env[0] == NULL)
@@ -37,7 +38,12 @@ void	store_env(t_inf *info, char **env)
 			if (ft_atoi(env[i] + 6) < 0)
 				info->env[j++] = ft_strdup("SHLVL=0");
 			else
-				info->env[j++] = ft_strjoin("SHLVL=", ft_itoa(ft_atoi(env[i] + 6) + 1));
+			{
+				tmp = ft_itoa(ft_atoi(env[i] + 6) + 1);
+				info->env[j++] = ft_strjoin("SHLVL=", tmp);
+				if (tmp != NULL)
+					free(tmp);
+			}
 		}
 		else if (ft_strncmp(env[i], "OLDPWD=", 7))
 			info->env[j++] = ft_strdup(env[i]);
