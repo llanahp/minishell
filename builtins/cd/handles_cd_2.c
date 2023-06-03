@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-void	handle_no_arg_cd(t_command *cmd, char **to_location)
+void	handle_no_arg_cd(char **to_location)
 {
 	*to_location = ft_strdup("~");
 }

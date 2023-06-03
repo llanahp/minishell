@@ -221,9 +221,9 @@ void	prepare_line(t_inf *info, char *line)
 		return ;
 	if (create_commands(info) == -1)
 		return ;
+	free(line);
 	if (info->must_continue == 1)
 		info->last_code = execute_commands(info);
-	free(line);
 	ft_lstclear_cmds(info);
 	ft_clear_tokens(info);
 	if (info->paths != NULL)
@@ -302,8 +302,9 @@ void	find_pid(t_inf *info)
 }
 
 int	main(int argc, char *argv[], char **env)
-{
-	//atexit(salida);
+{	
+
+	atexit(salida);
 	(void)argc;
 	(void)argv;
 	g_info.tokens = NULL;
@@ -313,11 +314,9 @@ int	main(int argc, char *argv[], char **env)
 	g_info.last_code = 0;
 	g_info.env = NULL;
 	g_info.exit = 0;
-	find_pid(&g_info);
-	
+	//find_pid(&g_info);
 	store_env(&g_info, env);
-	store_paths(&g_info);
-	//get_enviroment(&g_info, env);
+	//store_paths(&g_info);
 	while (g_info.exit == 0){
 		display_prompt(&g_info);
 		//prompt_tester(&g_info);

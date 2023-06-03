@@ -85,7 +85,7 @@ char		*handle_back_cd(char *pwd);
 char		*handle_cmd_for_change_env_cd(char *arg, char *pwd);
 char		*handle_cd_to_usr(t_inf *info);
 char		*handle_absolute_path(char *absolute_path);
-void		handle_no_arg_cd(t_command *cmd, char **to_location);
+void		handle_no_arg_cd(char **to_location);
 char		*cd_handler(int abs, char *loc, t_command *cmd, t_inf *info);
 void		handling_cd(char *to_location, t_command *cmd,
 				t_inf *info, int is_abs);
