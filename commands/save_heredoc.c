@@ -20,37 +20,23 @@ int	file_exists(char *name)
 		return (0);
 }
 
-char	*define_delimiter(t_list **tmp)
+int	read_heredoc_aux(char **buf, char *delimiter, t_inf *info, int fd)
 {
-	char	*delimiter;
-	int		quote;
-
-	if (!(*tmp))
-		return (NULL);
-	if ((*tmp)->type == WORD)
+	if ((*buf) != NULL)
+		(*buf)[ft_strlen((*buf))] = '\0';
+	if ((*buf) == NULL)
+		(*buf) = ft_strdup(delimiter);
+	(*buf) = check_var_replace((*buf), info);
+	(*buf) = ft_replace_quotes_2((*buf));
+	if (ft_strcmp((*buf), delimiter) == 0)
 	{
-		delimiter = ft_strdup((*tmp)->content);
-		(*tmp) = (*tmp)->next;
-		return (delimiter);
+		free((*buf));
+		return (1);
 	}
-	else if ((*tmp)->type == SIMPLE_QUOTE || (*tmp)->type == DOUBLE_QUOTE)
-	{
-		quote = (*tmp)->type;
-		(*tmp) = (*tmp)->next;
-		while ((*tmp) && (*tmp)->type != quote)
-		{
-			delimiter = ft_strjoin(delimiter, (*tmp)->content);
-			(*tmp) = (*tmp)->next;
-		}
-		if ((*tmp)->type != quote)
-		{
-			free(delimiter);
-			return (NULL);
-		}
-		return (delimiter);
-	}
-	else
-		return (NULL);
+	ft_putendl_fd((*buf), fd);
+	if ((*buf) != NULL)
+		free((*buf));
+	return (0);
 }
 
 int	read_heredoc(char *name, char *delimiter, t_inf *info)
@@ -64,24 +50,16 @@ int	read_heredoc(char *name, char *delimiter, t_inf *info)
 	while (1 == 1)
 	{
 		buf = NULL;
-		set_signals_interactive();
+		set_signals_interactive_here();
 		buf = readline("heredoc>");
 		set_signals_noninteractive();
-		buf = get_next_line(STDIN_FILENO);
-		if (ft_strchr(buf, '\n') > 0)
-			ft_delete_char(ft_strchr(buf, '\n'));
-		if (buf == NULL)
-			return (msg("Error reading", ": ", strerror(errno), -1));
-		buf[ft_strlen(buf)] = '\0';
-		buf = check_var_replace(buf, info);
-		buf = ft_replace_quotes_2(buf);
-		if (ft_strcmp(buf, delimiter) == 0)
+		if (info->must_continue == 0
+			|| read_heredoc_aux(&buf, delimiter, info, fd) == 1)
 		{
-			free(buf);
+			if (buf != NULL)
+				free(buf);
 			break ;
-		}
-		ft_putendl_fd(buf, fd);
-		free(buf);
+		}		
 	}
 	close (fd);
 	return (0);

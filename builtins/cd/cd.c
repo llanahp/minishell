@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:36:33 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/06/03 14:32:07 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/03 19:00:08 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,7 @@ char	*to_check_chdir(t_command *cmd, int *is_absolute)
 		to_location = ft_strjoin("./", cmd->args[0]);
 	else
 		to_location = ft_strdup(cmd->args[0]);
-	free(tmp);
-	return (to_location);
+	return (free(tmp), to_location);
 }
 
 int	chdir_exeptions(char *str)
@@ -59,19 +58,21 @@ int	chdir_exeptions(char *str)
 char	*cd_handler(int abs, char *loc, t_command *cmd, t_inf *info)
 {
 	if (abs == 1)
-		loc = handle_absolute_path(loc);
+		loc = handle_absolute_path(info, loc);
 	else if (!(cmd->args[0]) || !ft_strcmp(cmd->args[0], ""))
 		loc = handle_cd_to_usr(info);
 	else if (!ft_strcmp(cmd->args[0], ".."))
 		loc = handle_back_cd(info->pwd);
 	else if (!ft_strcmp(cmd->args[0], "."))
 		loc = ft_strdup(info->pwd);
-	else if (!ft_strcmp(cmd->args[0], "--") || !ft_strcmp(cmd->args[0], "~"))
+	else if (!ft_strcmp(cmd->args[0], "~"))
 		loc = handle_cd_to_usr(info);
+	else if (!ft_strcmp(cmd->args[0], "--"))
+		loc = handle_cd_to_home(info);
 	else if (!ft_strcmp(cmd->args[0], "-"))
 		loc = handle_to_oldpwd(info);
 	else
-		loc = handle_cmd_for_change_env_cd(cmd->args[0], info->pwd);
+		loc = handle_cmd_for_change_env_cd(info, cmd->args[0], info->pwd);
 	if (loc == NULL)
 		return (NULL);
 	return (loc);
@@ -94,11 +95,13 @@ int	cd(t_inf *info, t_command *cmd)
 	chdir_exeption = chdir_exeptions(to_location);
 	if (chdir(to_location) == -1 && is_abs == 0 && chdir_exeption == 0)
 	{
-		printf("cd: no such file or directory: %s\n", to_location);
+		cd_output_error(to_location);
 		free(to_location);
-		return (0);
+		return (127);
 	}
-	else
-		handling_cd(to_location, cmd, info, is_abs);
-	return (0);
+	if (check_folder_exists() > 0)
+		return (check_folder_exists_err());
+	info->last_code = 0;
+	handling_cd(to_location, cmd, info, is_abs);
+	return (info->last_code);
 }

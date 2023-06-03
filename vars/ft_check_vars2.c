@@ -21,19 +21,14 @@ void	copy_value(char *value, char *new, int *j)
 		new[(*j)++] = value[h++];
 }
 
-void	replace_for_var(char **str, char *value, int index)
+void	replace_for_var_aux(char **new, char **str, char *value, int index)
 {
-	char	*new;
-	int		i;
-	int		j;
-	int		k;
+	int	i;
+	int	j;
+	int	k;
 
 	i = 0;
 	j = 0;
-	new = (char *)malloc(sizeof(char)
-			* (ft_strlen(*str) + ft_strlen(value) + 2));
-	if (!new)
-		return ;
 	while ((*str)[i])
 	{
 		k = 0;
@@ -41,14 +36,25 @@ void	replace_for_var(char **str, char *value, int index)
 		{
 			if ((*str)[i] == '$' && (*str)[i + 1] == '$')
 				k = 1;
-			copy_value(value, new, &j);
+			copy_value(value, (*new), &j);
 			i = i + len_var((*str) + index) + 1 + k;
 			if ((*str)[i] == '\0')
 				break ;
 		}
-		new[j++] = (*str)[i++];
+		(*new)[j++] = (*str)[i++];
 	}
-	new[j] = '\0';
+	(*new)[j] = '\0';
+}
+
+void	replace_for_var(char **str, char *value, int index)
+{
+	char	*new;
+
+	new = (char *)malloc(sizeof(char)
+			* (ft_strlen(*str) + ft_strlen(value) + 2));
+	if (!new)
+		return ;
+	replace_for_var_aux(&new, str, value, index);
 	free((*str));
 	(*str) = new;
 }

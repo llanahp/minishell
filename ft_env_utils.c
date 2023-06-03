@@ -20,37 +20,6 @@ void	store_when_env_null(t_inf *info)
 	info->env[2] = ft_strdup("_=");
 }
 
-void	store_env(t_inf *info, char **env)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	if (env[0] == NULL)
-	{
-		store_when_env_null(info);
-		return ;
-	}
-	while (env[i])
-		i++;
-	j = i - 1;
-	info->env = (char **)malloc(sizeof(char *) * (j + 1));
-	if (! info->env)
-		return ;
-	i = 0;
-	j = 0;
-	while (env[i])
-	{
-		if (ft_strncmp(env[i], "OLDPWD=", 7))
-		{
-			info->env[j] = ft_strdup(env[i]);
-			j++;
-		}
-		i++;
-	}
-	info->env[j] = NULL;
-}
-
 int	store_paths(t_inf *info)
 {
 	int		i;
