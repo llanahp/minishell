@@ -139,11 +139,7 @@ char	*ft_replace_quotes_2(char *str)
 	while (str[i])
 	{
 		if (!is_quote(str[i]))
-		{
-			res[j] = str[i];
-			j++;
-			i++;
-		}
+			res[j++] = str[i++];
 		else if (str[i])
 		{
 			if (x == is_quote(str[i]))
@@ -151,23 +147,12 @@ char	*ft_replace_quotes_2(char *str)
 				i++;
 				x = is_quote(str[i]);
 				while (!is_quote(str[i]) && str[i])
-				{
-					res[j] = str[i];
-					j++;
-					i++;
-				}
+					res[j++] = str[i++];
 				if (str[i])
-				{
-					x = is_quote(str[i]);
-					i++;
-				}
+					x = is_quote(str[i++]);
 			}
 			else
-			{
-				res[j] = str[i];
-				j++;
-				i++;
-			}
+				res[j++] = str[i++];
 		}
 	}
 	res[j] = '\0';
