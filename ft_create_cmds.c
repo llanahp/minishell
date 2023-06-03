@@ -52,6 +52,7 @@ int	create_commands(t_inf *info)
 		else if (tmp != NULL && tmp->type == END)
 			break ;
 	}
-	prepare_args(info);
+	if (info->must_continue)
+		prepare_args(info);
 	return (0);
 }
