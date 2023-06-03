@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 09:47:00 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/06/03 13:57:10 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/03 18:59:59 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,16 +83,22 @@ typedef struct s_inf
 /** cd.c */
 int			cd(t_inf *info, t_command *cmd);
 char		*handle_back_cd(char *pwd);
-char		*handle_cmd_for_change_env_cd(char *arg, char *pwd);
+char		*handle_cmd_for_change_env_cd(t_inf *info, char *arg, char *pwd);
 char		*handle_cd_to_usr(t_inf *info);
-char		*handle_absolute_path(char *absolute_path);
+char		*handle_absolute_path(t_inf *info, char *absolute_path);
 void		handle_no_arg_cd(char **to_location);
 char		*cd_handler(int abs, char *loc, t_command *cmd, t_inf *info);
 void		handling_cd(char *to_location, t_command *cmd,
 				t_inf *info, int is_abs);
 void		handle_chdir_error(char *to_loc, char *free_var);
-int			check_on_root(t_inf *info);
-char 		*handle_to_oldpwd(t_inf *info);
+int			check_on_home(t_inf *info);
+char		*handle_to_oldpwd(t_inf *info);
+int			check_home_cd(t_inf *info);
+char		*checking_for_env(char *tmp, char *usr, t_inf *info);
+int			check_folder_exists(void);
+int			check_folder_exists_err(void);
+char		*handle_cd_to_home(t_inf *info);
+void		cd_output_error(char *str);
 
 /** echo.c */
 int			echo(t_command *cmd);
@@ -103,6 +109,10 @@ int			pwd(t_inf *info, t_command *cmd);
 /** env.c */
 int			env(t_inf *info);
 int			env_export(t_inf *info);
+void		export_binding_err(char *name, char *value, t_command *cmd, int i);
+char		*get_value_var_line(char *name, char *line);
+int			ft_n_aparitions(char *str, char c);
+void		do_export(t_inf *info, char *str, char *name, char *value);
 
 /** export.c */
 int			export_binding(t_inf *info, t_command *cmd);
@@ -130,7 +140,9 @@ int			exist_var(t_inf *info, char *name);
 
 /** sigaction.c */
 void		set_signals_interactive(void);
+void		set_signals_interactive_here(void);
 void		set_signals_noninteractive(void);
+void		ignore_sigquit(void);
 
 /** tokenize.c */
 int			tokenize(t_inf *info, char *line);
@@ -189,7 +201,7 @@ int			execute_commands(t_inf *info);
 int			prepare_execution(t_inf *info);
 int			prepare_pipes(t_inf *info);
 int			wait_childs(t_inf *info);
-void	fds_pipes(int in, int out);
+void		fds_pipes(int in, int out);
 
 /** redir.c */
 void		redir(t_command *cmd, t_inf *info);
@@ -229,4 +241,7 @@ char		*create_cmd(t_inf *info, int i, char *cmd);
 char		*get_path(char *cmd, t_inf *info);
 void		clear_command(t_command *cmd);
 int			display_error_path(char *cmd_original);
+void		store_when_env_null(t_inf *info);
+char		*define_delimiter_aux(char **delimiter, t_list **tmp);
+char		*define_delimiter(t_list **tmp);
 #endif

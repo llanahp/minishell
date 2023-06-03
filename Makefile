@@ -6,7 +6,7 @@
 #    By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/27 12:35:10 by ralopez-          #+#    #+#              #
-#    Updated: 2023/06/01 12:55:56 by mpizzolo         ###   ########.fr        #
+#    Updated: 2023/06/03 18:35:36 by mpizzolo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,13 +55,14 @@ GREY		:=	"\033[0;37m"
 COLRESET	:=	"\033[0m"
 endif
 
-SRC = builtins/echo.c builtins/cd/cd.c builtins/cd/handles_cd.c builtins/cd/handles_cd_2.c builtins/pwd.c builtins/env.c builtins/export.c builtins/unset.c builtins/exit.c\
+SRC = builtins/echo.c builtins/cd/cd.c builtins/cd/handles_cd.c builtins/cd/handles_cd_2.c builtins/cd/handles_cd_3.c builtins/cd/handles_cd_4.c builtins/pwd.c builtins/env.c builtins/export/export.c builtins/export/export_2.c builtins/unset.c builtins/exit.c\
 	token/ft_token_utils.c token/ft_tokenize.c \
 	utils/ft_utils.c utils/ft_quotes.c utils/ft_quotes_2.c utils/ft_atoi_exit.c\
 	vars/ft_check_vars.c vars/ft_var_utils.c vars/ft_var_utils2.c vars/ft_check_vars2.c vars/ft_check_vars3.c\
 	commands/save_args.c commands/save_heredoc.c  commands/save_input.c commands/save_output.c commands/save_pipe.c commands/save_word.c\
 	ft_error.c ft_execution.c ft_redir.c ft_pipes.c ft_free_split.c ft_env_utils.c ft_sigaction.c ft_create_cmds.c ft_command_utils.c \
-	ft_execution2.c ft_env_utils2.c ft_command_utils2.c minishell.c
+	ft_execution2.c ft_env_utils2.c ft_command_utils2.c ft_env_utils3.c utils/ft_quotes3.c commands/save_heredoc2.c \
+    ft_sigaction_here.c minishell.c
 
 OBJ = $(SRC:.c=.o)
 
