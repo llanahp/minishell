@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:36:33 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/06/03 19:00:08 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/03 19:37:40 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ char	*cd_handler(int abs, char *loc, t_command *cmd, t_inf *info)
 	else if (!ft_strcmp(cmd->args[0], "--"))
 		loc = handle_cd_to_home(info);
 	else if (!ft_strcmp(cmd->args[0], "-"))
-		loc = handle_to_oldpwd(info);
+		loc = handle_to_oldpwd(info, cmd);
 	else
 		loc = handle_cmd_for_change_env_cd(info, cmd->args[0], info->pwd);
 	if (loc == NULL)

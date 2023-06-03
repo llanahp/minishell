@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 18:07:00 by mpizzolo          #+#    #+#             */
-/*   Updated: 2023/06/03 19:16:50 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/03 19:37:35 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,10 @@ int	check_on_home(t_inf *info)
 	return (res);
 }
 
-char	*handle_to_oldpwd(t_inf *info)
+char	*handle_to_oldpwd(t_inf *info, t_command *cmd)
 {
 	char	*res;
+	int		fd_write;
 
 	if (exist_var(info, "OLDPWD") == 1)
 	{
@@ -74,7 +75,10 @@ char	*handle_to_oldpwd(t_inf *info)
 			info->last_code = 127;
 			return (handle_chdir_error(res, res), NULL);
 		}
-		printf("%s\n", res);
+		fd_write = 1;
+		if (cmd->output != -2)
+			fd_write = cmd->output;
+		ft_putstr_fd(res, fd_write);
 		return (res);
 	}
 	ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2);

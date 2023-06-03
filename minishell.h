@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 09:47:00 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/06/03 18:59:59 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/03 19:37:23 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void		handling_cd(char *to_location, t_command *cmd,
 				t_inf *info, int is_abs);
 void		handle_chdir_error(char *to_loc, char *free_var);
 int			check_on_home(t_inf *info);
-char		*handle_to_oldpwd(t_inf *info);
+char		*handle_to_oldpwd(t_inf *info, t_command *cmd);
 int			check_home_cd(t_inf *info);
 char		*checking_for_env(char *tmp, char *usr, t_inf *info);
 int			check_folder_exists(void);
