@@ -222,4 +222,7 @@ void		rl_replace_line(const char *text, int clear_undo);
 void		extend_var(char **str, t_inf *info);
 int			ft_check_char_before(char *line, char c, char z);
 int			expand_pox(char *str);
+int			num_cmds(t_inf *info);
+char		*create_cmd(t_inf *info, int i, char *cmd);
+char		*get_path(char *cmd, t_inf *info);
 #endif
