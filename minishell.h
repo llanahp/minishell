@@ -218,4 +218,8 @@ int			between_simple_quotes(char *str, int separator);
 int			delete_quotes(t_inf *info);
 int			check_vars(t_inf *info);
 char		*check_var_replace(char *str, t_inf *info);
+void		rl_replace_line(const char *text, int clear_undo);
+void		extend_var(char **str, t_inf *info);
+int			ft_check_char_before(char *line, char c, char z);
+int			expand_pox(char *str);
 #endif
