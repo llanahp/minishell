@@ -189,7 +189,7 @@ int			execute_commands(t_inf *info);
 int			prepare_execution(t_inf *info);
 int			prepare_pipes(t_inf *info);
 int			wait_childs(t_inf *info);
-void	fds_pipes(int in, int out);
+void		fds_pipes(int in, int out);
 
 /** redir.c */
 void		redir(t_command *cmd, t_inf *info);
@@ -229,4 +229,5 @@ char		*create_cmd(t_inf *info, int i, char *cmd);
 char		*get_path(char *cmd, t_inf *info);
 void		clear_command(t_command *cmd);
 int			display_error_path(char *cmd_original);
+void		store_when_env_null(t_inf *info);
 #endif
