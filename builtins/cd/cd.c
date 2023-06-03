@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:36:33 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/06/03 19:00:08 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/03 20:37:27 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,20 +57,27 @@ int	chdir_exeptions(char *str)
 
 char	*cd_handler(int abs, char *loc, t_command *cmd, t_inf *info)
 {
-	if (abs == 1)
+	char	*tmp_free;
+
+	if (!(cmd->args[0]) || !ft_strcmp(cmd->args[0], "")
+		|| !ft_strcmp(cmd->args[0], "~") || !ft_strcmp(cmd->args[0], "--"))
+	{
+		if (!check_home_cd(info))
+			return (NULL);
+		tmp_free = get_var(info, "HOME");
+		loc = handle_absolute_path(info, tmp_free);
+		free(tmp_free);
+	}
+	else if (!ft_strcmp(cmd->args[0], "/"))
+		loc = handle_cd_to_first_dir(info);
+	else if (abs == 1)
 		loc = handle_absolute_path(info, loc);
-	else if (!(cmd->args[0]) || !ft_strcmp(cmd->args[0], ""))
-		loc = handle_cd_to_usr(info);
 	else if (!ft_strcmp(cmd->args[0], ".."))
 		loc = handle_back_cd(info->pwd);
 	else if (!ft_strcmp(cmd->args[0], "."))
 		loc = ft_strdup(info->pwd);
-	else if (!ft_strcmp(cmd->args[0], "~"))
-		loc = handle_cd_to_usr(info);
-	else if (!ft_strcmp(cmd->args[0], "--"))
-		loc = handle_cd_to_home(info);
 	else if (!ft_strcmp(cmd->args[0], "-"))
-		loc = handle_to_oldpwd(info);
+		loc = handle_to_oldpwd(info, cmd);
 	else
 		loc = handle_cmd_for_change_env_cd(info, cmd->args[0], info->pwd);
 	if (loc == NULL)

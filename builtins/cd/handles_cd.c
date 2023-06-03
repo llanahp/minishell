@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 15:57:41 by mpizzolo          #+#    #+#             */
-/*   Updated: 2023/06/03 19:01:22 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/03 20:39:36 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,7 @@ char	*handle_cmd_for_change_env_cd(t_inf *info, char *arg, char *pwd)
 
 	to_location = NULL;
 	tmp = NULL;
-	tmp = ft_substr(arg, 0, 2);
-	if (!ft_strcmp(tmp, "./"))
-		arg += 2;
-	free(tmp);
-	if (arg[ft_strlen(arg) - 1] == '/')
-		arg[ft_strlen(arg) - 1] = '\0';
-	to_location = ft_strjoin("/", arg);
+	to_location = modify_str_for_change_env_cd(info, arg);
 	tmp = to_location;
 	to_location = ft_strjoin(pwd, to_location);
 	free(tmp);
@@ -58,28 +52,6 @@ char	*handle_cmd_for_change_env_cd(t_inf *info, char *arg, char *pwd)
 		free(tmp);
 		return (NULL);
 	}
-	return (to_location);
-}
-
-char	*handle_cd_to_home(t_inf *info)
-{
-	char	*to_location;
-	char	*usr;
-	char	*tmp;
-	char	*tmp_free;
-
-	if (!check_home_cd(info))
-		return (NULL);
-	tmp = get_var(info, "HOME");
-	tmp_free = tmp;
-	tmp = ft_strrchr(tmp, '/');
-	free(tmp_free);
-	tmp = ft_substr(tmp, 1, ft_strlen(tmp));
-	usr = ft_strjoin("/", tmp);
-	if (check_on_home(info) == 1)
-		return (free(usr), ft_strdup(info->pwd));
-	to_location = checking_for_env(tmp, usr, info);
-	free(usr);
 	return (to_location);
 }
 

@@ -17,6 +17,8 @@ t_list	*save_output(t_inf *info, t_list *tmp, int type)
 	t_command	*command;
 
 	command = get_last_cmd(info);
+	if (ft_error_syntax (tmp, info) == 1)
+		return (NULL);
 	tmp = tmp->next;
 	if (command->output_name != NULL)
 	{

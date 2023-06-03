@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 18:07:00 by mpizzolo          #+#    #+#             */
-/*   Updated: 2023/06/03 19:16:50 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/03 20:39:27 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,28 +43,11 @@ void	handle_chdir_error(char *to_loc, char *free_var)
 		free(free_var);
 }
 
-int	check_on_home(t_inf *info)
-{
-	char	*tmp;
-	char	*tmp_free;
-	char	*usr;
-	int		res;
-
-	tmp_free = get_var(info, "PWD");
-	tmp = ft_strrchr(tmp_free, '/') + 1;
-	free(tmp_free);
-	tmp_free = get_var(info, "HOME");
-	usr = tmp_free;
-	while (usr[0] == '/')
-		usr = ft_strrchr(usr, '/') + 1;
-	res = !ft_strcmp(tmp, usr);
-	free(tmp_free);
-	return (res);
-}
-
-char	*handle_to_oldpwd(t_inf *info)
+char	*handle_to_oldpwd(t_inf *info, t_command *cmd)
 {
 	char	*res;
+	char	*tmp;
+	int		fd_write;
 
 	if (exist_var(info, "OLDPWD") == 1)
 	{
@@ -74,7 +57,12 @@ char	*handle_to_oldpwd(t_inf *info)
 			info->last_code = 127;
 			return (handle_chdir_error(res, res), NULL);
 		}
-		printf("%s\n", res);
+		fd_write = 1;
+		if (cmd->output != -2)
+			fd_write = cmd->output;
+		tmp = ft_strjoin(res, "\n");
+		ft_putstr_fd(tmp, fd_write);
+		free(tmp);
 		return (res);
 	}
 	ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2);
