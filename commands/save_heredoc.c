@@ -105,6 +105,8 @@ t_list	*save_heredoc(t_inf *info, t_list *tmp)
 {
 	t_command	*command;
 
+	if (ft_error_syntax (tmp, info) == 1)
+		return (NULL);
 	command = get_last_cmd(info);
 	close_prev_redir(command);
 	tmp = set_name_heredoc(tmp, command, info);
