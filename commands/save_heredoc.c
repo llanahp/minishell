@@ -20,7 +20,6 @@ int	file_exists(char *name)
 		return (0);
 }
 
-
 int	read_heredoc_aux(char **buf, char *delimiter, t_inf *info, int fd)
 {
 	if ((*buf) != NULL)

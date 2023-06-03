@@ -12,7 +12,6 @@
 
 #include "minishell.h"
 
-
 void	signal_reset_prompt_here(int signal)
 {
 	if (signal == SIGINT)
@@ -28,7 +27,6 @@ void	signal_reset_prompt_here(int signal)
 	else if (signal == SIGQUIT)
 		SIG_IGN ;
 }
-
 
 void	set_signals_interactive_here(void)
 {
