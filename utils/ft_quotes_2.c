@@ -12,6 +12,26 @@
 
 #include "../minishell.h"
 
+void	between_simple_quotes_aux(char *str, int *x, int quote)
+{
+	while ((*x) >= 0)
+	{
+		if (str[(*x)] == quote)
+		{
+			while ((*x) >= 0)
+			{
+				if (str[(*x)] == '"')
+					(*x) = -4;
+				(*x)--;
+			}
+			if ((*x) != -5)
+				(*x) = -3;
+			break ;
+		}
+		(*x)--;
+	}
+}
+
 int	between_simple_quotes(char *str, int index)
 {
 	int		x;
@@ -21,22 +41,7 @@ int	between_simple_quotes(char *str, int index)
 	quote = '\'';
 	i = index;
 	x = index - 1;
-	while (x >= 0)
-	{
-		if (str[x] == quote)
-		{
-			while (x >= 0)
-			{
-				if (str[x] == '"')
-					x = -4;
-				x--;
-			}
-			if (x != -5)
-				x = -3;
-			break ;
-		}
-		x--;
-	}
+	between_simple_quotes_aux(str, &x, quote);
 	while (str[i])
 	{
 		if (str[i] == quote)
@@ -52,6 +57,20 @@ int	between_simple_quotes(char *str, int index)
 		return (0);
 }
 
+void	is_inside_quotes_aux(char **str, int *x, char quote)
+{
+	while ((*x) >= 0)
+	{
+		if ((*str)[(*x)] == '"' || (*str)[(*x)] == '\'')
+		{
+			quote = (*str)[(*x)];
+			(*x) = -3;
+			break ;
+		}
+		(*x)--;
+	}
+}
+
 int	is_inside_quotes(char **str, int separator)
 {
 	int		x;
@@ -60,16 +79,7 @@ int	is_inside_quotes(char **str, int separator)
 
 	i = separator;
 	x = separator - 1;
-	while (x >= 0)
-	{
-		if ((*str)[x] == '"' || (*str)[x] == '\'')
-		{
-			quote = (*str)[x];
-			x = -3;
-			break ;
-		}
-		x--;
-	}
+	is_inside_quotes_aux(str, &x, quote);
 	while ((*str)[i])
 	{
 		if ((*str)[i] && (*str)[i] == quote)
