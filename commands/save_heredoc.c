@@ -63,17 +63,17 @@ int	read_heredoc(char *name, char *delimiter, t_inf *info)
 			break ;
 		}
 		if (buf != NULL)
-			free(buf);	
+			free(buf);
 	}
 	close (fd);
 	return (0);
 }
 
-char *find_name()
+char	*find_name(void)
 {
 	float	i;
 	char	*name;
-	char 	*n;
+	char	*n;
 
 	i = 0;
 	n = ft_itoa(i);
