@@ -78,3 +78,11 @@ char	*get_path(char *cmd, t_inf *info)
 	free(cmd);
 	return (cmd_ret);
 }
+
+int	display_error_path(char *cmd_original)
+{
+	if (g_info.paths == NULL)
+		return (msg(cmd_original, NOFILE, "", 127));
+	else
+		return (msg(cmd_original, NOCMD, "", 127));
+}

@@ -12,8 +12,6 @@
 
 #include "minishell.h"
 
-
-
 void	ignore_sigquit(void)
 {
 	struct sigaction	act;

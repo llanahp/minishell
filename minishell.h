@@ -41,6 +41,8 @@
 # define END 9
 # define SIMPLE_QUOTE 10
 # define DOUBLE_QUOTE 11
+# define NOFILE ": No such file or directory"
+# define NOCMD ": command not found"
 
 typedef struct s_command	t_command;
 typedef struct s_inf		t_inf;
@@ -224,4 +226,6 @@ int			expand_pox(char *str);
 int			num_cmds(t_inf *info);
 char		*create_cmd(t_inf *info, int i, char *cmd);
 char		*get_path(char *cmd, t_inf *info);
+void		clear_command(t_command *cmd);
+int			display_error_path(char *cmd_original);
 #endif

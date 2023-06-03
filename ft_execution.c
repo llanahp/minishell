@@ -51,10 +51,7 @@ void	execute_cmd(t_command *cmd)
 		cmd->cmd = get_path(cmd->cmd, &g_info);
 		if (cmd->cmd == NULL)
 		{
-			if (g_info.paths == NULL)
-				g_info.last_code = msg(cmd_original, ": No such file or directory", "", 127);
-			else
-				g_info.last_code = msg(cmd_original, ": command not found", "", 127);
+			g_info.last_code = display_error_path(cmd_original);
 			exit(g_info.last_code);
 		}
 		else if (execve(cmd->cmd, cmd->args, g_info.env) == -1)
