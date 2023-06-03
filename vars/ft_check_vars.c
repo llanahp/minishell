@@ -50,6 +50,18 @@ void	simple_extend_var(char **str, int *i, t_inf *info)
 		replace_for_var(str, ft_itoa(info->last_code), (*i));
 }
 
+void	extend_var_aux(int *i, int len, char **str)
+{
+	if (((*i) + 1) < len && (*str)[(*i)] == '$'
+		&& !ft_isalpha((*str)[(*i) + 1]) && !is_inside_quotes(str, (*i)))
+	{
+		remove_separator(str, (*i));
+		(*i)++;
+	}
+	else
+		(*i)++;
+}
+
 void	extend_var(char **str, t_inf *info)
 {
 	int	i;
@@ -74,14 +86,8 @@ void	extend_var(char **str, t_inf *info)
 			if (replace_var(str, i, info) == -1)
 				i++;
 		}
-		else if ((i + 1) < len && (*str)[i] == '$'
-			&& !ft_isalpha((*str)[i + 1]) && !is_inside_quotes(str, i))
-		{
-			remove_separator(str, i);
-			i++;
-		}
 		else
-			i++;
+			extend_var_aux(&i, len, str);
 	}
 }
 
