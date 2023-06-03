@@ -28,13 +28,15 @@ void	store_env(t_inf *info, char **env)
 	info->env = (char **)malloc(sizeof(char *) * (i));
 	if (! info->env)
 		return ;
-	i = 0;
+	i = -1;
 	j = 0;
-	while (env[i])
+	while (env[++i])
 	{
-		if (ft_strncmp(env[i], "OLDPWD=", 7))
+		if (ft_strncmp(env[i], "SHLVL=", 6) == 0)
+			info->env[j++]
+				= ft_strjoin("SHLVL=", ft_itoa(ft_atoi(env[i] + 6) + 1));
+		else if (ft_strncmp(env[i], "OLDPWD=", 7))
 			info->env[j++] = ft_strdup(env[i]);
-		i++;
 	}
 	info->env[j] = NULL;
 }

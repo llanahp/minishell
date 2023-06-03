@@ -30,12 +30,15 @@ int	read_heredoc_aux(char **buf, char *delimiter, t_inf *info, int fd)
 	(*buf) = ft_replace_quotes_2((*buf));
 	if (ft_strcmp((*buf), delimiter) == 0)
 	{
-		free((*buf));
+		if ((*buf) != NULL)
+			free((*buf));
+		(*buf) = NULL;
 		return (1);
 	}
 	ft_putendl_fd((*buf), fd);
 	if ((*buf) != NULL)
 		free((*buf));
+	(*buf) = NULL;
 	return (0);
 }
 
@@ -77,6 +80,12 @@ t_list	*set_name_heredoc(t_list *tmp, t_command *command, t_inf *info)
 	name = ft_strjoin("/tmp/heredoc_", ft_itoa(i));
 	tmp = tmp->next;
 	delimiter = define_delimiter(&tmp);
+	if (delimiter == NULL)
+	{
+		free(name);
+		info->last_code = msg("heredoc", ": ", "syntax error", 258);
+		return (NULL);
+	}
 	if (read_heredoc(name, delimiter, info) == -1)
 		return (NULL);
 	command->input_name = ft_strdup(name);
@@ -96,6 +105,8 @@ t_list	*save_heredoc(t_inf *info, t_list *tmp)
 {
 	t_command	*command;
 
+	if (ft_error_syntax (tmp, info) == 1)
+		return (NULL);
 	command = get_last_cmd(info);
 	close_prev_redir(command);
 	tmp = set_name_heredoc(tmp, command, info);
