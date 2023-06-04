@@ -138,7 +138,6 @@ int			exist_var(t_inf *info, char *name);
 
 /** sigaction.c */
 void		set_signals_interactive(void);
-void		set_signals_interactive_here(void);
 void		set_signals_noninteractive(void);
 void		ignore_sigquit(void);
 
@@ -245,4 +244,9 @@ char		*define_delimiter(t_list **tmp);
 int			ft_error_syntax(t_list *tmp, t_inf *info);
 char		*find_name(void);
 int			file_exists(char *name);
+void		handle_sigint_heredoc(int sig);
+int			heredoc_fork(t_inf *info, t_command *command, char *delimiter);
+int			parent_heredoc(t_command *command, int *heredoc, int pid);
+void		child_heredoc(t_command *command, t_inf *info, int *heredoc, char *deli);
+int			read_heredoc(char *name, char *delimiter, t_inf *info);
 #endif

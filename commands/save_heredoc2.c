@@ -64,9 +64,9 @@ char	*find_name(void)
 			free(name);
 		if (n != NULL)
 			free(n);
+		i++;
 		n = ft_itoa(i);
 		name = ft_strjoin("/tmp/heredoc_", n);
-		i++;
 	}
 	if (n != NULL)
 		free(n);

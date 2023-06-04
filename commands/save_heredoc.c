@@ -44,9 +44,7 @@ int	read_heredoc(char *name, char *delimiter, t_inf *info)
 	while (1 == 1)
 	{
 		buf = NULL;
-		set_signals_interactive_here();
 		buf = readline("heredoc>");
-		set_signals_noninteractive();
 		if (info->must_continue == 0
 			|| read_heredoc_aux(&buf, delimiter, fd) == 1)
 		{
@@ -62,6 +60,8 @@ int	read_heredoc(char *name, char *delimiter, t_inf *info)
 
 void	name_hd2(t_command *command, char *name, char *delimiter, t_inf *info)
 {
+	if (command->input_name != NULL)
+		free(command->input_name);
 	command->input_name = ft_strdup(name);
 	if (name != NULL)
 		free(name);
@@ -93,8 +93,8 @@ t_list	*set_name_heredoc(t_list *tmp, t_command *command, t_inf *info)
 		info->last_code = msg("heredoc", ": ", "syntax error", 258);
 		return (NULL);
 	}
-	if (read_heredoc(name, delimiter, info) == -1)
-		return (NULL);
+	command->input_name = ft_strdup(name);
+	heredoc_fork(info, command, delimiter);
 	name_hd2(command, name, delimiter, info);
 	return (tmp);
 }
@@ -108,5 +108,6 @@ t_list	*save_heredoc(t_inf *info, t_list *tmp)
 	command = get_last_cmd(info);
 	close_prev_redir(command);
 	tmp = set_name_heredoc(tmp, command, info);
+	set_signals_noninteractive();
 	return (tmp);
 }
