@@ -248,6 +248,8 @@ int			file_exists(char *name);
 void		handle_sigint_heredoc(int sig);
 int			heredoc_fork(t_inf *info, t_command *command, char *delimiter);
 int			parent_heredoc(t_command *command, int *heredoc, int pid);
-void		child_heredoc(t_command *command, t_inf *info, int *heredoc, char *deli);
+void		child_heredoc(t_command *command, t_inf *info,
+				int *heredoc, char *deli);
 int			read_heredoc(char *name, char *delimiter, t_inf *info);
+void		close_all_pipes(t_command **command, t_command *actual);
 #endif

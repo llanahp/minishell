@@ -49,15 +49,12 @@ void	redir_files(t_command *cmd)
 	}
 }
 
-void	close_pipe_fds(t_command *cmds, t_command *skip_cmd)
+void	close_pipe_fds(t_command *cmds)
 {
 	while (cmds)
 	{
-		if (cmds != skip_cmd && cmds->fds)
-		{
-			close(cmds->fds[0]);
-			close(cmds->fds[1]);
-		}
+		close(cmds->fds[0]);
+		close(cmds->fds[1]);
 		cmds = cmds->next;
 	}
 }
@@ -69,7 +66,7 @@ void	redir(t_command *cmd, t_inf *info)
 		dup2(cmd->previous->fds[0], STDIN_FILENO);
 	if (cmd->pipe_out)
 		dup2(cmd->fds[1], STDOUT_FILENO);
-	close_pipe_fds(info->commands, cmd);
+	close_pipe_fds(info->commands);
 }
 
 void	close_files(t_command *cmd)

@@ -38,11 +38,12 @@ int	execute_builtin(t_command *cmd, t_inf *info, int exi)
 	return (code);
 }
 
-void	execute_cmd(t_command *cmd)
+void	execute_cmd(t_command *cmd, t_command **command)
 {
 	char	*cmd_original;
 
 	cmd_original = ft_strdup(cmd->cmd);
+	close_all_pipes(command, cmd);
 	redir(cmd, &g_info);
 	if (cmd != NULL && is_builtin(cmd->cmd))
 		execute_builtin(cmd, &g_info, 1);
@@ -76,8 +77,11 @@ int	create_childs(t_inf *info)
 		if (tmp->pid_wait == -1)
 			info->last_code = msg("fork", ": ", strerror(errno), EXIT_FAILURE);
 		else if (tmp->pid_wait == 0)
-			execute_cmd(tmp);
-		tmp = tmp->next;
+			execute_cmd(tmp, &info->commands);
+		else if (tmp->pid_wait != 0)
+		{
+			tmp = tmp->next;
+		}
 	}
 	return (wait_childs(info));
 }
