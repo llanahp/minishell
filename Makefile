@@ -85,7 +85,7 @@ re : fclean all
 
 clean :
 	@echo $(RED) clean $(COLRESET)
-	make clean -C libft/
+	@make clean -C libft/
 	@$(RM) $(OBJ)
 
 fclean : clean
