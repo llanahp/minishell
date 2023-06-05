@@ -72,12 +72,12 @@ int	create_childs(t_inf *info)
 	tmp = info->commands;
 	while (tmp)
 	{
-		info->pid = fork();
-		if (info->pid == -1)
+		tmp->pid_wait = fork();
+		if (tmp->pid_wait == -1)
 			info->last_code = msg("fork", ": ", strerror(errno), EXIT_FAILURE);
-		else if (info->pid == 0)
+		else if (tmp->pid_wait == 0)
 			execute_cmd(tmp);
-			tmp = tmp->next;
+		tmp = tmp->next;
 	}
 	return (wait_childs(info));
 }

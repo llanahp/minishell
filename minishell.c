@@ -65,7 +65,6 @@ int	main(int argc, char *argv[], char **env)
 	g_info.last_code = 0;
 	g_info.env = NULL;
 	g_info.exit = 0;
-	//find_pid();
 	g_info.minishell_pid = (int)getpid();
 	store_env(&g_info, env);
 	while (g_info.exit == 0)

@@ -65,6 +65,7 @@ typedef struct s_command
 	int					pid;
 	int					pipe_out;
 	int					*fds;
+	int					pid_wait;
 }		t_command;
 
 typedef struct s_inf
