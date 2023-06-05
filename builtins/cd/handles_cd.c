@@ -6,31 +6,11 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 15:57:41 by mpizzolo          #+#    #+#             */
-/*   Updated: 2023/06/03 20:39:36 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/04 23:29:38 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-void	handling_cd(char *to_location, t_command *cmd, t_inf *info, int is_abs)
-{
-	char	*tmp;
-
-	tmp = to_location;
-	to_location = cd_handler(is_abs, to_location, cmd, info);
-	free(tmp);
-	if (to_location == NULL)
-		return ;
-	if (exist_var(info, "OLDPWD") == 0 && info->pwd)
-		add_var(info, "OLDPWD", info->pwd);
-	else
-		change_var_env(info, "OLDPWD", info->pwd);
-	if (exist_var(info, "PWD") == 0 && to_location)
-		add_var(info, "PWD", to_location);
-	else
-		change_var_env(info, "PWD", to_location);
-	free(to_location);
-}
 
 char	*handle_cmd_for_change_env_cd(t_inf *info, char *arg, char *pwd)
 {
@@ -62,7 +42,7 @@ char	*handle_for_absolute(char **to, char *to_loc)
 	int		i_tmp;
 
 	i_tmp = ft_strichr(to[0] + 1, '/');
-	if (i_tmp == -1)
+	if (i_tmp != -1)
 		tmp = ft_substr(to[0], 0, ft_strlen(to[0]));
 	else
 		tmp = ft_substr(to[0], 0, i_tmp + 1);
@@ -81,22 +61,44 @@ char	*handle_absolute_path(t_inf *info, char *absolute_path)
 	to = absolute_path;
 	to_loc = handle_for_absolute(&to, "");
 	if (chdir(to_loc) == -1)
-	{
-		info->last_code = 127;
-		return (handle_chdir_error(to_loc, NULL), NULL);
-	}
+		return (handle_chdir_error(info, to_loc, to), NULL);
 	while (ft_strcmp(to_loc, absolute_path) && to)
 	{
 		tmp = to_loc;
+		free(to);
 		to_loc = handle_for_absolute(&to, to_loc);
 		free(tmp);
 		if (chdir(to_loc) == -1)
-		{
-			info->last_code = 127;
-			return (handle_chdir_error(to_loc, NULL), NULL);
-		}
+			return (handle_chdir_error(info, to_loc, to), NULL);
 	}
 	if (to_loc[ft_strlen(to_loc) - 1] == '/')
 		to_loc[ft_strlen(to_loc) - 1] = '\0';
 	return (free(to), to_loc);
+}
+
+char	*handle_cd_to_home(t_inf *info)
+{
+	char	*loc;
+	char	*tmp_free;
+
+	if (!check_home_cd(info))
+		return (NULL);
+	tmp_free = get_var(info, "HOME");
+	loc = handle_absolute_path(info, tmp_free);
+	free(tmp_free);
+	return (loc);
+}
+
+char	*handle_back_cd(char *pwd)
+{
+	char	*to_location;
+	char	*tmp;
+
+	to_location = ft_strdup(pwd);
+	tmp = ft_strrchr(to_location, '/');
+	if (tmp != NULL && ft_strcmp(tmp, "/Users") && ft_strcmp(tmp, "/"))
+		*tmp = '\0';
+	else
+		return (ft_strdup("/"));
+	return ((to_location));
 }

@@ -52,21 +52,31 @@ void	ft_replace_quotes_aux(char *str, char **res, int i, int x)
 	(*res)[j] = '\0';
 }
 
-char	*ft_replace_quotes_2(char *str)
+char	*ft_replace_quotes_2(char **str)
 {
 	char	*res;
 	int		i;
 	int		j;
 	int		x;
 
-	res = ft_calloc((ft_strlen(str) + 1), sizeof(char));
-	i = starting_quote_from(str, &res, 0);
+	res = ft_calloc((ft_strlen((*str)) + 1), sizeof(char));
+	if (!res)
+		return (NULL);
+	i = starting_quote_from((*str), &res, 0);
 	if (i == -1)
-		return (str);
-	x = is_quote(str[i]);
+	{
+		free(res);
+		res = ft_strdup((*str));
+		if ((*str))
+			free((*str));
+		str = NULL;
+		return (res);
+	}
+	x = is_quote((*str)[i]);
 	i++;
 	j = i - 1;
-	ft_replace_quotes_aux(str, &res, i, x);
-	free(str);
+	ft_replace_quotes_aux((*str), &res, i, x);
+	if ((*str))
+		free((*str));
 	return (res);
 }

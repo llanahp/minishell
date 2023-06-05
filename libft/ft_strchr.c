@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ralopez- <ralopez-@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 09:39:01 by ralopez-          #+#    #+#             */
-/*   Updated: 2022/09/17 09:39:03 by ralopez-         ###   ########.fr       */
+/*   Updated: 2023/06/03 23:29:40 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*ft_strchr(const char *s, int c)
 		if (s[i] == c)
 		{
 			p = ft_strdup((char *)s + i);
-			break ;
+			return (p);
 		}
 		i++;
 	}

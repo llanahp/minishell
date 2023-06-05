@@ -65,7 +65,7 @@ int	delete_quotes(t_inf *info)
 	{
 		if (ft_strcontains(tmp->content, '\'')
 			|| ft_strcontains(tmp->content, '"'))
-		tmp->content = ft_replace_quotes_2(tmp->content);
+		tmp->content = ft_replace_quotes_2(&tmp->content);
 		tmp = tmp->next;
 	}
 	return (0);
