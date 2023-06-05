@@ -6,11 +6,38 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 18:07:00 by mpizzolo          #+#    #+#             */
-/*   Updated: 2023/06/04 23:40:53 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/05 12:35:58 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+char	*handle_cd_to_home(t_inf *info)
+{
+	char	*loc;
+	char	*tmp_free;
+
+	if (!check_home_cd(info))
+		return (NULL);
+	tmp_free = get_var(info, "HOME");
+	loc = handle_absolute_path(info, tmp_free);
+	free(tmp_free);
+	return (loc);
+}
+
+char	*handle_back_cd(char *pwd)
+{
+	char	*to_location;
+	char	*tmp;
+
+	to_location = ft_strdup(pwd);
+	tmp = ft_strrchr(to_location, '/');
+	if (tmp != NULL && ft_strcmp(tmp, "/Users") && ft_strcmp(tmp, "/"))
+		*tmp = '\0';
+	else
+		return (ft_strdup("/"));
+	return ((to_location));
+}
 
 void	handle_chdir_error(t_inf *info, char *to_loc, char *free_var)
 {
@@ -58,26 +85,4 @@ int	check_home_cd(t_inf *info)
 		return (0);
 	}
 	return (1);
-}
-
-int	check_folder_exists(void)
-{
-	char	buf[PATH_MAX];
-
-	if (getcwd(buf, sizeof(buf)) == NULL)
-		return (127);
-	return (0);
-}
-
-int	check_folder_exists_err(void)
-{
-	char	buf[PATH_MAX];
-
-	if (getcwd(buf, sizeof(buf)) == NULL)
-	{
-		ft_putstr_fd("minishell: cd: error retrieving current directory: ", 2);
-		ft_putstr_fd("getcwd: No such file or directory\n", 2);
-		return (127);
-	}
-	return (0);
 }

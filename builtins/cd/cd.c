@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 11:36:33 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/06/04 23:41:57 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/05 14:05:08 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,20 +41,6 @@ char	*to_check_chdir(t_command *cmd, int *is_absolute)
 	return (free(tmp), to_location);
 }
 
-int	chdir_exeptions(char *str)
-{
-	int	res;
-
-	res = 0;
-	if (!ft_strcmp(str, "--"))
-		res = 1;
-	else if (!ft_strcmp(str, "~"))
-		res = 1;
-	else if (!ft_strcmp(str, "-"))
-		res = 1;
-	return (res);
-}
-
 char	*cd_handler(int abs, char *loc, t_command *cmd, t_inf *info)
 {
 	if (!(cmd->args[0]) || !ft_strcmp(cmd->args[0], "")
@@ -77,24 +63,37 @@ char	*cd_handler(int abs, char *loc, t_command *cmd, t_inf *info)
 	return (loc);
 }
 
-void	handling_cd(char *to_location, t_command *cmd, t_inf *info, int is_abs)
+void	handling_cd(char *to_loc, t_command *cmd, t_inf *info, int is_abs)
 {
 	char	*tmp;
 
-	tmp = to_location;
-	to_location = cd_handler(is_abs, to_location, cmd, info);
+	tmp = to_loc;
+	to_loc = cd_handler(is_abs, to_loc, cmd, info);
 	free(tmp);
-	if (to_location == NULL)
+	if (to_loc == NULL)
 		return ;
 	if (exist_var(info, "OLDPWD") == 0 && info->pwd)
 		add_var(info, "OLDPWD", info->pwd);
 	else
 		change_var_env(info, "OLDPWD", info->pwd);
-	if (exist_var(info, "PWD") == 0 && to_location)
-		add_var(info, "PWD", to_location);
+	if (exist_var(info, "PWD") == 0 && to_loc)
+		add_var(info, "PWD", to_loc);
 	else
-		change_var_env(info, "PWD", to_location);
-	free(to_location);
+		change_var_env(info, "PWD", to_loc);
+	free(to_loc);
+}
+
+char	*get_cd_location(t_inf *info, t_command *cmd, int *is_abs)
+{
+	char	*to_location;
+
+	if (!cmd->args[0] || !ft_strcmp(cmd->args[0], ""))
+		to_location = ft_strdup("~");
+	else if (cmd->args[0][0] == '~' && ft_strcmp(cmd->args[0], "~"))
+		to_location = expand_home_cd(cmd, info, is_abs);
+	else
+		to_location = to_check_chdir(cmd, is_abs);
+	return (to_location);
 }
 
 int	cd(t_inf *info, t_command *cmd)
@@ -107,17 +106,13 @@ int	cd(t_inf *info, t_command *cmd)
 	get_pwd(info);
 	if (info->env == NULL)
 		return (0);
-	manage_cmd_args_cd(cmd);
-	if (!cmd->args[0] || !ft_strcmp(cmd->args[0], ""))
-		to_location = ft_strdup("~");
-	else
-		to_location = to_check_chdir(cmd, &is_abs);
+	manage_back_and_cd(cmd, info, &chdir_exeption);
+	to_location = get_cd_location(info, cmd, &is_abs);
 	chdir_exeption = chdir_exeptions(to_location);
 	if (chdir(to_location) == -1 && is_abs == 0 && chdir_exeption == 0)
 	{
 		cd_output_error(to_location);
-		free(to_location);
-		return (127);
+		return (free(to_location), 127);
 	}
 	if (check_folder_exists() > 0)
 		return (free(to_location), check_folder_exists_err());

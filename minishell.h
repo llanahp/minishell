@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 09:47:00 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/06/04 23:46:44 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/05 14:00:45 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,10 @@ typedef struct s_inf
 
 /** cd.c */
 int			cd(t_inf *info, t_command *cmd);
+void		handling_cd(char *to_loc, t_command *cmd, t_inf *info, int is_abs);
 char		*handle_back_cd(char *pwd);
 char		*handle_cmd_for_change_env_cd(t_inf *info, char *arg, char *pwd);
 char		*handle_absolute_path(t_inf *info, char *absolute_path);
-void		handle_no_arg_cd(char **to_location);
 void		handle_chdir_error(t_inf *info, char *to_loc, char *free_var);
 char		*handle_to_oldpwd(t_inf *info, t_command *cmd);
 int			check_home_cd(t_inf *info);
@@ -95,7 +95,9 @@ void		cd_output_error(char *str);
 char		*modify_str_for_change_env_cd(t_inf *info, char *arg);
 char		*handle_cd_to_first_dir(t_inf *info);
 char		*handle_cd_to_home(t_inf *info);
-void		manage_cmd_args_cd(t_command *cmd);
+void		manage_back_and_cd(t_command *cmd, t_inf *info, int *exep);
+char		*expand_home_cd(t_command *cmd, t_inf *info, int *is_abs);
+int			chdir_exeptions(char *str);
 
 /** echo.c */
 int			echo(t_command *cmd);
@@ -221,13 +223,12 @@ char		*replace_string(char *string, char stop, char *new);
 char		*get_next_line(int fd);
 char		*ft_replace_quotes_2(char **str);
 void		ft_delete_char(char *str);
-char		*check_var_replace(char *str, t_inf *info);
 void		remove_separator(char **str, int sep);
 int			is_inside_quotes(char **str, int separator);
 int			between_simple_quotes(char *str, int separator);
 int			delete_quotes(t_inf *info);
 int			check_vars(t_inf *info);
-char		*check_var_replace(char *str, t_inf *info);
+char		*check_var_replace(char *str, t_list *cmd, t_inf *info);
 void		rl_replace_line(const char *text, int clear_undo);
 void		extend_var(char **str, t_inf *info);
 int			ft_check_char_before(char *line, char c, char z);

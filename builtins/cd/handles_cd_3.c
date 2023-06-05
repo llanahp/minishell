@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 15:35:58 by mpizzolo          #+#    #+#             */
-/*   Updated: 2023/06/04 23:29:42 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/05 14:00:34 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,4 +76,18 @@ char	*modify_str_for_change_env_cd(t_inf *info, char *arg)
 	else
 		to_location = ft_strdup(arg);
 	return (to_location);
+}
+
+int	chdir_exeptions(char *str)
+{
+	int	res;
+
+	res = 0;
+	if (!ft_strcmp(str, "--"))
+		res = 1;
+	else if (!ft_strcmp(str, "~"))
+		res = 1;
+	else if (!ft_strcmp(str, "-"))
+		res = 1;
+	return (res);
 }
