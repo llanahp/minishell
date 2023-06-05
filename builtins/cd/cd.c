@@ -43,6 +43,8 @@ char	*to_check_chdir(t_command *cmd, int *is_absolute)
 
 char	*cd_handler(int abs, char *loc, t_command *cmd, t_inf *info)
 {
+	char	buf[PATH_MAX];
+
 	if (!(cmd->args[0]) || !ft_strcmp(cmd->args[0], "")
 		|| !ft_strcmp(cmd->args[0], "~") || !ft_strcmp(cmd->args[0], "--"))
 		loc = handle_cd_to_home(info);
@@ -57,7 +59,7 @@ char	*cd_handler(int abs, char *loc, t_command *cmd, t_inf *info)
 	else if (!ft_strcmp(cmd->args[0], "-"))
 		loc = handle_to_oldpwd(info, cmd);
 	else
-		loc = handle_cmd_for_change_env_cd(info, cmd->args[0], info->pwd);
+		loc = ft_strdup(getcwd(buf, PATH_MAX));
 	if (loc == NULL)
 		return (NULL);
 	return (loc);
@@ -76,10 +78,14 @@ void	handling_cd(char *to_loc, t_command *cmd, t_inf *info, int is_abs)
 		add_var(info, "OLDPWD", info->pwd);
 	else
 		change_var_env(info, "OLDPWD", info->pwd);
+
 	if (exist_var(info, "PWD") == 0 && to_loc)
 		add_var(info, "PWD", to_loc);
 	else
+	{
 		change_var_env(info, "PWD", to_loc);
+	}
+
 	free(to_loc);
 }
 

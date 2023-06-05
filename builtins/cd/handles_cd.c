@@ -59,6 +59,8 @@ void	manage_back_and_cd(t_command *cmd, t_inf *info, int *exep)
 	char	*str;
 	char	*to;
 
+	if (cmd->args)
+		return ;
 	str = cmd->args[0];
 	if (chdir(str) == -1)
 	{
@@ -79,27 +81,4 @@ void	manage_back_and_cd(t_command *cmd, t_inf *info, int *exep)
 	free(str);
 	*exep = 1;
 	get_pwd(info);
-}
-
-char	*handle_cmd_for_change_env_cd(t_inf *info, char *arg, char *pwd)
-{
-	char	*to_location;
-	char	*tmp;
-
-	to_location = NULL;
-	tmp = NULL;
-	to_location = modify_str_for_change_env_cd(info, arg);
-	tmp = to_location;
-	to_location = ft_strjoin(pwd, to_location);
-	free(tmp);
-	if (chdir(to_location) == -1)
-	{
-		info->last_code = 127;
-		tmp = to_location;
-		to_location = ft_strrchr(to_location, '/') + 1;
-		cd_output_error(to_location);
-		free(tmp);
-		return (NULL);
-	}
-	return (to_location);
 }

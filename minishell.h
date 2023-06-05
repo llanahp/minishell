@@ -86,7 +86,6 @@ typedef struct s_inf
 int			cd(t_inf *info, t_command *cmd);
 void		handling_cd(char *to_loc, t_command *cmd, t_inf *info, int is_abs);
 char		*handle_back_cd(char *pwd);
-char		*handle_cmd_for_change_env_cd(t_inf *info, char *arg, char *pwd);
 char		*handle_absolute_path(t_inf *info, char *absolute_path);
 void		handle_chdir_error(t_inf *info, char *to_loc, char *free_var);
 char		*handle_to_oldpwd(t_inf *info, t_command *cmd);
