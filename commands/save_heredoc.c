@@ -41,10 +41,12 @@ int	read_heredoc(char *name, char *delimiter, t_inf *info)
 	fd = open(name, O_CREAT | O_WRONLY | O_TRUNC, 0000644);
 	if (fd < 0)
 		return (msg("here_doc", ": ", strerror(errno), -1));
-	while (1 == 1)
+	while (1)
 	{
 		buf = NULL;
 		buf = readline("heredoc>");
+		if (buf == NULL)
+			break ;
 		if (info->must_continue == 0
 			|| read_heredoc_aux(&buf, delimiter, fd) == 1)
 		{
@@ -54,6 +56,7 @@ int	read_heredoc(char *name, char *delimiter, t_inf *info)
 		}
 		free(buf);
 	}
+
 	close (fd);
 	return (0);
 }
