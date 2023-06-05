@@ -56,7 +56,6 @@ int	read_heredoc(char *name, char *delimiter, t_inf *info)
 		}
 		free(buf);
 	}
-
 	close (fd);
 	return (0);
 }

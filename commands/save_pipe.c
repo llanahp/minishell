@@ -29,7 +29,7 @@ t_list	*save_pipe(t_inf *info, t_list *tmp, int pipe)
 		return (tmp->next);
 	}
 	if (command->previous == NULL && command->next == NULL
-			&& command->cmd == NULL && command->input_name != NULL)
+		&& command->cmd == NULL && command->input_name != NULL)
 		return (tmp->next);
 	if (ft_error_syntax(tmp, info) == 1)
 		return (NULL);
