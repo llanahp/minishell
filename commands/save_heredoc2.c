@@ -48,3 +48,35 @@ char	*define_delimiter(t_list **tmp)
 	else
 		return (NULL);
 }
+
+char	*find_name(void)
+{
+	float	i;
+	char	*name;
+	char	*n;
+
+	i = 0;
+	n = ft_itoa(i);
+	name = ft_strjoin("/tmp/heredoc_", n);
+	while (file_exists(name))
+	{
+		if (name != NULL)
+			free(name);
+		if (n != NULL)
+			free(n);
+		i++;
+		n = ft_itoa(i);
+		name = ft_strjoin("/tmp/heredoc_", n);
+	}
+	if (n != NULL)
+		free(n);
+	return (name);
+}
+
+int	file_exists(char *name)
+{
+	if (access(name, F_OK) == 0)
+		return (1);
+	else
+		return (0);
+}

@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 09:47:00 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/06/03 20:42:20 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/04 23:46:44 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,10 +86,7 @@ char		*handle_back_cd(char *pwd);
 char		*handle_cmd_for_change_env_cd(t_inf *info, char *arg, char *pwd);
 char		*handle_absolute_path(t_inf *info, char *absolute_path);
 void		handle_no_arg_cd(char **to_location);
-char		*cd_handler(int abs, char *loc, t_command *cmd, t_inf *info);
-void		handling_cd(char *to_location, t_command *cmd,
-				t_inf *info, int is_abs);
-void		handle_chdir_error(char *to_loc, char *free_var);
+void		handle_chdir_error(t_inf *info, char *to_loc, char *free_var);
 char		*handle_to_oldpwd(t_inf *info, t_command *cmd);
 int			check_home_cd(t_inf *info);
 int			check_folder_exists(void);
@@ -97,6 +94,8 @@ int			check_folder_exists_err(void);
 void		cd_output_error(char *str);
 char		*modify_str_for_change_env_cd(t_inf *info, char *arg);
 char		*handle_cd_to_first_dir(t_inf *info);
+char		*handle_cd_to_home(t_inf *info);
+void		manage_cmd_args_cd(t_command *cmd);
 
 /** echo.c */
 int			echo(t_command *cmd);
@@ -138,7 +137,6 @@ int			exist_var(t_inf *info, char *name);
 
 /** sigaction.c */
 void		set_signals_interactive(void);
-void		set_signals_interactive_here(void);
 void		set_signals_noninteractive(void);
 void		ignore_sigquit(void);
 
@@ -221,7 +219,7 @@ char		*ft_replace_double_quotes(char *line);
 
 char		*replace_string(char *string, char stop, char *new);
 char		*get_next_line(int fd);
-char		*ft_replace_quotes_2(char *str);
+char		*ft_replace_quotes_2(char **str);
 void		ft_delete_char(char *str);
 char		*check_var_replace(char *str, t_inf *info);
 void		remove_separator(char **str, int sep);
@@ -243,4 +241,11 @@ void		store_when_env_null(t_inf *info);
 char		*define_delimiter_aux(char **delimiter, t_list **tmp);
 char		*define_delimiter(t_list **tmp);
 int			ft_error_syntax(t_list *tmp, t_inf *info);
+char		*find_name(void);
+int			file_exists(char *name);
+void		handle_sigint_heredoc(int sig);
+int			heredoc_fork(t_inf *info, t_command *command, char *delimiter);
+int			parent_heredoc(t_command *command, int *heredoc, int pid);
+void		child_heredoc(t_command *command, t_inf *info, int *heredoc, char *deli);
+int			read_heredoc(char *name, char *delimiter, t_inf *info);
 #endif

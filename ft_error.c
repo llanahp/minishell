@@ -52,11 +52,12 @@ void	end_shell(t_inf *info)
 	exit(info->last_code);
 }
 
-int 	ft_error_syntax(t_list *tmp, t_inf *info)
+int	ft_error_syntax(t_list *tmp, t_inf *info)
 {
-	if (tmp->content!= NULL && tmp->next!= NULL && tmp->next->content!=NULL && ft_strcmp(tmp->content, tmp->next->content) == 0)
+	if (tmp->content != NULL && tmp->next != NULL && tmp->next->content != NULL
+		&& ft_strcmp(tmp->content, tmp->next->content) == 0)
 	{
-		ft_putstr_fd("minishell: syntax error near unexpected token `",2);
+		ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
 		ft_putstr_fd(tmp->content, 2);
 		ft_putstr_fd("'\n", 2);
 		info->last_code = 258;
