@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 15:35:58 by mpizzolo          #+#    #+#             */
-/*   Updated: 2023/06/03 19:02:37 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/03 20:41:30 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,33 +21,6 @@ int	check_home_cd(t_inf *info)
 		return (0);
 	}
 	return (1);
-}
-
-char	*checking_for_env(char *tmp, char *usr, t_inf *info)
-{
-	char	*tmp_free;
-	char	*to_location;
-
-	to_location = handle_back_cd(info->pwd);
-	if (chdir(to_location) == -1)
-	{
-		info->last_code = 127;
-		return (handle_chdir_error(to_location, usr), NULL);
-	}
-	tmp = ft_strrchr(to_location, '/');
-	while (ft_strcmp(tmp, usr))
-	{
-		tmp_free = to_location;
-		to_location = handle_back_cd(to_location);
-		free(tmp_free);
-		if (chdir(to_location) == -1)
-		{
-			info->last_code = 127;
-			return (handle_chdir_error(to_location, usr), NULL);
-		}
-		tmp = ft_strrchr(to_location, '/');
-	}
-	return (to_location);
 }
 
 int	check_folder_exists(void)
@@ -70,4 +43,22 @@ int	check_folder_exists_err(void)
 		return (127);
 	}
 	return (0);
+}
+
+char	*handle_cd_to_first_dir(t_inf *info)
+{
+	char	*to_location;
+	char	*tmp;
+
+	tmp = "/";
+	to_location = info->pwd;
+	if (!ft_strcmp(to_location, "/"))
+		return (NULL);
+	to_location = handle_back_cd(to_location);
+	while (ft_strcmp(to_location, "/"))
+	{
+		free(to_location);
+		to_location = handle_back_cd(to_location);
+	}
+	return (to_location);
 }

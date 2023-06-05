@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 09:47:00 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/06/03 18:59:59 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/03 20:42:20 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,21 +84,19 @@ typedef struct s_inf
 int			cd(t_inf *info, t_command *cmd);
 char		*handle_back_cd(char *pwd);
 char		*handle_cmd_for_change_env_cd(t_inf *info, char *arg, char *pwd);
-char		*handle_cd_to_usr(t_inf *info);
 char		*handle_absolute_path(t_inf *info, char *absolute_path);
 void		handle_no_arg_cd(char **to_location);
 char		*cd_handler(int abs, char *loc, t_command *cmd, t_inf *info);
 void		handling_cd(char *to_location, t_command *cmd,
 				t_inf *info, int is_abs);
 void		handle_chdir_error(char *to_loc, char *free_var);
-int			check_on_home(t_inf *info);
-char		*handle_to_oldpwd(t_inf *info);
+char		*handle_to_oldpwd(t_inf *info, t_command *cmd);
 int			check_home_cd(t_inf *info);
-char		*checking_for_env(char *tmp, char *usr, t_inf *info);
 int			check_folder_exists(void);
 int			check_folder_exists_err(void);
-char		*handle_cd_to_home(t_inf *info);
 void		cd_output_error(char *str);
+char		*modify_str_for_change_env_cd(t_inf *info, char *arg);
+char		*handle_cd_to_first_dir(t_inf *info);
 
 /** echo.c */
 int			echo(t_command *cmd);
@@ -244,4 +242,5 @@ int			display_error_path(char *cmd_original);
 void		store_when_env_null(t_inf *info);
 char		*define_delimiter_aux(char **delimiter, t_list **tmp);
 char		*define_delimiter(t_list **tmp);
+int			ft_error_syntax(t_list *tmp, t_inf *info);
 #endif

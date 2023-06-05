@@ -27,6 +27,8 @@ t_list	*save_input(t_inf *info, t_list *tmp)
 	t_command	*command;
 
 	command = get_last_cmd(info);
+	if (ft_error_syntax (tmp, info) == 1)
+		return (NULL);
 	tmp = tmp->next;
 	close_prev_redir(command);
 	if (tmp != NULL && tmp->type == WORD)
