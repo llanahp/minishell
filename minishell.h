@@ -6,7 +6,7 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 09:47:00 by ralopez-          #+#    #+#             */
-/*   Updated: 2023/06/03 20:42:20 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/04 23:46:44 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,10 +86,7 @@ char		*handle_back_cd(char *pwd);
 char		*handle_cmd_for_change_env_cd(t_inf *info, char *arg, char *pwd);
 char		*handle_absolute_path(t_inf *info, char *absolute_path);
 void		handle_no_arg_cd(char **to_location);
-char		*cd_handler(int abs, char *loc, t_command *cmd, t_inf *info);
-void		handling_cd(char *to_location, t_command *cmd,
-				t_inf *info, int is_abs);
-void		handle_chdir_error(char *to_loc, char *free_var);
+void		handle_chdir_error(t_inf *info, char *to_loc, char *free_var);
 char		*handle_to_oldpwd(t_inf *info, t_command *cmd);
 int			check_home_cd(t_inf *info);
 int			check_folder_exists(void);
@@ -97,6 +94,8 @@ int			check_folder_exists_err(void);
 void		cd_output_error(char *str);
 char		*modify_str_for_change_env_cd(t_inf *info, char *arg);
 char		*handle_cd_to_first_dir(t_inf *info);
+char		*handle_cd_to_home(t_inf *info);
+void		manage_cmd_args_cd(t_command *cmd);
 
 /** echo.c */
 int			echo(t_command *cmd);
