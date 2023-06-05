@@ -16,11 +16,13 @@ char	*handle_cd_to_home(t_inf *info)
 {
 	char	*loc;
 	char	*tmp_free;
+	char	buf[PATH_MAX];
 
 	if (!check_home_cd(info))
 		return (NULL);
 	tmp_free = get_var(info, "HOME");
-	loc = handle_absolute_path(info, tmp_free);
+	chdir(tmp_free);
+	loc = ft_strdup(getcwd(buf, PATH_MAX));
 	free(tmp_free);
 	return (loc);
 }

@@ -55,7 +55,7 @@ GREY		:=	"\033[0;37m"
 COLRESET	:=	"\033[0m"
 endif
 
-SRC = builtins/echo.c builtins/cd/cd.c builtins/cd/handles_cd.c builtins/cd/handles_cd_2.c builtins/cd/handles_cd_3.c builtins/cd/handles_cd_4.c  builtins/pwd.c builtins/env.c builtins/export/export.c builtins/export/export_2.c builtins/unset.c builtins/exit.c\
+SRC = builtins/echo.c builtins/cd/cd.c builtins/cd/handles_cd.c builtins/cd/handles_cd_2.c builtins/cd/handles_cd_3.c builtins/pwd.c builtins/env.c builtins/export/export.c builtins/export/export_2.c builtins/unset.c builtins/exit.c\
 	token/ft_token_utils.c token/ft_tokenize.c \
 	utils/ft_utils.c utils/ft_quotes.c utils/ft_quotes_2.c utils/ft_atoi_exit.c\
 	vars/ft_check_vars.c vars/ft_var_utils.c vars/ft_var_utils2.c vars/ft_check_vars2.c vars/ft_check_vars3.c\

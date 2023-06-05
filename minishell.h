@@ -86,17 +86,14 @@ typedef struct s_inf
 int			cd(t_inf *info, t_command *cmd);
 void		handling_cd(char *to_loc, t_command *cmd, t_inf *info, int is_abs);
 char		*handle_back_cd(char *pwd);
-char		*handle_absolute_path(t_inf *info, char *absolute_path);
 void		handle_chdir_error(t_inf *info, char *to_loc, char *free_var);
 char		*handle_to_oldpwd(t_inf *info, t_command *cmd);
 int			check_home_cd(t_inf *info);
 int			check_folder_exists(void);
 int			check_folder_exists_err(void);
 void		cd_output_error(char *str);
-char		*modify_str_for_change_env_cd(t_inf *info, char *arg);
 char		*handle_cd_to_first_dir(t_inf *info);
 char		*handle_cd_to_home(t_inf *info);
-void		manage_back_and_cd(t_command *cmd, t_inf *info, int *exep);
 char		*expand_home_cd(t_command *cmd, t_inf *info, int *is_abs);
 int			chdir_exeptions(char *str);
 

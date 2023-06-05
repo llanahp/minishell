@@ -51,7 +51,7 @@ char	*cd_handler(int abs, char *loc, t_command *cmd, t_inf *info)
 	else if (!ft_strcmp(cmd->args[0], "/"))
 		loc = handle_cd_to_first_dir(info);
 	else if (abs == 1)
-		loc = handle_absolute_path(info, loc);
+		loc = ft_strdup(getcwd(buf, PATH_MAX));
 	else if (!ft_strcmp(cmd->args[0], ".."))
 		loc = handle_back_cd(info->pwd);
 	else if (!ft_strcmp(cmd->args[0], "."))
@@ -110,7 +110,6 @@ int	cd(t_inf *info, t_command *cmd)
 	get_pwd(info);
 	if (info->env == NULL)
 		return (0);
-	manage_back_and_cd(cmd, info, &chdir_exeption);
 	to_location = get_cd_location(info, cmd, &is_abs);
 	chdir_exeption = chdir_exeptions(to_location);
 	if (chdir(to_location) == -1 && is_abs == 0 && chdir_exeption == 0)

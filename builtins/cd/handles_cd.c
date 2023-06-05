@@ -31,54 +31,38 @@ char	*expand_home_cd(t_command *cmd, t_inf *info, int *is_abs)
 	return (ft_strdup(res));
 }
 
-int	check_back_before_cd(char *str)
+int	chdir_exeptions(char *str)
 {
-	int		args;
+	int	res;
 
-	args = 0;
-	if (str[0] == '.' && str[1] == '.' && str[2] == '/'
-		&& ft_isalnum(str[3]) + 0)
-		args++;
-	return (args);
+	res = 0;
+	if (!ft_strcmp(str, "--"))
+		res = 1;
+	else if (!ft_strcmp(str, "~"))
+		res = 1;
+	else if (!ft_strcmp(str, "-"))
+		res = 1;
+	return (res);
 }
 
-void	changing_pwd_oldpwd(t_inf *info, char *to)
+int	check_folder_exists(void)
 {
-	if (exist_var(info, "OLDPWD") == 0 && info->pwd)
-		add_var(info, "OLDPWD", info->pwd);
-	else
-		change_var_env(info, "OLDPWD", info->pwd);
-	if (exist_var(info, "PWD") == 0 && to)
-		add_var(info, "PWD", to);
-	else
-		change_var_env(info, "PWD", to);
+	char	buf[PATH_MAX];
+
+	if (getcwd(buf, sizeof(buf)) == NULL)
+		return (127);
+	return (0);
 }
 
-void	manage_back_and_cd(t_command *cmd, t_inf *info, int *exep)
+int	check_folder_exists_err(void)
 {
-	char	*str;
-	char	*to;
+	char	buf[PATH_MAX];
 
-	if (cmd->args)
-		return ;
-	str = cmd->args[0];
-	if (chdir(str) == -1)
+	if (getcwd(buf, sizeof(buf)) == NULL)
 	{
-		if (!check_back_before_cd(str))
-			return ;
-		cd_output_error(str);
-		return ;
+		ft_putstr_fd("minishell: cd: error retrieving current directory: ", 2);
+		ft_putstr_fd("getcwd: No such file or directory\n", 2);
+		return (127);
 	}
-	chdir(info->pwd);
-	if (!check_back_before_cd(str))
-		return ;
-	if (chdir("..") == -1)
-		printf("erro");
-	to = handle_back_cd(info->pwd);
-	changing_pwd_oldpwd(info, to);
-	free(to);
-	cmd->args[0] = ft_substr(str, 3, ft_strlen(str));
-	free(str);
-	*exep = 1;
-	get_pwd(info);
+	return (0);
 }
