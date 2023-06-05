@@ -26,22 +26,39 @@ RM = rm -rf
 CFLAGS = -Wall -Wextra -Werror -g  
 OBJS = ${SRCS:.c=.o}
 AR = ar -rcs
-NAME_B = .file_shadow
+
+
+ifdef TERM
+RED			:=	"\033[1;31m"
+GREEN		:=	"\033[0;32m"
+BGREEN		:=	"\033[1;32m"
+BLUE		:=	"\033[0;34m"
+YELLOW		:=	"\033[0;33m"
+PURPLE		:=	"\033[0;35m"
+CYAN		:=	"\033[0;36m"
+GREY		:=	"\033[0;37m"
+# When printed reset the color
+COLRESET	:=	"\033[0m"
+endif
+
 .c.o:
-	${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
+	@echo $(GREEN) Compiling file $< $(COLRESET)
+	@${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
 
 all: ${NAME}
 
 ${NAME}: ${OBJS}
-	${AR} ${NAME} ${OBJS}
+	@${AR} ${NAME} ${OBJS}
 
 clean:
-	${RM} ${OBJS} ${BONUS_OBJS}
+	@echo $(RED) clean libft $(COLRESET)
+	@${RM} ${OBJS}
 
 
 
 fclean: clean
-	${RM} ${NAME}
+	@echo $(RED) fclean libft $(COLRESET)
+	@${RM} ${NAME}
 
 re:	fclean all
 
