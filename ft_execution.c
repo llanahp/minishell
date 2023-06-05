@@ -57,7 +57,7 @@ void	execute_cmd(t_command *cmd, t_command **command)
 		}
 		else if (execve(cmd->cmd, cmd->args, g_info.env) == -1)
 		{
-			g_info.last_code = msg("Execve", ": ", strerror(errno), errno);
+			g_info.last_code = msg(cmd_original, ": ", strerror(errno), errno);
 			exit(g_info.last_code);
 		}
 		g_info.last_code = 0;
