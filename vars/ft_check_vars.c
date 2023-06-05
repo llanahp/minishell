@@ -46,7 +46,8 @@ int	between_quotes(char *str, int i)
 
 void	simple_extend_var(char **str, int *i, t_inf *info)
 {
-	char *tmp;
+	char	*tmp;
+
 	if ((*str)[(*i)] == '$' && (*str)[(*i) + 1] == '$')
 	{
 		tmp = ft_itoa(info->minishell_pid);

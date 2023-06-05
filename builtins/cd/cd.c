@@ -78,14 +78,12 @@ void	handling_cd(char *to_loc, t_command *cmd, t_inf *info, int is_abs)
 		add_var(info, "OLDPWD", info->pwd);
 	else
 		change_var_env(info, "OLDPWD", info->pwd);
-
 	if (exist_var(info, "PWD") == 0 && to_loc)
 		add_var(info, "PWD", to_loc);
 	else
 	{
 		change_var_env(info, "PWD", to_loc);
 	}
-
 	free(to_loc);
 }
 
