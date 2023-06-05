@@ -12,10 +12,37 @@
 
 #include "minishell.h"
 
+void	store_env_aux(t_inf *info, char **env)
+{
+	int		i;
+	int		j;
+	char	*tmp;
+
+	i = -1;
+	j = 0;
+	while (env[++i])
+	{
+		if (ft_strncmp(env[i], "SHLVL=", 6) == 0)
+		{
+			if (ft_atoi(env[i] + 6) < 0)
+				info->env[j++] = ft_strdup("SHLVL=0");
+			else
+			{
+				tmp = ft_itoa(ft_atoi(env[i] + 6) + 1);
+				info->env[j++] = ft_strjoin("SHLVL=", tmp);
+				if (tmp != NULL)
+					free(tmp);
+			}
+		}
+		else if (ft_strncmp(env[i], "OLDPWD=", 7))
+			info->env[j++] = ft_strdup(env[i]);
+	}
+	info->env[j] = NULL;
+}
+
 void	store_env(t_inf *info, char **env)
 {
-	int	i;
-	int	j;
+	int		i;
 
 	i = 0;
 	if (env[0] == NULL)
@@ -28,15 +55,5 @@ void	store_env(t_inf *info, char **env)
 	info->env = (char **)malloc(sizeof(char *) * (i));
 	if (! info->env)
 		return ;
-	i = -1;
-	j = 0;
-	while (env[++i])
-	{
-		if (ft_strncmp(env[i], "SHLVL=", 6) == 0)
-			info->env[j++]
-				= ft_strjoin("SHLVL=", ft_itoa(ft_atoi(env[i] + 6) + 1));
-		else if (ft_strncmp(env[i], "OLDPWD=", 7))
-			info->env[j++] = ft_strdup(env[i]);
-	}
-	info->env[j] = NULL;
+	store_env_aux(info, env);
 }

@@ -17,7 +17,6 @@ t_list	*save_pipe(t_inf *info, t_list *tmp, int pipe)
 	t_command	*command;
 
 	command = get_last_cmd(info);
-
 	if ((command->previous == NULL && command->next == NULL
 			&& command->cmd == NULL)
 		|| (command->previous != NULL && command->pipe_out == 1

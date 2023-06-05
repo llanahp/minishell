@@ -12,6 +12,16 @@
 
 #include "../minishell.h"
 
+void	close_pre_output(t_command *command)
+{
+	if (command->output_name != NULL)
+	{
+		close(command->output);
+		free(command->output_name);
+		command->output_name = NULL;
+	}
+}
+
 t_list	*save_output(t_inf *info, t_list *tmp, int type)
 {
 	t_command	*command;
@@ -20,12 +30,7 @@ t_list	*save_output(t_inf *info, t_list *tmp, int type)
 	if (ft_error_syntax (tmp, info) == 1)
 		return (NULL);
 	tmp = tmp->next;
-	if (command->output_name != NULL)
-	{
-		close(command->output);
-		free(command->output_name);
-		command->output_name = NULL;
-	}
+	close_pre_output(command);
 	if (tmp != NULL && tmp->type == WORD)
 	{
 		command->output_name = ft_strdup(tmp->content);

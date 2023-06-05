@@ -28,12 +28,11 @@ void	signal_reset_prompt_here(int signal)
 		SIG_IGN ;
 }
 
-void	set_signals_interactive_here(void)
+void	handle_sigint_heredoc(int sig)
 {
-	struct sigaction	act;
-
-	ignore_sigquit();
-	ft_memset(&act, 0, sizeof(act));
-	act.sa_handler = &signal_reset_prompt_here;
-	sigaction(SIGINT, &act, NULL);
+	(void)sig;
+	g_info.must_continue = 0;
+	g_info.last_code = 1;
+	write(1, "\n", 1);
+	exit(1);
 }
