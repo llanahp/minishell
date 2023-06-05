@@ -27,20 +27,6 @@ char	*handle_cd_to_home(t_inf *info)
 	return (loc);
 }
 
-char	*handle_back_cd(char *pwd)
-{
-	char	*to_location;
-	char	*tmp;
-
-	to_location = ft_strdup(pwd);
-	tmp = ft_strrchr(to_location, '/');
-	if (tmp != NULL && ft_strcmp(tmp, "/Users") && ft_strcmp(tmp, "/"))
-		*tmp = '\0';
-	else
-		return (ft_strdup("/"));
-	return ((to_location));
-}
-
 void	handle_chdir_error(t_inf *info, char *to_loc, char *free_var)
 {
 	char	*tmp;

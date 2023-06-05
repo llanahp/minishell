@@ -52,8 +52,6 @@ char	*cd_handler(int abs, char *loc, t_command *cmd, t_inf *info)
 		loc = handle_cd_to_first_dir(info);
 	else if (abs == 1)
 		loc = ft_strdup(getcwd(buf, PATH_MAX));
-	else if (!ft_strcmp(cmd->args[0], ".."))
-		loc = handle_back_cd(info->pwd);
 	else if (!ft_strcmp(cmd->args[0], "."))
 		loc = ft_strdup(info->pwd);
 	else if (!ft_strcmp(cmd->args[0], "-"))
