@@ -12,6 +12,20 @@
 
 #include "../minishell.h"
 
+char	*handle_back_cd(char *pwd)
+{
+	char	*to_location;
+	char	*tmp;
+
+	to_location = ft_strdup(pwd);
+	tmp = ft_strrchr(to_location, '/');
+	if (tmp != NULL && ft_strcmp(tmp, "/Users") && ft_strcmp(tmp, "/"))
+		*tmp = '\0';
+	else
+		return (ft_strdup("/"));
+	return ((to_location));
+}
+
 char	*handle_cd_to_first_dir(t_inf *info)
 {
 	char	*to_location;
