@@ -6,11 +6,80 @@
 /*   By: mpizzolo <mpizzolo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 15:57:41 by mpizzolo          #+#    #+#             */
-/*   Updated: 2023/06/04 23:29:38 by mpizzolo         ###   ########.fr       */
+/*   Updated: 2023/06/05 13:58:31 by mpizzolo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+char	*expand_home_cd(t_command *cmd, t_inf *info, int *is_abs)
+{
+	char	*home;
+	char	*res;
+	char	*str;
+
+	str = cmd->args[0];
+	home = get_var(info, "HOME");
+	str = ft_substr(str, 1, ft_strlen(str));
+	res = ft_strjoin(home, str);
+	free(home);
+	free(str);
+	str = cmd->args[0];
+	cmd->args[0] = res;
+	free(str);
+	*is_abs = 1;
+	return (ft_strdup(res));
+}
+
+int	check_back_before_cd(char *str)
+{
+	int		args;
+
+	args = 0;
+	if (str[0] == '.' && str[1] == '.' && str[2] == '/'
+		&& ft_isalnum(str[3]) + 0)
+		args++;
+	return (args);
+}
+
+void	changing_pwd_oldpwd(t_inf *info, char *to)
+{
+	if (exist_var(info, "OLDPWD") == 0 && info->pwd)
+		add_var(info, "OLDPWD", info->pwd);
+	else
+		change_var_env(info, "OLDPWD", info->pwd);
+	if (exist_var(info, "PWD") == 0 && to)
+		add_var(info, "PWD", to);
+	else
+		change_var_env(info, "PWD", to);
+}
+
+void	manage_back_and_cd(t_command *cmd, t_inf *info, int *exep)
+{
+	char	*str;
+	char	*to;
+
+	str = cmd->args[0];
+	if (chdir(str) == -1)
+	{
+		if (!check_back_before_cd(str))
+			return ;
+		cd_output_error(str);
+		return ;
+	}
+	chdir(info->pwd);
+	if (!check_back_before_cd(str))
+		return ;
+	if (chdir("..") == -1)
+		printf("erro");
+	to = handle_back_cd(info->pwd);
+	changing_pwd_oldpwd(info, to);
+	free(to);
+	cmd->args[0] = ft_substr(str, 3, ft_strlen(str));
+	free(str);
+	*exep = 1;
+	get_pwd(info);
+}
 
 char	*handle_cmd_for_change_env_cd(t_inf *info, char *arg, char *pwd)
 {
@@ -33,72 +102,4 @@ char	*handle_cmd_for_change_env_cd(t_inf *info, char *arg, char *pwd)
 		return (NULL);
 	}
 	return (to_location);
-}
-
-char	*handle_for_absolute(char **to, char *to_loc)
-{
-	char	*res;
-	char	*tmp;
-	int		i_tmp;
-
-	i_tmp = ft_strichr(to[0] + 1, '/');
-	if (i_tmp != -1)
-		tmp = ft_substr(to[0], 0, ft_strlen(to[0]));
-	else
-		tmp = ft_substr(to[0], 0, i_tmp + 1);
-	to[0] = ft_strchr(to[0] + 1, '/');
-	res = ft_strjoin(to_loc, tmp);
-	free(tmp);
-	return (res);
-}
-
-char	*handle_absolute_path(t_inf *info, char *absolute_path)
-{
-	char	*to;
-	char	*to_loc;
-	char	*tmp;
-
-	to = absolute_path;
-	to_loc = handle_for_absolute(&to, "");
-	if (chdir(to_loc) == -1)
-		return (handle_chdir_error(info, to_loc, to), NULL);
-	while (ft_strcmp(to_loc, absolute_path) && to)
-	{
-		tmp = to_loc;
-		free(to);
-		to_loc = handle_for_absolute(&to, to_loc);
-		free(tmp);
-		if (chdir(to_loc) == -1)
-			return (handle_chdir_error(info, to_loc, to), NULL);
-	}
-	if (to_loc[ft_strlen(to_loc) - 1] == '/')
-		to_loc[ft_strlen(to_loc) - 1] = '\0';
-	return (free(to), to_loc);
-}
-
-char	*handle_cd_to_home(t_inf *info)
-{
-	char	*loc;
-	char	*tmp_free;
-
-	if (!check_home_cd(info))
-		return (NULL);
-	tmp_free = get_var(info, "HOME");
-	loc = handle_absolute_path(info, tmp_free);
-	free(tmp_free);
-	return (loc);
-}
-
-char	*handle_back_cd(char *pwd)
-{
-	char	*to_location;
-	char	*tmp;
-
-	to_location = ft_strdup(pwd);
-	tmp = ft_strrchr(to_location, '/');
-	if (tmp != NULL && ft_strcmp(tmp, "/Users") && ft_strcmp(tmp, "/"))
-		*tmp = '\0';
-	else
-		return (ft_strdup("/"));
-	return ((to_location));
 }
