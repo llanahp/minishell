@@ -18,7 +18,7 @@ t_list	*save_pipe(t_inf *info, t_list *tmp, int pipe)
 
 	command = get_last_cmd(info);
 	if ((command->previous == NULL && command->next == NULL
-			&& command->cmd == NULL)
+			&& command->cmd == NULL && command->input_name == NULL)
 		|| (command->previous != NULL && command->pipe_out == 1
 			&& command->cmd == NULL && command->next == NULL
 			&& command->cmd == NULL))
@@ -28,7 +28,10 @@ t_list	*save_pipe(t_inf *info, t_list *tmp, int pipe)
 		info->last_code = 258;
 		return (tmp->next);
 	}
-	if (ft_error_syntax (tmp, info) == 1)
+	if (command->previous == NULL && command->next == NULL
+		&& command->cmd == NULL && command->input_name != NULL)
+		return (tmp->next);
+	if (ft_error_syntax(tmp, info) == 1)
 		return (NULL);
 	if (pipe)
 		command->pipe_out = 1;

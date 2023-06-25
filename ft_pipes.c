@@ -65,25 +65,28 @@ void	close_pipes(t_inf *info)
 
 int	wait_childs(t_inf *info)
 {
-	pid_t	wpid;
-	int		status;
-	int		save_status;
+	int			status;
+	int			save_status;
+	int			id;
+	t_command	*tmp;
 
 	close_pipes(info);
 	save_status = 0;
-	wpid = 0;
-	while ((wpid != -1 || errno != ECHILD))
+	tmp = info->commands;
+	while (tmp)
 	{
-		wpid = waitpid(info->pid, &status, 0);
-		if (wpid == info->pid)
+		id = waitpid(tmp->pid_wait, &status, 0);
+		if (id == tmp->pid_wait && tmp->next == NULL)
+		{
 			save_status = status;
-		continue ;
+			if (WIFSIGNALED(save_status))
+				status = 128 + WTERMSIG(save_status);
+			else if (WIFEXITED(save_status))
+				status = WEXITSTATUS(save_status);
+			else
+				status = save_status;
+		}
+		tmp = tmp->next;
 	}
-	if (WIFSIGNALED(save_status))
-		status = 128 + WTERMSIG(save_status);
-	else if (WIFEXITED(save_status))
-		status = WEXITSTATUS(save_status);
-	else
-		status = save_status;
 	return (status);
 }

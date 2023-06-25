@@ -15,6 +15,7 @@
 void	child_heredoc(t_command *command, t_inf *info, int *heredoc, char *deli)
 {
 	signal(SIGINT, handle_sigint_heredoc);
+	ignore_sigquit();
 	close(heredoc[0]);
 	read_heredoc(command->input_name, deli, info);
 	close(heredoc[1]);

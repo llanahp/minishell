@@ -38,11 +38,12 @@ int	execute_builtin(t_command *cmd, t_inf *info, int exi)
 	return (code);
 }
 
-void	execute_cmd(t_command *cmd)
+void	execute_cmd(t_command *cmd, t_command **command)
 {
 	char	*cmd_original;
 
 	cmd_original = ft_strdup(cmd->cmd);
+	close_all_pipes(command, cmd);
 	redir(cmd, &g_info);
 	if (cmd != NULL && is_builtin(cmd->cmd))
 		execute_builtin(cmd, &g_info, 1);
@@ -56,7 +57,7 @@ void	execute_cmd(t_command *cmd)
 		}
 		else if (execve(cmd->cmd, cmd->args, g_info.env) == -1)
 		{
-			g_info.last_code = msg("Execve", ": ", strerror(errno), errno);
+			g_info.last_code = msg(cmd_original, ": ", strerror(errno), errno);
 			exit(g_info.last_code);
 		}
 		g_info.last_code = 0;
@@ -72,12 +73,15 @@ int	create_childs(t_inf *info)
 	tmp = info->commands;
 	while (tmp)
 	{
-		info->pid = fork();
-		if (info->pid == -1)
+		tmp->pid_wait = fork();
+		if (tmp->pid_wait == -1)
 			info->last_code = msg("fork", ": ", strerror(errno), EXIT_FAILURE);
-		else if (info->pid == 0)
-			execute_cmd(tmp);
+		else if (tmp->pid_wait == 0)
+			execute_cmd(tmp, &info->commands);
+		else if (tmp->pid_wait != 0)
+		{
 			tmp = tmp->next;
+		}
 	}
 	return (wait_childs(info));
 }
